@@ -1,4 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema de Citas Médicas
+
+## Estructura del Proyecto
+
+```
+citasmedicas_db/
+├── app/                       # App Router Directory
+│   ├── (auth)/               # Auth Route Group
+│   │   └── login/           # Login Route
+│   │       └── page.tsx     # Login Page (Único punto de entrada)
+│   ├── (dashboard)/         # Protected Dashboard Routes
+│   │   ├── admin/          # Admin Routes
+│   │   │   ├── users/      # Gestión de usuarios
+│   │   │   │   └── page.tsx # Crear/Editar usuarios
+│   │   │   └── page.tsx    # Admin Dashboard
+│   │   ├── doctor/         # Doctor Routes
+│   │   │   ├── appointments/
+│   │   │   ├── patients/   # Ver lista de pacientes
+│   │   │   └── page.tsx    # Doctor Dashboard
+│   │   └── patient/        # Patient Routes
+│   │       ├── appointments/
+│   │       └── page.tsx    # Patient Dashboard
+│   ├── api/                 # API Routes
+│   │   ├── auth/
+│   │   │   └── login/     # API de autenticación
+│   │   ├── appointments/   # API de citas
+│   │   └── users/         # API de usuarios
+│   ├── components/          # Shared Components
+│   │   ├── ui/             # UI Components
+│   │   │   ├── Button.tsx
+│   │   │   └── Input.tsx
+│   │   └── layout/         # Layout Components
+│   │       ├── Header.tsx
+│   │       └── Sidebar.tsx
+│   ├── lib/                # Utility Functions
+│   │   ├── auth.ts        # Authentication Utils
+│   │   └── db.ts         # Database Utils
+│   ├── styles/            # Global Styles
+│   │   └── globals.css
+│   ├── types/             # TypeScript Types
+│   ├── layout.tsx         # Root Layout
+│   └── page.tsx           # Redirect to /login
+│
+├── public/                # Public Assets
+│   ├── images/
+│   └── icons/
+│
+├── database/              # Database Files
+│   ├── schema.sql        # Database Schema
+│   └── seed.sql          # Initial Data
+│
+├── middleware.ts          # Next.js Middleware (auth & role protection)
+├── .env                  # Environment Variables
+├── .gitignore
+└── package.json
+```
+
+## Flujo de Usuario
+
+1. **Login**
+   - Usuario ingresa sus credenciales
+   - Sistema identifica el rol (admin/doctor/paciente)
+   - Redirección automática al dashboard correspondiente
+
+2. **Administrador**
+   - Gestión de usuarios (crear/editar médicos y pacientes)
+   - Reportes y estadísticas
+   - Configuración del sistema
+
+3. **Médico**
+   - Ver y gestionar lista de pacientes
+   - Gestionar citas médicas
+   - Ver historial médico de pacientes
+
+4. **Paciente**
+   - Ver sus citas programadas
+   - Solicitar nuevas citas
+   - Ver su historial médico
 
 ## Getting Started
 
@@ -16,7 +93,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
