@@ -39,6 +39,8 @@ export default function PatientDashboard() {
     }
   ])
 
+  const isClient = typeof window !== 'undefined';
+
   const availableTimeSlots = [
     "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
     "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
@@ -126,6 +128,8 @@ export default function PatientDashboard() {
         </div>
       </motion.header>
 
+      {/* --- Añadir envoltorio isClient --*/}
+      {isClient ? (
       <div className="flex">
         {/* Sidebar */}
         <motion.aside
@@ -249,6 +253,8 @@ export default function PatientDashboard() {
           </motion.div>
         </main>
       </div>
+      ) : null}
+      {/* ------------------------------------*/}
 
       {/* Appointment Modal */}
       {showAppointmentModal && (
