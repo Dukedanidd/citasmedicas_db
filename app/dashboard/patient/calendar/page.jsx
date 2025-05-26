@@ -236,7 +236,7 @@ export default function PatientCalendar() {
                         return timeDiff > 0 && timeDiff <= oneDayInMillis;
                       });
 
-                      dayClassName = isUpcomingWithin24Hrs ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
+                      dayClassName = isUpcomingWithin24Hrs ? "bg-yellow-200 text-yellow-800" : "bg-green-100 text-green-700"
                     }
 
                     return (
@@ -263,10 +263,10 @@ export default function PatientCalendar() {
                       <span className="block w-4 h-4 bg-orange-200 rounded-full mr-2"></span> Cita Pasada
                     </div>
                     <div className="flex items-center">
-                      <span className="block w-4 h-4 bg-green-100 rounded-full mr-2"></span> Cita Próxima {'>'} 24h
+                      <span className="block w-4 h-4 bg-yellow-200 rounded-full mr-2"></span> Cita Próxima {'<'} 24h
                     </div>
                     <div className="flex items-center">
-                      <span className="block w-4 h-4 bg-blue-100 rounded-full mr-2"></span> Cita Próxima {'<'} 24h
+                      <span className="block w-4 h-4 bg-green-100 rounded-full mr-2"></span> Cita Próxima {'>'} 24h
                     </div>
                   </div>
                 </div>
