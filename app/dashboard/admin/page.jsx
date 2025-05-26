@@ -2,6 +2,9 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import Modal from "@/components/ui/Modal"
+import DoctorForm from "@/components/ui/DoctorForm"
+import PatientForm from "@/components/ui/PatientForm"
 import { useRouter } from "next/navigation"
 import {
   Users,
@@ -23,6 +26,8 @@ export default function AdminDashboard() {
   const router = useRouter()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("doctors") // doctors, patients, appointments
+  const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false)
+  const [isPatientModalOpen, setIsPatientModalOpen] = useState(false)
 
   // Datos de ejemplo
   const doctores = [
@@ -52,6 +57,7 @@ export default function AdminDashboard() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
+                  onClick={() => setIsDoctorModalOpen(true)}
                 >
                   <UserPlus className="h-4 w-4 mr-2" />
                   Agregar Doctor
@@ -153,6 +159,7 @@ export default function AdminDashboard() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
+                  onClick={() => setIsPatientModalOpen(true)}
                 >
                   <UserPlus className="h-4 w-4 mr-2" />
                   Agregar Paciente
@@ -427,6 +434,23 @@ export default function AdminDashboard() {
         {/* Tab Content */}
         {renderTabContent()}
       </div>
+
+      {/* Modales */}
+      <Modal 
+        isOpen={isDoctorModalOpen} 
+        onClose={() => setIsDoctorModalOpen(false)}
+        title="Agregar Nuevo Doctor"
+      >
+        <DoctorForm onClose={() => setIsDoctorModalOpen(false)} />
+      </Modal>
+
+      <Modal 
+        isOpen={isPatientModalOpen} 
+        onClose={() => setIsPatientModalOpen(false)}
+        title="Agregar Nuevo Paciente"
+      >
+        <PatientForm onClose={() => setIsPatientModalOpen(false)} />
+      </Modal>
     </div>
   )
 }
