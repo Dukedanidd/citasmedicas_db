@@ -231,8 +231,9 @@ export default function PatientCalendar() {
                       const oneDayInMillis = 24 * 60 * 60 * 1000;
                       const now = new Date();
                       const isUpcomingWithin24Hrs = appointmentsOnDay.some(apt => {
-                         const aptDateTime = new Date(`${apt.date}T${apt.time}`)
-                         return aptDateTime > now && aptDateTime.getTime() - now.getTime() <= oneDayInMillis
+                        const aptDateTime = new Date(`${apt.date}T${apt.time}`);
+                        const timeDiff = aptDateTime.getTime() - now.getTime();
+                        return timeDiff > 0 && timeDiff <= oneDayInMillis;
                       });
 
                       dayClassName = isUpcomingWithin24Hrs ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
