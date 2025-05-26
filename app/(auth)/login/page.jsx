@@ -11,17 +11,33 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+    setError("")
 
-    // Simular autenticación
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    
-    // Por ahora, ando simulando un login exitoso
-    if (email && password) {
-      router.push('/dashboard/admin')
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await res.json()
+
+      if (data.error) {
+        setError(data.error)
+        return
+      }
+
+      // Redirigir al usuario según su rol
+      router.push(data.redirectTo)
+    } catch (error) {
+      setError("Error al iniciar sesión")
     }
     
     setIsLoading(false)
@@ -187,6 +203,12 @@ export default function LoginPage() {
                 )}
               </motion.button>
             </motion.div>
+
+            {error && (
+              <div className="text-red-500 text-sm text-center">
+                {error}
+              </div>
+            )}
           </form>
         </motion.div>
 
