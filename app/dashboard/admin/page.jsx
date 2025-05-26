@@ -28,22 +28,42 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("doctors") // doctors, patients, appointments
   const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false)
   const [isPatientModalOpen, setIsPatientModalOpen] = useState(false)
-
-  // Datos de ejemplo
-  const doctores = [
+  
+  const [doctores, setDoctores] = useState([
     { id: 1, nombre: "Dr. Juan Pérez", especialidad: "Cardiología", pacientes: 45, citas: 12 },
     { id: 2, nombre: "Dra. María García", especialidad: "Pediatría", pacientes: 60, citas: 8 },
     { id: 3, nombre: "Dr. Carlos López", especialidad: "Dermatología", pacientes: 30, citas: 5 },
-  ]
+  ])
 
-  const pacientes = [
+  const [pacientes, setPacientes] = useState([
     { id: 1, nombre: "Ana Martínez", edad: 35, ultimaCita: "2024-03-15", doctor: "Dr. Juan Pérez" },
     { id: 2, nombre: "Pedro Sánchez", edad: 28, ultimaCita: "2024-03-14", doctor: "Dra. María García" },
     { id: 3, nombre: "Laura Torres", edad: 42, ultimaCita: "2024-03-13", doctor: "Dr. Carlos López" },
-  ]
+  ])
 
   const handleLogout = () => {
     router.push("/")
+  }
+
+  const handleAddDoctor = (newDoctor) => {
+    const doctorWithId = {
+      ...newDoctor,
+      id: doctores.length + 1,
+      pacientes: 0,
+      citas: 0
+    }
+    setDoctores([...doctores, doctorWithId])
+    setIsDoctorModalOpen(false)
+  }
+
+  const handleAddPatient = (newPatient) => {
+    const patientWithId = {
+      ...newPatient,
+      id: pacientes.length + 1,
+      ultimaCita: new Date().toISOString().split('T')[0]
+    }
+    setPacientes([...pacientes, patientWithId])
+    setIsPatientModalOpen(false)
   }
 
   const renderTabContent = () => {
@@ -441,7 +461,7 @@ export default function AdminDashboard() {
         onClose={() => setIsDoctorModalOpen(false)}
         title="Agregar Nuevo Doctor"
       >
-        <DoctorForm onClose={() => setIsDoctorModalOpen(false)} />
+        <DoctorForm onClose={() => setIsDoctorModalOpen(false)} onSubmit={handleAddDoctor} />
       </Modal>
 
       <Modal 
@@ -449,7 +469,7 @@ export default function AdminDashboard() {
         onClose={() => setIsPatientModalOpen(false)}
         title="Agregar Nuevo Paciente"
       >
-        <PatientForm onClose={() => setIsPatientModalOpen(false)} />
+        <PatientForm onClose={() => setIsPatientModalOpen(false)} onSubmit={handleAddPatient} />
       </Modal>
     </div>
   )
