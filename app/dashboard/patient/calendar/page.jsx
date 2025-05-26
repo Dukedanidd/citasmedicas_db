@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   Calendar,
@@ -37,17 +37,34 @@ export default function PatientCalendar() {
       doctor: "Dra. María García",
       reason: "Seguimiento",
       status: "upcoming"
+    },
+    {
+      id: 3,
+      date: "2024-03-10",
+      time: "11:00",
+      doctor: "Dr. Carlos López",
+      reason: "Chequeo general",
+      status: "completed"
     }
   ])
+
+  const [today, setToday] = useState(null);
+
+  useEffect(() => {
+    setToday(new Date());
+  }, []);
 
   const availableTimeSlots = [
     "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
     "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
   ]
 
-  const handleDateSelect = (date) => {
-    setSelectedDate(date)
-    setShowAppointmentModal(false)
+  const handleDateSelect = (day) => {
+    if (today) {
+      const date = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      setSelectedDate(date)
+      setShowAppointmentModal(false)
+    }
   }
 
   const handleAppointmentCancel = (appointmentId) => {
@@ -55,12 +72,12 @@ export default function PatientCalendar() {
   }
 
   const handleNewAppointment = () => {
-    if (appointmentReason && selectedTime) {
+    if (appointmentReason && selectedTime && selectedDate) {
       const newAppointment = {
         id: Date.now(),
         date: selectedDate,
         time: selectedTime,
-        doctor: "Dr. Juan Pérez", // Esto vendría de la BD
+        doctor: "Dr. Juan Pérez",
         reason: appointmentReason,
         status: "scheduled"
       }
@@ -91,19 +108,8 @@ export default function PatientCalendar() {
     },
   }
 
-  // Lógica para colorear días (simplificada por ahora)
-  const getDayClassName = (day) => {
-    const hasAppointment = appointments.some(apt => apt.date === `2024-03-${day}`)
-    // Lógica básica para "upcoming" - debería compararse con la fecha actual
-    const isUpcoming = appointments.some(apt => 
-      apt.date === `2024-03-${day}` && apt.status === "upcoming"
-    )
-
-    if (hasAppointment) {
-      return isUpcoming ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
-    }
-    return "bg-slate-50 text-slate-700"
-  }
+  const currentMonth = today ? today.toLocaleString('es-ES', { month: 'long' }) : '';
+  const currentYear = today ? today.getFullYear() : '';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
@@ -173,97 +179,146 @@ export default function PatientCalendar() {
 
         {/* Main Content */}
         <main className="flex-1 p-6">
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
-            {/* Calendar Section */}
-            <motion.div
-              variants={itemVariants}
-              className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-slate-800 flex items-center">
-                  <Calendar className="mr-2 text-sky-600" size={24} />
-                  Calendario de Citas
-                </h2>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowAppointmentModal(true)}
-                  className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
-                >
-                  Agendar Cita
-                </motion.button>
-              </div>
+          {today ? (
+            <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+              {/* Calendar Section */}
+              <motion.div
+                variants={itemVariants}
+                className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-bold text-slate-800 flex items-center">
+                    <Calendar className="mr-2 text-sky-600" size={24} />
+                    Calendario de Citas
+                  </h2>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowAppointmentModal(true)}
+                    className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
+                  >
+                    Agendar Cita
+                  </motion.button>
+                </div>
 
-              {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-2">
-                {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => {
-                  // Lógica para colorear días (simplificada por ahora)
-                  const hasAppointment = appointments.some(apt => apt.date === `2024-03-${day}`)
-                  const isUpcoming = appointments.some(apt => 
-                    apt.date === `2024-03-${day}` && apt.status === "upcoming"
-                  )
-                  
-                  const dayClassName = getDayClassName(day)
+                {/* Month and Year */}
+                <div className="text-center text-lg font-semibold text-slate-700 mb-4">
+                  {`${currentMonth} ${currentYear}`}
+                </div>
 
-                  return (
-                    <motion.button
-                      key={day}
-                      whileHover={{ scale: 1.05 }}
-                      onClick={() => handleDateSelect(`2024-03-${day}`)}
-                      className={`p-4 rounded-lg text-center ${dayClassName}`}
-                    >
-                      {day}
-                    </motion.button>
-                  )
-                })}
-              </div>
+                {/* Calendar Grid */}
+                <div className="grid grid-cols-7 gap-2">
+                  {today && Array.from({ length: new Date(currentYear, today.getMonth() + 1, 0).getDate() }, (_, i) => i + 1).map((day) => {
+                    const dayDate = new Date(currentYear, today.getMonth(), day)
+                    const isToday = dayDate.toDateString() === today.toDateString()
+                    const isPast = dayDate < today && !isToday
 
-              {/* Selected Date Appointments */}
-              {selectedDate && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-3">
-                    Citas para {selectedDate}
-                  </h3>
-                  <div className="space-y-3">
-                    {appointments
-                      .filter(apt => apt.date === selectedDate)
-                      .map(appointment => (
-                        <motion.div
-                          key={appointment.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="bg-sky-50 border border-sky-200 rounded-lg p-4"
-                        >
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <p className="text-slate-800 font-medium">
-                                {appointment.time} - {appointment.doctor}
-                              </p>
-                              <p className="text-slate-600 text-sm mt-1">
-                                {appointment.reason}
-                              </p>
-                            </div>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => handleAppointmentCancel(appointment.id)}
-                              className="p-2 text-red-600 hover:text-red-800 transition-colors"
-                            >
-                              <X size={16} />
-                            </motion.button>
-                          </div>
-                        </motion.div>
-                      ))}
+                    const appointmentsOnDay = appointments.filter(apt => {
+                      const aptDate = new Date(apt.date)
+                      return aptDate.getFullYear() === dayDate.getFullYear() &&
+                             aptDate.getMonth() === dayDate.getMonth() &&
+                             aptDate.getDate() === dayDate.getDate();
+                    })
+                    const hasAppointment = appointmentsOnDay.length > 0
+
+                    let dayClassName = "bg-slate-50 text-slate-700"
+
+                    if (isToday) {
+                      dayClassName = "bg-purple-500 text-white font-bold"
+                    } else if (hasAppointment && isPast) {
+                      dayClassName = "bg-orange-200 text-orange-800"
+                    } else if (hasAppointment) {
+                      const oneDayInMillis = 24 * 60 * 60 * 1000;
+                      const now = new Date();
+                      const isUpcomingWithin24Hrs = appointmentsOnDay.some(apt => {
+                         const aptDateTime = new Date(`${apt.date}T${apt.time}`)
+                         return aptDateTime > now && aptDateTime.getTime() - now.getTime() <= oneDayInMillis
+                      });
+
+                      dayClassName = isUpcomingWithin24Hrs ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
+                    }
+
+                    return (
+                      <motion.button
+                        key={day}
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => handleDateSelect(day)}
+                        className={`p-4 rounded-lg text-center ${dayClassName}`}
+                      >
+                        {day}
+                      </motion.button>
+                    )
+                  })}
+                </div>
+
+                {/* Color Legend */}
+                <div className="mt-6 text-sm text-slate-700">
+                  <h4 className="font-semibold mb-2">Simbología de Colores:</h4>
+                  <div className="flex flex-wrap gap-4">
+                    <div className="flex items-center">
+                      <span className="block w-4 h-4 bg-purple-500 rounded-full mr-2"></span> Día Actual
+                    </div>
+                    <div className="flex items-center">
+                      <span className="block w-4 h-4 bg-orange-200 rounded-full mr-2"></span> Cita Pasada
+                    </div>
+                    <div className="flex items-center">
+                      <span className="block w-4 h-4 bg-green-100 rounded-full mr-2"></span> Cita Próxima {'>'} 24h
+                    </div>
+                    <div className="flex items-center">
+                      <span className="block w-4 h-4 bg-blue-100 rounded-full mr-2"></span> Cita Próxima {'<'} 24h
+                    </div>
                   </div>
                 </div>
-              )}
+
+                {/* Selected Date Appointments */}
+                {selectedDate && (
+                  <div className="mt-6">
+                    <h3 className="text-lg font-semibold text-slate-800 mb-3">
+                      Citas para {selectedDate}
+                    </h3>
+                    <div className="space-y-3">
+                      {appointments
+                        .filter(apt => apt.date === selectedDate)
+                        .map(appointment => (
+                          <motion.div
+                            key={appointment.id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-sky-50 border border-sky-200 rounded-lg p-4"
+                          >
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <p className="text-slate-800 font-medium">
+                                  {appointment.time} - {appointment.doctor}
+                                </p>
+                                <p className="text-slate-600 text-sm mt-1">
+                                  {appointment.reason}
+                                </p>
+                              </div>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => handleAppointmentCancel(appointment.id)}
+                                className="p-2 text-red-600 hover:text-red-800 transition-colors"
+                              >
+                                <X size={16} />
+                              </motion.button>
+                            </div>
+                          </motion.div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             </motion.div>
-          </motion.div>
+          ) : (
+            <div className="text-center text-slate-600">Cargando calendario...</div>
+          )}
         </main>
       </div>
 
       {/* Appointment Modal */}
-      {showAppointmentModal && (
+      {showAppointmentModal && today && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
