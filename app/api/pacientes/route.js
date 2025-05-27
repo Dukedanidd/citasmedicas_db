@@ -28,9 +28,17 @@ export async function GET(request) {
     if (pacienteId) {
       console.log('[GET /api/pacientes] Obteniendo paciente específico...');
       const [rows] = await conn.execute(`
-        SELECT p.*, u.nombre, u.email, u.telefono
+        SELECT 
+          p.*,
+          u.primer_nombre,
+          u.segundo_nombre,
+          u.apellido_paterno,
+          u.apellido_materno,
+          u.email,
+          m.especialidad as doctor_especialidad
         FROM pacientes p
         JOIN usuarios u ON p.paciente_id = u.user_id
+        JOIN medicos m ON p.doctor_id = m.doctor_id
         WHERE p.paciente_id = ?
       `, [pacienteId]);
       console.log('[GET /api/pacientes] Resultados:', rows);
@@ -48,9 +56,17 @@ export async function GET(request) {
 
     console.log('[GET /api/pacientes] Obteniendo todos los pacientes...');
     const [rows] = await conn.execute(`
-      SELECT p.*, u.nombre, u.email, u.telefono
+      SELECT 
+        p.*,
+        u.primer_nombre,
+        u.segundo_nombre,
+        u.apellido_paterno,
+        u.apellido_materno,
+        u.email,
+        m.especialidad as doctor_especialidad
       FROM pacientes p
       JOIN usuarios u ON p.paciente_id = u.user_id
+      JOIN medicos m ON p.doctor_id = m.doctor_id
     `);
     console.log('[GET /api/pacientes] Resultados:', rows);
 
@@ -71,7 +87,17 @@ export async function POST(request) {
     const data = await request.json();
     console.log('[POST /api/pacientes] Datos recibidos:', { ...data, password: '***' });
 
-    const { nombre, email, password, telefono, fecha_nacimiento, genero, direccion } = data;
+    const { 
+      primer_nombre,
+      segundo_nombre,
+      apellido_paterno,
+      apellido_materno,
+      email,
+      password,
+      fecha_nacimiento,
+      sexo,
+      doctor_id
+    } = data;
 
     console.log('[POST /api/pacientes] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -108,9 +134,24 @@ export async function POST(request) {
       // 1. Crear el usuario
       console.log('[POST /api/pacientes] Creando usuario...');
       const [userResult] = await conn.execute(`
-        INSERT INTO usuarios (nombre, email, password, telefono, role_id)
-        VALUES (?, ?, ?, ?, ?)
-      `, [nombre, email, password, telefono, role_id]);
+        INSERT INTO usuarios (
+          primer_nombre,
+          segundo_nombre,
+          apellido_paterno,
+          apellido_materno,
+          email,
+          password,
+          role_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      `, [
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        email,
+        password,
+        role_id
+      ]);
       console.log('[POST /api/pacientes] Usuario creado:', userResult);
 
       const paciente_id = userResult.insertId;
@@ -119,9 +160,13 @@ export async function POST(request) {
       // 2. Crear el paciente
       console.log('[POST /api/pacientes] Creando paciente...');
       await conn.execute(`
-        INSERT INTO pacientes (paciente_id, fecha_nacimiento, genero, direccion)
-        VALUES (?, ?, ?, ?)
-      `, [paciente_id, fecha_nacimiento, genero, direccion]);
+        INSERT INTO pacientes (
+          paciente_id,
+          fecha_nacimiento,
+          sexo,
+          doctor_id
+        ) VALUES (?, ?, ?, ?)
+      `, [paciente_id, fecha_nacimiento, sexo, doctor_id]);
       console.log('[POST /api/pacientes] Paciente creado');
 
       // Confirmar transacción
@@ -157,7 +202,17 @@ export async function PUT(request) {
     const data = await request.json();
     console.log('[PUT /api/pacientes] Datos recibidos:', { ...data, password: '***' });
 
-    const { paciente_id, nombre, email, telefono, fecha_nacimiento, genero, direccion } = data;
+    const { 
+      paciente_id,
+      primer_nombre,
+      segundo_nombre,
+      apellido_paterno,
+      apellido_materno,
+      email,
+      fecha_nacimiento,
+      sexo,
+      doctor_id
+    } = data;
 
     console.log('[PUT /api/pacientes] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -176,18 +231,33 @@ export async function PUT(request) {
       console.log('[PUT /api/pacientes] Actualizando usuario...');
       const [userResult] = await conn.execute(`
         UPDATE usuarios
-        SET nombre = ?, email = ?, telefono = ?
+        SET 
+          primer_nombre = ?,
+          segundo_nombre = ?,
+          apellido_paterno = ?,
+          apellido_materno = ?,
+          email = ?
         WHERE user_id = ?
-      `, [nombre, email, telefono, paciente_id]);
+      `, [
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        email,
+        paciente_id
+      ]);
       console.log('[PUT /api/pacientes] Usuario actualizado:', userResult);
 
       // 2. Actualizar paciente
       console.log('[PUT /api/pacientes] Actualizando paciente...');
       const [pacienteResult] = await conn.execute(`
         UPDATE pacientes
-        SET fecha_nacimiento = ?, genero = ?, direccion = ?
+        SET 
+          fecha_nacimiento = ?,
+          sexo = ?,
+          doctor_id = ?
         WHERE paciente_id = ?
-      `, [fecha_nacimiento, genero, direccion, paciente_id]);
+      `, [fecha_nacimiento, sexo, doctor_id, paciente_id]);
       console.log('[PUT /api/pacientes] Paciente actualizado:', pacienteResult);
 
       // Confirmar transacción

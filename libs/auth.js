@@ -58,15 +58,15 @@ function getRedirectPath(rol) {
     console.log('[AUTH] Obteniendo ruta de redirección para rol:', rol);
     const path = (() => {
         switch (rol.toLowerCase()) {
-            case 'admin':
-                return '/dashboard/admin';
-            case 'doctor':
-                return '/dashboard/doctor';
-            case 'paciente':
+        case 'admin':
+            return '/dashboard/admin';
+        case 'doctor':
+            return '/dashboard/doctor';
+        case 'paciente':
                 return '/dashboard/patient';
-            default:
-                return '/';
-        }
+        default:
+            return '/';
+    }
     })();
     console.log('[AUTH] Ruta seleccionada:', path);
     return path;
