@@ -21,6 +21,7 @@ export default function PatientCalendar() {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false)
   const [appointmentReason, setAppointmentReason] = useState("")
   const [selectedTime, setSelectedTime] = useState("")
+  const [editingAppointment, setEditingAppointment] = useState(null)
   const [appointments, setAppointments] = useState([
     {
       id: 1,
@@ -86,6 +87,14 @@ export default function PatientCalendar() {
       setAppointmentReason("")
       setSelectedTime("")
     }
+  }
+
+  const handleEditAppointment = (appointment) => {
+    setEditingAppointment(appointment)
+    setAppointmentReason(appointment.reason)
+    setSelectedTime(appointment.time)
+    setSelectedDate(appointment.date)
+    setShowAppointmentModal(true)
   }
 
   const containerVariants = {
@@ -228,15 +237,7 @@ export default function PatientCalendar() {
                     } else if (hasAppointment && isPast) {
                       dayClassName = "bg-orange-200 text-orange-800"
                     } else if (hasAppointment) {
-                      const oneDayInMillis = 24 * 60 * 60 * 1000;
-                      const now = new Date();
-                      const isUpcomingWithin24Hrs = appointmentsOnDay.some(apt => {
-                        const aptDateTime = new Date(`${apt.date}T${apt.time}`);
-                        const timeDiff = aptDateTime.getTime() - now.getTime();
-                        return timeDiff > 0 && timeDiff <= oneDayInMillis;
-                      });
-
-                      dayClassName = isUpcomingWithin24Hrs ? "bg-yellow-200 text-yellow-800" : "bg-green-100 text-green-700"
+                      dayClassName = "bg-green-100 text-green-700"
                     }
 
                     return (
@@ -263,10 +264,7 @@ export default function PatientCalendar() {
                       <span className="block w-4 h-4 bg-orange-200 rounded-full mr-2"></span> Cita Pasada
                     </div>
                     <div className="flex items-center">
-                      <span className="block w-4 h-4 bg-yellow-200 rounded-full mr-2"></span> Cita Próxima {'<'} 24h
-                    </div>
-                    <div className="flex items-center">
-                      <span className="block w-4 h-4 bg-green-100 rounded-full mr-2"></span> Cita Próxima {'>'} 24h
+                      <span className="block w-4 h-4 bg-green-100 rounded-full mr-2"></span> Cita Futura
                     </div>
                   </div>
                 </div>
@@ -296,14 +294,24 @@ export default function PatientCalendar() {
                                   {appointment.reason}
                                 </p>
                               </div>
-                              <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={() => handleAppointmentCancel(appointment.id)}
-                                className="p-2 text-red-600 hover:text-red-800 transition-colors"
-                              >
-                                <X size={16} />
-                              </motion.button>
+                              <div className="flex space-x-2">
+                                <motion.button
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  onClick={() => handleEditAppointment(appointment)}
+                                  className="p-2 text-sky-600 hover:text-sky-800 transition-colors"
+                                >
+                                  <FileText size={16} />
+                                </motion.button>
+                                <motion.button
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  onClick={() => handleAppointmentCancel(appointment.id)}
+                                  className="p-2 text-red-600 hover:text-red-800 transition-colors"
+                                >
+                                  <X size={16} />
+                                </motion.button>
+                              </div>
                             </div>
                           </motion.div>
                         ))}
