@@ -9,17 +9,8 @@ export async function authenticateUser(email, password) {
     try {
         // Buscamos en la tabla usuarios
         console.log('[AUTH] Ejecutando consulta SQL...');
-        console.log('[AUTH] Query:', `SELECT u.user_id as id, u.email, u.password, r.nombre as rol 
-             FROM usuarios u 
-             JOIN roles r ON u.role_id = r.role_id 
-             WHERE u.email = ? AND u.password = ?`);
-        console.log('[AUTH] Parámetros:', { email, password: '***' });
-
         const [users] = await connection.promise().query(
-            `SELECT u.user_id as id, u.email, u.password, r.nombre as rol 
-             FROM usuarios u 
-             JOIN roles r ON u.role_id = r.role_id 
-             WHERE u.email = ? AND u.password = ?`,
+            'SELECT user_id as id, email, password, rol FROM usuarios WHERE email = ? AND password = ?',
             [email, password]
         );
 
@@ -58,15 +49,15 @@ function getRedirectPath(rol) {
     console.log('[AUTH] Obteniendo ruta de redirección para rol:', rol);
     const path = (() => {
         switch (rol.toLowerCase()) {
-        case 'admin':
-            return '/dashboard/admin';
-        case 'doctor':
-            return '/dashboard/doctor';
-        case 'paciente':
+            case 'admin':
+                return '/dashboard/admin';
+            case 'doctor':
+                return '/dashboard/doctor';
+            case 'paciente':
                 return '/dashboard/patient';
-        default:
-            return '/';
-    }
+            default:
+                return '/';
+        }
     })();
     console.log('[AUTH] Ruta seleccionada:', path);
     return path;

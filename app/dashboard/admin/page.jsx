@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Modal from "@/components/ui/Modal"
 import DoctorForm from "@/components/ui/DoctorForm"
@@ -40,6 +40,24 @@ export default function AdminDashboard() {
     { id: 2, nombre: "Pedro Sánchez", edad: 28, ultimaCita: "2024-03-14", doctor: "Dra. María García" },
     { id: 3, nombre: "Laura Torres", edad: 42, ultimaCita: "2024-03-13", doctor: "Dr. Carlos López" },
   ])
+
+  useEffect(() => {
+    // Aquí podrías verificar si el usuario está autenticado
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/check');
+        const data = await res.json();
+        
+        if (!data.authenticated || data.user?.rol !== 'admin') {
+          router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error verificando autenticación:', error);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleLogout = () => {
     router.push("/")

@@ -190,18 +190,7 @@ async function authenticateUser(email, password) {
     try {
         // Buscamos en la tabla usuarios
         console.log('[AUTH] Ejecutando consulta SQL...');
-        console.log('[AUTH] Query:', `SELECT u.user_id as id, u.email, u.password, r.nombre as rol 
-             FROM usuarios u 
-             JOIN roles r ON u.role_id = r.role_id 
-             WHERE u.email = ? AND u.password = ?`);
-        console.log('[AUTH] Parámetros:', {
-            email,
-            password: '***'
-        });
-        const [users] = await __TURBOPACK__imported__module__$5b$project$5d2f$database$2f$connection$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].promise().query(`SELECT u.user_id as id, u.email, u.password, r.nombre as rol 
-             FROM usuarios u 
-             JOIN roles r ON u.role_id = r.role_id 
-             WHERE u.email = ? AND u.password = ?`, [
+        const [users] = await __TURBOPACK__imported__module__$5b$project$5d2f$database$2f$connection$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].promise().query('SELECT user_id as id, email, password, rol FROM usuarios WHERE email = ? AND password = ?', [
             email,
             password
         ]);
@@ -291,7 +280,6 @@ async function POST(request) {
                 status: 400
             });
         }
-        console.log('[LOGIN] Autenticando usuario...');
         const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$libs$2f$auth$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["authenticateUser"])(email, password);
         console.log('[LOGIN] Resultado de autenticación:', result);
         if (result.error) {
@@ -302,11 +290,10 @@ async function POST(request) {
                 status: 401
             });
         }
-        console.log('[LOGIN] Usuario autenticado exitosamente');
+        console.log('[LOGIN] Login exitoso, redirigiendo a:', result.redirectTo);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(result);
     } catch (error) {
-        console.error('[LOGIN] Error en el proceso de login:', error);
-        console.error('[LOGIN] Stack trace:', error.stack);
+        console.error('[LOGIN] Error en el servidor:', error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: 'Error en el servidor'
         }, {

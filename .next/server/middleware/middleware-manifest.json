@@ -11,20 +11,16 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/api/:path*{(\\\\.json)}?",
-          "originalSource": "/api/:path*"
-        },
-        {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/dashboard/:path*{(\\\\.json)}?",
-          "originalSource": "/dashboard/:path*"
-        },
-        {
           "regexp": "/:nextData(_next/data/[^/]{1,})?/login{(\\\\.json)}?",
           "originalSource": "/login"
         },
         {
           "regexp": "/:nextData(_next/data/[^/]{1,})?/register{(\\\\.json)}?",
           "originalSource": "/register"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/dashboard/:path*{(\\\\.json)}?",
+          "originalSource": "/dashboard/:path*"
         }
       ],
       "wasm": [],

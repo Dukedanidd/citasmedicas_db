@@ -19,6 +19,8 @@ export default function LoginPage() {
     setError("")
 
     try {
+      console.log('Intentando iniciar sesión con:', { email, password })
+      
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -28,19 +30,33 @@ export default function LoginPage() {
       })
 
       const data = await res.json()
+      console.log('Respuesta del servidor:', data)
 
       if (data.error) {
         setError(data.error)
+        setIsLoading(false)
         return
       }
 
-      // Redirigir al usuario según su rol
+      // Verificar que tenemos una ruta de redirección
+      if (!data.redirectTo) {
+        console.error('No se recibió ruta de redirección')
+        setError('Error en la redirección')
+        setIsLoading(false)
+        return
+      }
+
+      console.log('Redirigiendo a:', data.redirectTo)
+      
+      // Usar router.push para la redirección
       router.push(data.redirectTo)
+      
     } catch (error) {
+      console.error('Error durante el login:', error)
       setError("Error al iniciar sesión")
+    } finally {
+      setIsLoading(false)
     }
-    
-    setIsLoading(false)
   }
 
   const containerVariants = {

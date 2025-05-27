@@ -29,49 +29,27 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/esm/server/web/spec-extension/response.js [middleware] (ecmascript)");
 ;
 function middleware(request) {
-    // Obtener el origen de la petición
-    const origin = request.headers.get('origin') || '';
-    console.log('[Middleware] Origen de la petición:', origin);
-    // Verificar si es una petición de API
-    if (request.nextUrl.pathname.startsWith('/api')) {
-        console.log('[Middleware] Es una petición de API');
-        // Crear la respuesta
-        const response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
-        // Configurar CORS
-        response.headers.set('Access-Control-Allow-Origin', '*');
-        response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-        response.headers.set('Access-Control-Allow-Credentials', 'true');
-        // Si es una petición OPTIONS, responder inmediatamente
-        if (request.method === 'OPTIONS') {
-            console.log('[Middleware] Es una petición OPTIONS, respondiendo...');
-            return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"](null, {
-                status: 204
-            });
-        }
-        return response;
+    const path = request.nextUrl.pathname;
+    // Definir las rutas públicas
+    const isPublicPath = path === '/login' || path === '/register';
+    // Si es una ruta pública y el usuario está autenticado, redirigir al dashboard
+    if (isPublicPath) {
+        // Aquí podrías verificar si hay una sesión activa y redirigir al dashboard correspondiente
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
     }
-    // Para rutas no-API, verificar autenticación
-    const isAuthPage = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register');
-    const token = request.cookies.get('token')?.value;
-    console.log('[Middleware] Token presente:', !!token);
-    console.log('[Middleware] Es página de auth:', isAuthPage);
-    if (!token && !isAuthPage) {
-        console.log('[Middleware] Redirigiendo a login...');
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL('/login', request.url));
-    }
-    if (token && isAuthPage) {
-        console.log('[Middleware] Redirigiendo a dashboard...');
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL('/dashboard', request.url));
+    // Si es una ruta protegida y el usuario no está autenticado, redirigir al login
+    if (path.startsWith('/dashboard')) {
+        // Aquí deberías verificar si el usuario está autenticado y tiene el rol correcto
+        // Por ahora, permitiremos el acceso
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
     }
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
 }
 const config = {
     matcher: [
-        '/api/:path*',
-        '/dashboard/:path*',
         '/login',
-        '/register'
+        '/register',
+        '/dashboard/:path*'
     ]
 };
 }}),
