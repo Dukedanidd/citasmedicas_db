@@ -1,16 +1,17 @@
-import { authenticateUser } from '../../../libs/auth';
+import { authenticateUser } from '../../../../libs/auth';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     console.log('[LOGIN] Iniciando proceso de login...');
     try {
-        const { email, password } = await request.json();
+        const body = await request.json();
+        const { email, password } = body;
         console.log('[LOGIN] Datos recibidos:', { email, password: '***' });
 
         if (!email || !password) {
             console.log('[LOGIN] Faltan credenciales');
             return NextResponse.json(
-                { error: 'Email y contraseña son requeridos' },
+                { error: 'Correo y contraseña son requeridos' },
                 { status: 400 }
             );
         }
