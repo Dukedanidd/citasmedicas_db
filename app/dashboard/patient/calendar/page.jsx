@@ -21,81 +21,89 @@ export default function PatientCalendar() {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false)
   const [appointmentReason, setAppointmentReason] = useState("")
   const [selectedTime, setSelectedTime] = useState("")
-  const [editingAppointment, setEditingAppointment] = useState(null)
-  const [appointments, setAppointments] = useState([
-    {
-      id: 1,
-      date: "2024-03-20",
-      time: "09:00",
-      doctor: "Dr. Juan Pérez",
-      reason: "Consulta de rutina",
-      status: "scheduled"
-    },
-    {
-      id: 2,
-      date: "2024-03-25",
-      time: "14:30",
-      doctor: "Dra. María García",
-      reason: "Seguimiento",
-      status: "upcoming"
-    },
-    {
-      id: 3,
-      date: "2024-03-10",
-      time: "11:00",
-      doctor: "Dr. Carlos López",
-      reason: "Chequeo general",
-      status: "completed"
-    }
-  ])
+  const [appointments, setAppointments] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [today, setToday] = useState(null)
 
-  const [today, setToday] = useState(null);
+  // Simular ID del paciente (esto debería venir de la autenticación)
+  const pacienteId = 1
 
   useEffect(() => {
-    setToday(new Date());
-  }, []);
+    setToday(new Date())
+    fetchAppointments()
+  }, [])
 
-  const availableTimeSlots = [
-    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
-  ]
+  const fetchAppointments = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/citas?pacienteId=${pacienteId}`)
+      if (!response.ok) throw new Error('Error al cargar las citas')
+      const data = await response.json()
+      setAppointments(data)
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleDateSelect = (day) => {
     if (today) {
-      const date = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      const date = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
       setSelectedDate(date)
       setShowAppointmentModal(false)
     }
   }
 
-  const handleAppointmentCancel = (appointmentId) => {
-    setAppointments(appointments.filter(apt => apt.id !== appointmentId))
-  }
-
-  const handleNewAppointment = () => {
-    if (appointmentReason && selectedTime && selectedDate) {
-      const newAppointment = {
-        id: Date.now(),
-        date: selectedDate,
-        time: selectedTime,
-        doctor: "Dr. Juan Pérez",
-        reason: appointmentReason,
-        status: "scheduled"
-      }
-      setAppointments([...appointments, newAppointment])
-      setShowAppointmentModal(false)
-      setAppointmentReason("")
-      setSelectedTime("")
+  const handleAppointmentCancel = async (appointmentId) => {
+    try {
+      const response = await fetch(`/api/citas?citaId=${appointmentId}`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Error al cancelar la cita')
+      await fetchAppointments()
+    } catch (error) {
+      setError(error.message)
     }
   }
 
-  const handleEditAppointment = (appointment) => {
-    setEditingAppointment(appointment)
-    setAppointmentReason(appointment.reason)
-    setSelectedTime(appointment.time)
-    setSelectedDate(appointment.date)
-    setShowAppointmentModal(true)
+  const handleNewAppointment = async () => {
+    if (appointmentReason && selectedTime && selectedDate) {
+      try {
+        const response = await fetch('/api/citas', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            paciente_id: pacienteId,
+            doctor_id: 1, // Esto debería venir de una selección del usuario
+            fecha: selectedDate,
+            hora: selectedTime,
+            motivo: appointmentReason
+          })
+        })
+
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error || 'Error al crear la cita')
+        }
+
+        await fetchAppointments()
+        setShowAppointmentModal(false)
+        setAppointmentReason("")
+        setSelectedTime("")
+      } catch (error) {
+        setError(error.message)
+      }
+    }
   }
+
+  const availableTimeSlots = [
+    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+  ]
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -117,8 +125,20 @@ export default function PatientCalendar() {
     },
   }
 
-  const currentMonth = today ? today.toLocaleString('es-ES', { month: 'long' }) : '';
-  const currentYear = today ? today.getFullYear() : '';
+  const currentMonth = today ? today.toLocaleString('es-ES', { month: 'long' }) : ''
+  const currentYear = today ? today.getFullYear() : ''
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="text-slate-600">Cargando calendario...</div>
+    </div>
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="text-red-600">Error: {error}</div>
+    </div>
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
@@ -223,10 +243,10 @@ export default function PatientCalendar() {
                     const isPast = dayDate < today && !isToday
 
                     const appointmentsOnDay = appointments.filter(apt => {
-                      const aptDate = new Date(apt.date)
+                      const aptDate = new Date(apt.fecha)
                       return aptDate.getFullYear() === dayDate.getFullYear() &&
                              aptDate.getMonth() === dayDate.getMonth() &&
-                             aptDate.getDate() === dayDate.getDate();
+                             aptDate.getDate() === dayDate.getDate()
                     })
                     const hasAppointment = appointmentsOnDay.length > 0
 
@@ -277,10 +297,10 @@ export default function PatientCalendar() {
                     </h3>
                     <div className="space-y-3">
                       {appointments
-                        .filter(apt => apt.date === selectedDate)
+                        .filter(apt => apt.fecha === selectedDate)
                         .map(appointment => (
                           <motion.div
-                            key={appointment.id}
+                            key={appointment.cita_id}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="bg-sky-50 border border-sky-200 rounded-lg p-4"
@@ -288,30 +308,20 @@ export default function PatientCalendar() {
                             <div className="flex justify-between items-start">
                               <div>
                                 <p className="text-slate-800 font-medium">
-                                  {appointment.time} - {appointment.doctor}
+                                  {appointment.hora} - {appointment.doctor_nombre}
                                 </p>
                                 <p className="text-slate-600 text-sm mt-1">
-                                  {appointment.reason}
+                                  {appointment.motivo}
                                 </p>
                               </div>
-                              <div className="flex space-x-2">
-                                <motion.button
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.9 }}
-                                  onClick={() => handleEditAppointment(appointment)}
-                                  className="p-2 text-sky-600 hover:text-sky-800 transition-colors"
-                                >
-                                  <FileText size={16} />
-                                </motion.button>
-                                <motion.button
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.9 }}
-                                  onClick={() => handleAppointmentCancel(appointment.id)}
-                                  className="p-2 text-red-600 hover:text-red-800 transition-colors"
-                                >
-                                  <X size={16} />
-                                </motion.button>
-                              </div>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => handleAppointmentCancel(appointment.cita_id)}
+                                className="p-2 text-red-600 hover:text-red-800 transition-colors"
+                              >
+                                <X size={16} />
+                              </motion.button>
                             </div>
                           </motion.div>
                         ))}
