@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'clinica-admin',          // Usuario de MySQL
     password: 'admin',          // Contraseña de MySQL
-    database: 'clinca_db' // Nombre de la base de datos
+    database: 'clinica_db' // Nombre de la base de datos
 });
 
 // Probar la conexión
