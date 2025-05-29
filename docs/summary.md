@@ -34,4 +34,4 @@
 - Using plain text passwords for testing (not for production)
 - Appointment times must be between 09:00:00 and 17:00:00
 - All endpoints require JWT authentication
-- Test data includes various scenarios (patients with/without records, appointments in different states)
+- Test data includes various scenarios (patients with/without records, appointments in different states) 
