@@ -25,7 +25,7 @@ export async function GET() {
     console.log('[GET /api/doctores] Ejecutando consulta SQL...');
     const [rows] = await conn.execute(`
       SELECT u.user_id AS doctor_id, u.primer_nombre, u.apellido_paterno,
-             m.especialidad, c.nombre AS consultorio
+             u.email, m.especialidad, c.nombre AS consultorio
       FROM medicos m
       JOIN usuarios u ON m.doctor_id = u.user_id
       JOIN consultorios c ON m.consultorio_id = c.consultorio_id

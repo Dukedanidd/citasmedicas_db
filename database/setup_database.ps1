@@ -38,9 +38,19 @@ try {
 Write-Host "`nCreando la base de datos..." -ForegroundColor Yellow
 mysql --defaults-file="$configPath" -e "CREATE DATABASE IF NOT EXISTS clinica_db;"
 
+# Buscar el archivo SQL más reciente
+$latestSqlFile = Get-ChildItem -Filter "*.sql" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+
+if (-not $latestSqlFile) {
+    Write-Host "Error: No se encontró ningún archivo SQL en el directorio actual" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "`nUsando el archivo SQL más reciente: $($latestSqlFile.Name)" -ForegroundColor Yellow
+
 # Importar el esquema y datos
 Write-Host "`nImportando el esquema y datos..." -ForegroundColor Yellow
-mysql --defaults-file="$configPath" clinica_db < backup_completo_clinica_20250529_124810.sql
+mysql --defaults-file="$configPath" clinica_db < $latestSqlFile.FullName
 
 # Limpiar archivo de configuración temporal
 Remove-Item $configPath
