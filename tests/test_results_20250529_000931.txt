@@ -1,0 +1,19 @@
+[TEST] Testing Doctores endpoints...
+[TEST] Testing Pacientes endpoints...
+[TEST] Testing Expedientes endpoints...
+Respuesta: {"error":"El paciente ya tiene un expediente registrado"}
+Código de estado: 400
+Código esperado: 201
+---
+[TEST] Testing Historial Médico endpoints...
+[TEST] Testing Alergias endpoints...
+[TEST] Testing Citas endpoints...
+Respuesta: {"error":"El doctor no está disponible en la fecha y hora especificadas"}
+Código de estado: 400
+Código esperado: 201
+---
+Respuesta: {"error":"Error al actualizar cita"}
+Código de estado: 500
+Código esperado: 200
+---
+[TEST] All tests completed!

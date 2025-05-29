@@ -32,7 +32,7 @@ CREATE TABLE `agenda` (
   PRIMARY KEY (`agenda_id`),
   KEY `doctor_id` (`doctor_id`),
   CONSTRAINT `agenda_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `medicos` (`doctor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +41,7 @@ CREATE TABLE `agenda` (
 
 LOCK TABLES `agenda` WRITE;
 /*!40000 ALTER TABLE `agenda` DISABLE KEYS */;
+INSERT INTO `agenda` VALUES (1,1,'2024-03-20','09:00:00','17:00:00',1);
 /*!40000 ALTER TABLE `agenda` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -127,7 +128,7 @@ CREATE TABLE `alergias` (
   PRIMARY KEY (`alergia_id`),
   KEY `expediente_id` (`expediente_id`),
   CONSTRAINT `alergias_ibfk_1` FOREIGN KEY (`expediente_id`) REFERENCES `expedientes` (`expediente_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +137,7 @@ CREATE TABLE `alergias` (
 
 LOCK TABLES `alergias` WRITE;
 /*!40000 ALTER TABLE `alergias` DISABLE KEYS */;
-INSERT INTO `alergias` VALUES (1,1,'Alergia severa a penicilina'),(2,1,'Alergia a penicilina');
+INSERT INTO `alergias` VALUES (1,1,'Alergia severa a penicilina'),(2,1,'Alergia a penicilina'),(3,1,'Alergia a penicilina'),(4,1,'Alergia a penicilina'),(5,1,'Alergia a penicilina'),(6,1,'Alergia a penicilina'),(7,1,'Alergia a penicilina');
 /*!40000 ALTER TABLE `alergias` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -227,7 +228,7 @@ CREATE TABLE `bitacora` (
   PRIMARY KEY (`log_id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `bitacora_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +237,7 @@ CREATE TABLE `bitacora` (
 
 LOCK TABLES `bitacora` WRITE;
 /*!40000 ALTER TABLE `bitacora` DISABLE KEYS */;
-INSERT INTO `bitacora` VALUES (1,'ingreso','consultorios',1,1,'2025-05-18 17:57:41','Creado consultorio id=1 nombre=Buenavista'),(2,'ingreso','medicos',1,1,'2025-05-18 18:01:09','Creado médico id=1 especialidad=Medicina de Emergencia'),(3,'ingreso','usuarios',3,1,'2025-05-18 20:41:25','Creado usuario id=3 (Pablo Gomez)'),(4,'delete','usuarios',3,1,'2025-05-18 20:42:08','Eliminado usuario id=3'),(5,'ingreso','usuarios',2,1,'2025-05-18 20:42:46','Creado usuario id=2 (Pablo Gomez)'),(6,'ingreso','usuarios',6,1,'2025-05-18 20:54:21','Creado usuario id=6 (Gustavo Fernandez)'),(7,'actualizacion','usuarios',6,1,'2025-05-18 20:55:20','Actualizado usuario id=6'),(8,'delete','usuarios',6,1,'2025-05-18 20:56:00','Eliminado usuario id=6'),(9,'ingreso','usuarios',3,1,'2025-05-18 21:05:20','Creado usuario id=3 (Arturo Chavez)'),(10,'delete','usuarios',3,1,'2025-05-18 21:06:23','Eliminado usuario id=3'),(11,'ingreso','usuarios',4,1,'2025-05-19 15:14:32','Creado usuario id=4 (Juan Marquez)'),(12,'ingreso','usuarios',9,1,'2025-05-26 19:36:54','Creado usuario id=9 (Juan Villa)'),(17,'ingreso','medicos',2,1,'2025-05-27 01:47:08','Creado médico id=2 especialidad=Cardiología'),(18,'delete','medicos',2,1,'2025-05-27 01:49:51','Eliminado médico id=2'),(24,'ingreso','usuarios',21,1,'2025-05-27 02:06:47','Creado usuario id=21 (Juan Pérez)'),(25,'ingreso','medicos',21,1,'2025-05-27 02:06:47','Creado médico id=21 especialidad=General'),(26,'actualizacion','medicos',21,1,'2025-05-27 02:06:47','Actualizado médico id=21'),(27,'actualizacion','usuarios',1,1,'2025-05-27 02:18:53','Actualizado usuario id=1'),(28,'delete','medicos',21,1,'2025-05-27 02:19:01','Eliminado médico id=21'),(29,'delete','usuarios',21,1,'2025-05-27 02:19:01','Eliminado usuario id=21'),(30,'ingreso','usuarios',22,1,'2025-05-27 02:22:20','Creado usuario id=22 (Juan Pérez)'),(31,'ingreso','medicos',22,1,'2025-05-27 02:22:20','Creado médico id=22 especialidad=General'),(32,'actualizacion','medicos',22,1,'2025-05-27 02:22:20','Actualizado médico id=22'),(33,'actualizacion','usuarios',22,1,'2025-05-27 02:24:36','Actualizado usuario id=22'),(34,'actualizacion','usuarios',22,1,'2025-05-27 02:25:45','Actualizado usuario id=22'),(35,'actualizacion','usuarios',22,1,'2025-05-27 02:25:59','Actualizado usuario id=22'),(37,'actualizacion','usuarios',22,1,'2025-05-27 02:30:13','Actualizado usuario id=22'),(38,'actualizacion','medicos',22,1,'2025-05-27 02:30:13','Actualizado médico id=22'),(39,'ingreso','usuarios',26,1,'2025-05-27 15:16:50','Creado usuario id=26 (Rodrigo Fernandez)'),(40,'ingreso','pacientes',26,1,'2025-05-27 15:17:42','Creado paciente id=26'),(41,'ingreso','usuarios',27,1,'2025-05-27 15:25:41','Creado usuario id=27 (Gabriela Quintero)'),(42,'ingreso','pacientes',27,1,'2025-05-27 15:25:41','Creado paciente id=27'),(43,'actualizacion','usuarios',27,1,'2025-05-27 15:38:07','Actualizado usuario id=27'),(44,'actualizacion','pacientes',27,1,'2025-05-27 15:38:07','Actualizado paciente id=27'),(45,'delete','pacientes',27,1,'2025-05-27 15:38:50','Eliminado paciente id=27'),(46,'ingreso','usuarios',28,1,'2025-05-28 20:51:31','Creado usuario id=28 (Emilio Gutierrez)'),(47,'ingreso','medicos',28,1,'2025-05-28 20:51:31','Creado médico id=28 especialidad=General'),(48,'actualizacion','medicos',28,1,'2025-05-28 20:51:31','Actualizado médico id=28'),(49,'actualizacion','usuarios',28,1,'2025-05-28 21:05:18','Actualizado usuario id=28'),(50,'actualizacion','medicos',28,1,'2025-05-28 21:05:18','Actualizado médico id=28'),(51,'ingreso','usuarios',29,1,'2025-05-28 21:07:00','Creado usuario id=29 (MR TONOTO)'),(52,'ingreso','medicos',29,1,'2025-05-28 21:07:00','Creado médico id=29 especialidad=General'),(53,'actualizacion','medicos',29,1,'2025-05-28 21:07:00','Actualizado médico id=29'),(54,'delete','medicos',29,1,'2025-05-28 21:07:25','Eliminado médico id=29'),(55,'delete','usuarios',29,1,'2025-05-28 21:07:26','Eliminado usuario id=29'),(56,'ingreso','usuarios',30,1,'2025-05-28 21:08:06','Creado usuario id=30 (María López)'),(57,'ingreso','pacientes',30,1,'2025-05-28 21:08:06','Creado paciente id=30'),(58,'actualizacion','usuarios',1,1,'2025-05-28 21:09:25','Actualizado usuario id=1'),(59,'delete','pacientes',30,1,'2025-05-28 21:12:19','Eliminado paciente id=30'),(60,'actualizacion','usuarios',1,1,'2025-05-28 21:16:54','Actualizado usuario id=1'),(61,'ingreso','expedientes',1,1,'2025-05-28 22:36:04','Creado expediente id=1'),(62,'actualizacion','expedientes',1,1,'2025-05-28 22:36:04','Actualizado expediente id=1'),(63,'ingreso','alergias',1,1,'2025-05-28 22:36:05','Creada alergia id=1'),(64,'actualizacion','alergias',1,1,'2025-05-28 22:36:05','Actualizada alergia id=1'),(65,'actualizacion','usuarios',1,1,'2025-05-28 22:36:07','Actualizado usuario id=1'),(66,'actualizacion','medicos',1,1,'2025-05-28 22:36:07','Actualizado médico id=1'),(67,'actualizacion','usuarios',2,1,'2025-05-28 22:48:42','Actualizado usuario id=2'),(68,'ingreso','estado_citas',11,1,'2025-05-28 23:09:23','Creado estado_citas id=11'),(69,'ingreso','estado_citas',12,1,'2025-05-28 23:09:23','Creado estado_citas id=12'),(70,'ingreso','estado_citas',13,1,'2025-05-28 23:09:23','Creado estado_citas id=13'),(71,'ingreso','estado_citas',14,1,'2025-05-28 23:09:23','Creado estado_citas id=14'),(72,'ingreso','estado_citas',15,1,'2025-05-28 23:09:23','Creado estado_citas id=15'),(73,'actualizacion','usuarios',1,1,'2025-05-28 23:13:06','Actualizado usuario id=1'),(74,'actualizacion','medicos',1,1,'2025-05-28 23:13:06','Actualizado médico id=1'),(75,'actualizacion','usuarios',26,1,'2025-05-28 23:13:06','Actualizado usuario id=26'),(76,'actualizacion','pacientes',26,1,'2025-05-28 23:13:06','Actualizado paciente id=26'),(77,'actualizacion','expedientes',1,1,'2025-05-28 23:13:07','Actualizado expediente id=1'),(78,'ingreso','alergias',2,1,'2025-05-28 23:13:07','Creada alergia id=2'),(79,'actualizacion','alergias',1,1,'2025-05-28 23:13:08','Actualizada alergia id=1');
+INSERT INTO `bitacora` VALUES (1,'ingreso','consultorios',1,1,'2025-05-18 17:57:41','Creado consultorio id=1 nombre=Buenavista'),(2,'ingreso','medicos',1,1,'2025-05-18 18:01:09','Creado médico id=1 especialidad=Medicina de Emergencia'),(3,'ingreso','usuarios',3,1,'2025-05-18 20:41:25','Creado usuario id=3 (Pablo Gomez)'),(4,'delete','usuarios',3,1,'2025-05-18 20:42:08','Eliminado usuario id=3'),(5,'ingreso','usuarios',2,1,'2025-05-18 20:42:46','Creado usuario id=2 (Pablo Gomez)'),(6,'ingreso','usuarios',6,1,'2025-05-18 20:54:21','Creado usuario id=6 (Gustavo Fernandez)'),(7,'actualizacion','usuarios',6,1,'2025-05-18 20:55:20','Actualizado usuario id=6'),(8,'delete','usuarios',6,1,'2025-05-18 20:56:00','Eliminado usuario id=6'),(9,'ingreso','usuarios',3,1,'2025-05-18 21:05:20','Creado usuario id=3 (Arturo Chavez)'),(10,'delete','usuarios',3,1,'2025-05-18 21:06:23','Eliminado usuario id=3'),(11,'ingreso','usuarios',4,1,'2025-05-19 15:14:32','Creado usuario id=4 (Juan Marquez)'),(12,'ingreso','usuarios',9,1,'2025-05-26 19:36:54','Creado usuario id=9 (Juan Villa)'),(17,'ingreso','medicos',2,1,'2025-05-27 01:47:08','Creado médico id=2 especialidad=Cardiología'),(18,'delete','medicos',2,1,'2025-05-27 01:49:51','Eliminado médico id=2'),(24,'ingreso','usuarios',21,1,'2025-05-27 02:06:47','Creado usuario id=21 (Juan Pérez)'),(25,'ingreso','medicos',21,1,'2025-05-27 02:06:47','Creado médico id=21 especialidad=General'),(26,'actualizacion','medicos',21,1,'2025-05-27 02:06:47','Actualizado médico id=21'),(27,'actualizacion','usuarios',1,1,'2025-05-27 02:18:53','Actualizado usuario id=1'),(28,'delete','medicos',21,1,'2025-05-27 02:19:01','Eliminado médico id=21'),(29,'delete','usuarios',21,1,'2025-05-27 02:19:01','Eliminado usuario id=21'),(30,'ingreso','usuarios',22,1,'2025-05-27 02:22:20','Creado usuario id=22 (Juan Pérez)'),(31,'ingreso','medicos',22,1,'2025-05-27 02:22:20','Creado médico id=22 especialidad=General'),(32,'actualizacion','medicos',22,1,'2025-05-27 02:22:20','Actualizado médico id=22'),(33,'actualizacion','usuarios',22,1,'2025-05-27 02:24:36','Actualizado usuario id=22'),(34,'actualizacion','usuarios',22,1,'2025-05-27 02:25:45','Actualizado usuario id=22'),(35,'actualizacion','usuarios',22,1,'2025-05-27 02:25:59','Actualizado usuario id=22'),(37,'actualizacion','usuarios',22,1,'2025-05-27 02:30:13','Actualizado usuario id=22'),(38,'actualizacion','medicos',22,1,'2025-05-27 02:30:13','Actualizado médico id=22'),(39,'ingreso','usuarios',26,1,'2025-05-27 15:16:50','Creado usuario id=26 (Rodrigo Fernandez)'),(40,'ingreso','pacientes',26,1,'2025-05-27 15:17:42','Creado paciente id=26'),(41,'ingreso','usuarios',27,1,'2025-05-27 15:25:41','Creado usuario id=27 (Gabriela Quintero)'),(42,'ingreso','pacientes',27,1,'2025-05-27 15:25:41','Creado paciente id=27'),(43,'actualizacion','usuarios',27,1,'2025-05-27 15:38:07','Actualizado usuario id=27'),(44,'actualizacion','pacientes',27,1,'2025-05-27 15:38:07','Actualizado paciente id=27'),(45,'delete','pacientes',27,1,'2025-05-27 15:38:50','Eliminado paciente id=27'),(46,'ingreso','usuarios',28,1,'2025-05-28 20:51:31','Creado usuario id=28 (Emilio Gutierrez)'),(47,'ingreso','medicos',28,1,'2025-05-28 20:51:31','Creado médico id=28 especialidad=General'),(48,'actualizacion','medicos',28,1,'2025-05-28 20:51:31','Actualizado médico id=28'),(49,'actualizacion','usuarios',28,1,'2025-05-28 21:05:18','Actualizado usuario id=28'),(50,'actualizacion','medicos',28,1,'2025-05-28 21:05:18','Actualizado médico id=28'),(51,'ingreso','usuarios',29,1,'2025-05-28 21:07:00','Creado usuario id=29 (MR TONOTO)'),(52,'ingreso','medicos',29,1,'2025-05-28 21:07:00','Creado médico id=29 especialidad=General'),(53,'actualizacion','medicos',29,1,'2025-05-28 21:07:00','Actualizado médico id=29'),(54,'delete','medicos',29,1,'2025-05-28 21:07:25','Eliminado médico id=29'),(55,'delete','usuarios',29,1,'2025-05-28 21:07:26','Eliminado usuario id=29'),(56,'ingreso','usuarios',30,1,'2025-05-28 21:08:06','Creado usuario id=30 (María López)'),(57,'ingreso','pacientes',30,1,'2025-05-28 21:08:06','Creado paciente id=30'),(58,'actualizacion','usuarios',1,1,'2025-05-28 21:09:25','Actualizado usuario id=1'),(59,'delete','pacientes',30,1,'2025-05-28 21:12:19','Eliminado paciente id=30'),(60,'actualizacion','usuarios',1,1,'2025-05-28 21:16:54','Actualizado usuario id=1'),(61,'ingreso','expedientes',1,1,'2025-05-28 22:36:04','Creado expediente id=1'),(62,'actualizacion','expedientes',1,1,'2025-05-28 22:36:04','Actualizado expediente id=1'),(63,'ingreso','alergias',1,1,'2025-05-28 22:36:05','Creada alergia id=1'),(64,'actualizacion','alergias',1,1,'2025-05-28 22:36:05','Actualizada alergia id=1'),(65,'actualizacion','usuarios',1,1,'2025-05-28 22:36:07','Actualizado usuario id=1'),(66,'actualizacion','medicos',1,1,'2025-05-28 22:36:07','Actualizado médico id=1'),(67,'actualizacion','usuarios',2,1,'2025-05-28 22:48:42','Actualizado usuario id=2'),(68,'ingreso','estado_citas',11,1,'2025-05-28 23:09:23','Creado estado_citas id=11'),(69,'ingreso','estado_citas',12,1,'2025-05-28 23:09:23','Creado estado_citas id=12'),(70,'ingreso','estado_citas',13,1,'2025-05-28 23:09:23','Creado estado_citas id=13'),(71,'ingreso','estado_citas',14,1,'2025-05-28 23:09:23','Creado estado_citas id=14'),(72,'ingreso','estado_citas',15,1,'2025-05-28 23:09:23','Creado estado_citas id=15'),(73,'actualizacion','usuarios',1,1,'2025-05-28 23:13:06','Actualizado usuario id=1'),(74,'actualizacion','medicos',1,1,'2025-05-28 23:13:06','Actualizado médico id=1'),(75,'actualizacion','usuarios',26,1,'2025-05-28 23:13:06','Actualizado usuario id=26'),(76,'actualizacion','pacientes',26,1,'2025-05-28 23:13:06','Actualizado paciente id=26'),(77,'actualizacion','expedientes',1,1,'2025-05-28 23:13:07','Actualizado expediente id=1'),(78,'ingreso','alergias',2,1,'2025-05-28 23:13:07','Creada alergia id=2'),(79,'actualizacion','alergias',1,1,'2025-05-28 23:13:08','Actualizada alergia id=1'),(80,'delete','estado_citas',11,1,'2025-05-28 23:33:25','Eliminado estado_citas id=11'),(81,'delete','estado_citas',12,1,'2025-05-28 23:33:25','Eliminado estado_citas id=12'),(82,'delete','estado_citas',13,1,'2025-05-28 23:33:25','Eliminado estado_citas id=13'),(83,'delete','estado_citas',14,1,'2025-05-28 23:33:25','Eliminado estado_citas id=14'),(84,'delete','estado_citas',15,1,'2025-05-28 23:33:25','Eliminado estado_citas id=15'),(85,'ingreso','estado_citas',1,1,'2025-05-28 23:33:48','Creado estado_citas id=1'),(86,'ingreso','estado_citas',2,1,'2025-05-28 23:33:48','Creado estado_citas id=2'),(87,'ingreso','estado_citas',3,1,'2025-05-28 23:33:48','Creado estado_citas id=3'),(88,'ingreso','estado_citas',4,1,'2025-05-28 23:33:48','Creado estado_citas id=4'),(89,'ingreso','estado_citas',5,1,'2025-05-28 23:33:48','Creado estado_citas id=5'),(90,'actualizacion','usuarios',1,1,'2025-05-28 23:36:41','Actualizado usuario id=1'),(91,'actualizacion','medicos',1,1,'2025-05-28 23:36:41','Actualizado médico id=1'),(92,'actualizacion','usuarios',26,1,'2025-05-28 23:36:41','Actualizado usuario id=26'),(93,'actualizacion','pacientes',26,1,'2025-05-28 23:36:41','Actualizado paciente id=26'),(94,'actualizacion','expedientes',1,1,'2025-05-28 23:36:42','Actualizado expediente id=1'),(95,'ingreso','historial_medico',1,1,'2025-05-28 23:36:42','Creado historial id=1'),(96,'actualizacion','historial_medico',1,1,'2025-05-28 23:36:42','Actualizado historial id=1'),(97,'ingreso','alergias',3,1,'2025-05-28 23:36:43','Creada alergia id=3'),(98,'actualizacion','alergias',1,1,'2025-05-28 23:36:43','Actualizada alergia id=1'),(99,'ingreso','citas',2,1,'2025-05-28 23:36:43','Creada cita id=2 paciente=26 doctor=1'),(100,'actualizacion','usuarios',1,1,'2025-05-28 23:43:31','Actualizado usuario id=1'),(101,'actualizacion','medicos',1,1,'2025-05-28 23:43:31','Actualizado médico id=1'),(102,'actualizacion','usuarios',26,1,'2025-05-28 23:43:31','Actualizado usuario id=26'),(103,'actualizacion','pacientes',26,1,'2025-05-28 23:43:31','Actualizado paciente id=26'),(104,'actualizacion','expedientes',1,1,'2025-05-28 23:43:32','Actualizado expediente id=1'),(105,'ingreso','historial_medico',2,1,'2025-05-28 23:43:32','Creado historial id=2'),(106,'actualizacion','historial_medico',1,1,'2025-05-28 23:43:32','Actualizado historial id=1'),(107,'ingreso','alergias',4,1,'2025-05-28 23:43:32','Creada alergia id=4'),(108,'actualizacion','alergias',1,1,'2025-05-28 23:43:32','Actualizada alergia id=1'),(109,'ingreso','pacientes',27,1,'2025-05-29 00:04:38','Creado paciente id=27'),(110,'ingreso','expedientes',8,1,'2025-05-29 00:05:29','Creado expediente id=8'),(111,'actualizacion','usuarios',1,1,'2025-05-29 00:09:33','Actualizado usuario id=1'),(112,'actualizacion','medicos',1,1,'2025-05-29 00:09:33','Actualizado médico id=1'),(113,'actualizacion','usuarios',26,1,'2025-05-29 00:09:34','Actualizado usuario id=26'),(114,'actualizacion','pacientes',26,1,'2025-05-29 00:09:34','Actualizado paciente id=26'),(115,'actualizacion','expedientes',1,1,'2025-05-29 00:09:34','Actualizado expediente id=1'),(116,'ingreso','historial_medico',3,1,'2025-05-29 00:09:34','Creado historial id=3'),(117,'actualizacion','historial_medico',1,1,'2025-05-29 00:09:34','Actualizado historial id=1'),(118,'ingreso','alergias',5,1,'2025-05-29 00:09:35','Creada alergia id=5'),(119,'actualizacion','alergias',1,1,'2025-05-29 00:09:35','Actualizada alergia id=1'),(120,'ingreso','agenda',1,1,'2025-05-29 00:13:31','Creada franja agenda id=1'),(121,'actualizacion','usuarios',1,1,'2025-05-29 00:16:25','Actualizado usuario id=1'),(122,'actualizacion','medicos',1,1,'2025-05-29 00:16:25','Actualizado médico id=1'),(123,'actualizacion','usuarios',26,1,'2025-05-29 00:16:26','Actualizado usuario id=26'),(124,'actualizacion','pacientes',26,1,'2025-05-29 00:16:26','Actualizado paciente id=26'),(125,'actualizacion','expedientes',1,1,'2025-05-29 00:16:26','Actualizado expediente id=1'),(126,'ingreso','historial_medico',4,1,'2025-05-29 00:16:27','Creado historial id=4'),(127,'actualizacion','historial_medico',1,1,'2025-05-29 00:16:27','Actualizado historial id=1'),(128,'ingreso','alergias',6,1,'2025-05-29 00:16:28','Creada alergia id=6'),(129,'actualizacion','alergias',1,1,'2025-05-29 00:16:28','Actualizada alergia id=1'),(130,'actualizacion','usuarios',1,1,'2025-05-29 00:24:27','Actualizado usuario id=1'),(131,'actualizacion','medicos',1,1,'2025-05-29 00:24:27','Actualizado médico id=1'),(132,'actualizacion','usuarios',26,1,'2025-05-29 00:24:28','Actualizado usuario id=26'),(133,'actualizacion','pacientes',26,1,'2025-05-29 00:24:28','Actualizado paciente id=26'),(134,'actualizacion','expedientes',1,1,'2025-05-29 00:24:28','Actualizado expediente id=1'),(135,'ingreso','historial_medico',5,1,'2025-05-29 00:24:28','Creado historial id=5'),(136,'actualizacion','historial_medico',1,1,'2025-05-29 00:24:28','Actualizado historial id=1'),(137,'ingreso','alergias',7,1,'2025-05-29 00:24:28','Creada alergia id=7'),(138,'actualizacion','alergias',1,1,'2025-05-29 00:24:29','Actualizada alergia id=1'),(139,'ingreso','citas',3,1,'2025-05-29 00:24:29','Creada cita id=3 paciente=26 doctor=1');
 /*!40000 ALTER TABLE `bitacora` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +263,7 @@ CREATE TABLE `citas` (
   CONSTRAINT `citas_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`paciente_id`),
   CONSTRAINT `citas_ibfk_2` FOREIGN KEY (`doctor_id`) REFERENCES `medicos` (`doctor_id`),
   CONSTRAINT `citas_ibfk_3` FOREIGN KEY (`estado_id`) REFERENCES `estado_citas` (`estado_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,6 +272,7 @@ CREATE TABLE `citas` (
 
 LOCK TABLES `citas` WRITE;
 /*!40000 ALTER TABLE `citas` DISABLE KEYS */;
+INSERT INTO `citas` VALUES (2,26,1,'2024-03-20 10:00:00',1,'Consulta de rutina','2025-05-28 23:36:43'),(3,26,1,'2024-03-20 11:00:00',1,'Consulta de rutina','2025-05-29 00:24:29');
 /*!40000 ALTER TABLE `citas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -454,7 +456,7 @@ CREATE TABLE `estado_citas` (
   `nombre` varchar(20) NOT NULL,
   PRIMARY KEY (`estado_id`),
   UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -463,7 +465,7 @@ CREATE TABLE `estado_citas` (
 
 LOCK TABLES `estado_citas` WRITE;
 /*!40000 ALTER TABLE `estado_citas` DISABLE KEYS */;
-INSERT INTO `estado_citas` VALUES (13,'Cancelada'),(14,'Completada'),(12,'Confirmada'),(15,'No asistió'),(11,'Programada');
+INSERT INTO `estado_citas` VALUES (3,'Cancelada'),(4,'Completada'),(2,'Confirmada'),(5,'No asistió'),(1,'Programada');
 /*!40000 ALTER TABLE `estado_citas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -577,7 +579,7 @@ CREATE TABLE `expedientes` (
   PRIMARY KEY (`expediente_id`),
   UNIQUE KEY `paciente_id` (`paciente_id`),
   CONSTRAINT `expedientes_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`paciente_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -586,7 +588,7 @@ CREATE TABLE `expedientes` (
 
 LOCK TABLES `expedientes` WRITE;
 /*!40000 ALTER TABLE `expedientes` DISABLE KEYS */;
-INSERT INTO `expedientes` VALUES (1,26,'Notas actualizadas');
+INSERT INTO `expedientes` VALUES (1,26,'Notas actualizadas'),(8,27,'Notas de prueba');
 /*!40000 ALTER TABLE `expedientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -674,7 +676,7 @@ CREATE TABLE `historial_medico` (
   PRIMARY KEY (`historial_id`),
   KEY `expediente_id` (`expediente_id`),
   CONSTRAINT `historial_medico_ibfk_1` FOREIGN KEY (`expediente_id`) REFERENCES `expedientes` (`expediente_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -683,6 +685,7 @@ CREATE TABLE `historial_medico` (
 
 LOCK TABLES `historial_medico` WRITE;
 /*!40000 ALTER TABLE `historial_medico` DISABLE KEYS */;
+INSERT INTO `historial_medico` VALUES (1,1,'Seguimiento - Paciente mejora con el tratamiento','2025-05-28 23:36:42'),(2,1,'Consulta de rutina - Paciente presenta síntomas de gripe','2025-05-28 23:43:32'),(3,1,'Consulta de rutina - Paciente presenta síntomas de gripe','2025-05-29 00:09:34'),(4,1,'Consulta de rutina - Paciente presenta síntomas de gripe','2025-05-29 00:16:27'),(5,1,'Consulta de rutina - Paciente presenta síntomas de gripe','2025-05-29 00:24:28');
 /*!40000 ALTER TABLE `historial_medico` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -877,7 +880,7 @@ CREATE TABLE `pacientes` (
 
 LOCK TABLES `pacientes` WRITE;
 /*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
-INSERT INTO `pacientes` VALUES (26,'1990-01-01','M',1);
+INSERT INTO `pacientes` VALUES (26,'1990-01-01','M',1),(27,'1985-06-15','M',1),(30,'1992-03-15','F',1);
 /*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1161,4 +1164,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-28 23:20:18
+-- Dump completed on 2025-05-29  0:26:39
