@@ -1,19 +1,38 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
-export default function PatientForm({ onClose }) {
+export default function PatientForm({ onClose, onSubmit, initialData }) {
   const [formData, setFormData] = useState({
-    nombre: "",
-    edad: "",
-    doctor: ""
+    primer_nombre: "",
+    segundo_nombre: "",
+    apellido_paterno: "",
+    apellido_materno: "",
+    email: "",
+    fecha_nacimiento: "",
+    sexo: "",
+    doctor_id: ""
   })
+
+  // Cargar datos iniciales si estamos editando
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        primer_nombre: initialData.primer_nombre || "",
+        segundo_nombre: initialData.segundo_nombre || "",
+        apellido_paterno: initialData.apellido_paterno || "",
+        apellido_materno: initialData.apellido_materno || "",
+        email: initialData.email || "",
+        fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento).toISOString().split('T')[0] : "",
+        sexo: initialData.sexo || "",
+        doctor_id: initialData.doctor_id || ""
+      })
+    }
+  }, [initialData])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Aquí irá la lógica para guardar el paciente
-    console.log(formData)
-    onClose()
+    onSubmit(formData)
   }
 
   const handleChange = (e) => {
@@ -26,52 +45,132 @@ export default function PatientForm({ onClose }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="primer_nombre" className="block text-sm font-medium text-gray-700">
+            Primer Nombre
+          </label>
+          <input
+            type="text"
+            id="primer_nombre"
+            name="primer_nombre"
+            value={formData.primer_nombre}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="segundo_nombre" className="block text-sm font-medium text-gray-700">
+            Segundo Nombre
+          </label>
+          <input
+            type="text"
+            id="segundo_nombre"
+            name="segundo_nombre"
+            value={formData.segundo_nombre}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="apellido_paterno" className="block text-sm font-medium text-gray-700">
+            Apellido Paterno
+          </label>
+          <input
+            type="text"
+            id="apellido_paterno"
+            name="apellido_paterno"
+            value={formData.apellido_paterno}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="apellido_materno" className="block text-sm font-medium text-gray-700">
+            Apellido Materno
+          </label>
+          <input
+            type="text"
+            id="apellido_materno"
+            name="apellido_materno"
+            value={formData.apellido_materno}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+          />
+        </div>
+      </div>
+
       <div>
-        <label htmlFor="nombre" className="block text-sm font-medium text-gray-700">
-          Nombre Completo
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          Email
         </label>
         <input
-          type="text"
-          id="nombre"
-          name="nombre"
-          value={formData.nombre}
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
         />
       </div>
 
-      <div>
-        <label htmlFor="edad" className="block text-sm font-medium text-gray-700">
-          Edad
-        </label>
-        <input
-          type="number"
-          id="edad"
-          name="edad"
-          value={formData.edad}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-          required
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700">
+            Fecha de Nacimiento
+          </label>
+          <input
+            type="date"
+            id="fecha_nacimiento"
+            name="fecha_nacimiento"
+            value={formData.fecha_nacimiento}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="sexo" className="block text-sm font-medium text-gray-700">
+            Sexo
+          </label>
+          <select
+            id="sexo"
+            name="sexo"
+            value={formData.sexo}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            required
+          >
+            <option value="">Seleccionar sexo</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+        </div>
       </div>
 
       <div>
-        <label htmlFor="doctor" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="doctor_id" className="block text-sm font-medium text-gray-700">
           Doctor Asignado
         </label>
         <select
-          id="doctor"
-          name="doctor"
-          value={formData.doctor}
+          id="doctor_id"
+          name="doctor_id"
+          value={formData.doctor_id}
           onChange={handleChange}
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
         >
           <option value="">Seleccionar doctor</option>
-          <option value="Dr. Juan Pérez">Dr. Juan Pérez</option>
-          <option value="Dra. María García">Dra. María García</option>
-          <option value="Dr. Carlos López">Dr. Carlos López</option>
+          <option value="1">Dr. Juan Pérez - Cardiología</option>
+          <option value="2">Dra. María García - Pediatría</option>
+          <option value="3">Dr. Carlos López - Dermatología</option>
         </select>
       </div>
 
@@ -88,7 +187,7 @@ export default function PatientForm({ onClose }) {
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-md hover:bg-sky-600"
         >
-          Guardar
+          {initialData ? "Actualizar" : "Guardar"}
         </motion.button>
       </div>
     </form>

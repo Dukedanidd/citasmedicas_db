@@ -349,51 +349,94 @@ export async function PUT(request) {
 // DELETE - Eliminar un paciente
 export async function DELETE(request) {
   console.log('[DELETE /api/pacientes] Iniciando petición...');
+  let conn;
   try {
     const { searchParams } = new URL(request.url);
     const pacienteId = searchParams.get('pacienteId');
     console.log('[DELETE /api/pacientes] ID del paciente:', pacienteId);
 
     if (!pacienteId) {
-      console.log('[DELETE /api/pacientes] ID de paciente no proporcionado');
-      return NextResponse.json({ error: 'ID de paciente requerido' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Se requiere el ID del paciente' },
+        { status: 400 }
+      );
     }
 
     console.log('[DELETE /api/pacientes] Conectando a la base de datos...');
-    const conn = await mysql.createConnection(dbConfig);
+    conn = await mysql.createConnection(dbConfig);
     console.log('[DELETE /api/pacientes] Conexión exitosa');
 
     // Asignar current_user_id para los triggers
     await conn.execute('SET @current_user_id = 1');
     console.log('[DELETE /api/pacientes] current_user_id asignado');
 
-    // Verificar si el paciente tiene citas
-    console.log('[DELETE /api/pacientes] Verificando citas del paciente...');
-    const [citas] = await conn.execute(
-      'SELECT COUNT(*) as count FROM citas WHERE paciente_id = ?',
+    // Iniciar transacción
+    await conn.beginTransaction();
+    console.log('[DELETE /api/pacientes] Transacción iniciada');
+
+    // Verificar si el paciente existe
+    const [paciente] = await conn.execute(
+      'SELECT paciente_id FROM pacientes WHERE paciente_id = ?',
       [pacienteId]
     );
 
-    if (citas[0].count > 0) {
-      console.log('[DELETE /api/pacientes] El paciente tiene citas registradas');
-      await conn.end();
-      return NextResponse.json({ 
-        error: 'No se puede eliminar el paciente porque tiene citas registradas' 
-      }, { status: 400 });
+    if (!paciente[0]) {
+      await conn.rollback();
+      console.log('[DELETE /api/pacientes] Paciente no encontrado');
+      return NextResponse.json(
+        { error: 'Paciente no encontrado' },
+        { status: 404 }
+      );
     }
 
-    // Eliminar el paciente (esto también eliminará el usuario debido a la restricción de clave foránea)
-    console.log('[DELETE /api/pacientes] Eliminando paciente...');
+    // Eliminar registros relacionados en orden
+    console.log('[DELETE /api/pacientes] Eliminando registros relacionados...');
+
+    // 1. Eliminar alergias
+    await conn.execute('DELETE FROM alergias WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [pacienteId]);
+    console.log('[DELETE /api/pacientes] Alergias eliminadas');
+
+    // 2. Eliminar historial médico
+    await conn.execute('DELETE FROM historial_medico WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [pacienteId]);
+    console.log('[DELETE /api/pacientes] Historial médico eliminado');
+
+    // 3. Eliminar expedientes
+    await conn.execute('DELETE FROM expedientes WHERE paciente_id = ?', [pacienteId]);
+    console.log('[DELETE /api/pacientes] Expedientes eliminados');
+
+    // 4. Eliminar citas
+    await conn.execute('DELETE FROM citas WHERE paciente_id = ?', [pacienteId]);
+    console.log('[DELETE /api/pacientes] Citas eliminadas');
+
+    // 5. Eliminar el paciente
     await conn.execute('DELETE FROM pacientes WHERE paciente_id = ?', [pacienteId]);
     console.log('[DELETE /api/pacientes] Paciente eliminado');
 
-    await conn.end();
-    console.log('[DELETE /api/pacientes] Conexión cerrada');
+    // 6. Eliminar el usuario asociado
+    await conn.execute('DELETE FROM usuarios WHERE user_id = ?', [pacienteId]);
+    console.log('[DELETE /api/pacientes] Usuario eliminado');
 
-    return NextResponse.json({ message: 'Paciente eliminado exitosamente' });
+    await conn.commit();
+    console.log('[DELETE /api/pacientes] Transacción completada');
+
+    return NextResponse.json({
+      message: 'Paciente eliminado exitosamente'
+    });
   } catch (error) {
+    if (conn) {
+      await conn.rollback();
+      console.log('[DELETE /api/pacientes] Transacción revertida');
+    }
     console.error('[DELETE /api/pacientes] Error:', error);
     console.error('[DELETE /api/pacientes] Stack trace:', error.stack);
-    return NextResponse.json({ error: 'Error al eliminar paciente' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error al eliminar el paciente' },
+      { status: 500 }
+    );
+  } finally {
+    if (conn) {
+      await conn.end();
+      console.log('[DELETE /api/pacientes] Conexión cerrada');
+    }
   }
 } 

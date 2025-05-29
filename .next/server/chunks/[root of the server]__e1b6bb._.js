@@ -476,57 +476,94 @@ async function PUT(request) {
 }
 async function DELETE(request) {
     console.log('[DELETE /api/pacientes] Iniciando petición...');
+    let conn;
     try {
         const { searchParams } = new URL(request.url);
         const pacienteId = searchParams.get('pacienteId');
         console.log('[DELETE /api/pacientes] ID del paciente:', pacienteId);
         if (!pacienteId) {
-            console.log('[DELETE /api/pacientes] ID de paciente no proporcionado');
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'ID de paciente requerido'
+                error: 'Se requiere el ID del paciente'
             }, {
                 status: 400
             });
         }
         console.log('[DELETE /api/pacientes] Conectando a la base de datos...');
-        const conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
+        conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
         console.log('[DELETE /api/pacientes] Conexión exitosa');
         // Asignar current_user_id para los triggers
         await conn.execute('SET @current_user_id = 1');
         console.log('[DELETE /api/pacientes] current_user_id asignado');
-        // Verificar si el paciente tiene citas
-        console.log('[DELETE /api/pacientes] Verificando citas del paciente...');
-        const [citas] = await conn.execute('SELECT COUNT(*) as count FROM citas WHERE paciente_id = ?', [
+        // Iniciar transacción
+        await conn.beginTransaction();
+        console.log('[DELETE /api/pacientes] Transacción iniciada');
+        // Verificar si el paciente existe
+        const [paciente] = await conn.execute('SELECT paciente_id FROM pacientes WHERE paciente_id = ?', [
             pacienteId
         ]);
-        if (citas[0].count > 0) {
-            console.log('[DELETE /api/pacientes] El paciente tiene citas registradas');
-            await conn.end();
+        if (!paciente[0]) {
+            await conn.rollback();
+            console.log('[DELETE /api/pacientes] Paciente no encontrado');
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'No se puede eliminar el paciente porque tiene citas registradas'
+                error: 'Paciente no encontrado'
             }, {
-                status: 400
+                status: 404
             });
         }
-        // Eliminar el paciente (esto también eliminará el usuario debido a la restricción de clave foránea)
-        console.log('[DELETE /api/pacientes] Eliminando paciente...');
+        // Eliminar registros relacionados en orden
+        console.log('[DELETE /api/pacientes] Eliminando registros relacionados...');
+        // 1. Eliminar alergias
+        await conn.execute('DELETE FROM alergias WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [
+            pacienteId
+        ]);
+        console.log('[DELETE /api/pacientes] Alergias eliminadas');
+        // 2. Eliminar historial médico
+        await conn.execute('DELETE FROM historial_medico WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [
+            pacienteId
+        ]);
+        console.log('[DELETE /api/pacientes] Historial médico eliminado');
+        // 3. Eliminar expedientes
+        await conn.execute('DELETE FROM expedientes WHERE paciente_id = ?', [
+            pacienteId
+        ]);
+        console.log('[DELETE /api/pacientes] Expedientes eliminados');
+        // 4. Eliminar citas
+        await conn.execute('DELETE FROM citas WHERE paciente_id = ?', [
+            pacienteId
+        ]);
+        console.log('[DELETE /api/pacientes] Citas eliminadas');
+        // 5. Eliminar el paciente
         await conn.execute('DELETE FROM pacientes WHERE paciente_id = ?', [
             pacienteId
         ]);
         console.log('[DELETE /api/pacientes] Paciente eliminado');
-        await conn.end();
-        console.log('[DELETE /api/pacientes] Conexión cerrada');
+        // 6. Eliminar el usuario asociado
+        await conn.execute('DELETE FROM usuarios WHERE user_id = ?', [
+            pacienteId
+        ]);
+        console.log('[DELETE /api/pacientes] Usuario eliminado');
+        await conn.commit();
+        console.log('[DELETE /api/pacientes] Transacción completada');
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             message: 'Paciente eliminado exitosamente'
         });
     } catch (error) {
+        if (conn) {
+            await conn.rollback();
+            console.log('[DELETE /api/pacientes] Transacción revertida');
+        }
         console.error('[DELETE /api/pacientes] Error:', error);
         console.error('[DELETE /api/pacientes] Stack trace:', error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al eliminar paciente'
+            error: 'Error al eliminar el paciente'
         }, {
             status: 500
         });
+    } finally{
+        if (conn) {
+            await conn.end();
+            console.log('[DELETE /api/pacientes] Conexión cerrada');
+        }
     }
 }
 }}),

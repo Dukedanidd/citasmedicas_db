@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("doctors") // doctors, patients, appointments
   const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false)
   const [isPatientModalOpen, setIsPatientModalOpen] = useState(false)
+  const [editingPatient, setEditingPatient] = useState(null)
   
   const [doctores, setDoctores] = useState([
     { id: 1, nombre: "Dr. Juan Pérez", especialidad: "Cardiología", pacientes: 45, citas: 12 },
@@ -94,14 +95,103 @@ export default function AdminDashboard() {
     setIsDoctorModalOpen(false)
   }
 
-  const handleAddPatient = (newPatient) => {
-    const patientWithId = {
-      ...newPatient,
-      id: pacientes.length + 1,
-      ultimaCita: new Date().toISOString().split('T')[0]
+  const handleEditPatient = (paciente) => {
+    setEditingPatient(paciente)
+    setIsPatientModalOpen(true)
+  }
+
+  const handleDeletePatient = async (pacienteId) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este paciente?')) {
+      try {
+        const response = await fetch(`/api/pacientes?pacienteId=${pacienteId}`, {
+          method: 'DELETE',
+        })
+
+        if (response.ok) {
+          // Actualizar la lista de pacientes
+          setPacientes(pacientes.filter(p => p.paciente_id !== pacienteId))
+          // Recalcular el total de páginas
+          setTotalPages(Math.ceil((pacientes.length - 1) / itemsPerPage))
+          // Si la página actual queda vacía, volver a la anterior
+          if (getCurrentPageData().length === 1 && currentPage > 1) {
+            setCurrentPage(currentPage - 1)
+          }
+        } else {
+          const error = await response.json()
+          alert(error.message || 'Error al eliminar el paciente')
+        }
+      } catch (error) {
+        console.error('Error al eliminar paciente:', error)
+        alert('Error al eliminar el paciente')
+      }
     }
-    setPacientes([...pacientes, patientWithId])
+  }
+
+  const handleAddPatient = async (newPatient) => {
+    try {
+      const response = await fetch('/api/pacientes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPatient),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        // Actualizar la lista de pacientes
+        const updatedPacientes = [...pacientes, data]
+        setPacientes(updatedPacientes)
+        setTotalPages(Math.ceil(updatedPacientes.length / itemsPerPage))
+        setIsPatientModalOpen(false)
+      } else {
+        const error = await response.json()
+        alert(error.message || 'Error al crear el paciente')
+      }
+    } catch (error) {
+      console.error('Error al crear paciente:', error)
+      alert('Error al crear el paciente')
+    }
+  }
+
+  const handleUpdatePatient = async (updatedPatient) => {
+    try {
+      const response = await fetch('/api/pacientes', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedPatient),
+      })
+
+      if (response.ok) {
+        // Actualizar la lista de pacientes
+        setPacientes(pacientes.map(p => 
+          p.paciente_id === updatedPatient.paciente_id ? updatedPatient : p
+        ))
+        setIsPatientModalOpen(false)
+        setEditingPatient(null)
+      } else {
+        const error = await response.json()
+        alert(error.message || 'Error al actualizar el paciente')
+      }
+    } catch (error) {
+      console.error('Error al actualizar paciente:', error)
+      alert('Error al actualizar el paciente')
+    }
+  }
+
+  const handlePatientSubmit = (patientData) => {
+    if (editingPatient) {
+      handleUpdatePatient({ ...editingPatient, ...patientData })
+    } else {
+      handleAddPatient(patientData)
+    }
+  }
+
+  const handleClosePatientModal = () => {
     setIsPatientModalOpen(false)
+    setEditingPatient(null)
   }
 
   const renderTabContent = () => {
@@ -304,12 +394,14 @@ export default function AdminDashboard() {
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               className="text-sky-600 hover:text-sky-900"
+                              onClick={() => handleEditPatient(paciente)}
                             >
                               <Edit className="h-4 w-4" />
                             </motion.button>
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               className="text-red-600 hover:text-red-900"
+                              onClick={() => handleDeletePatient(paciente.paciente_id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </motion.button>
@@ -607,10 +699,14 @@ export default function AdminDashboard() {
 
       <Modal 
         isOpen={isPatientModalOpen} 
-        onClose={() => setIsPatientModalOpen(false)}
-        title="Agregar Nuevo Paciente"
+        onClose={handleClosePatientModal}
+        title={editingPatient ? "Editar Paciente" : "Agregar Nuevo Paciente"}
       >
-        <PatientForm onClose={() => setIsPatientModalOpen(false)} onSubmit={handleAddPatient} />
+        <PatientForm 
+          onClose={handleClosePatientModal} 
+          onSubmit={handlePatientSubmit}
+          initialData={editingPatient}
+        />
       </Modal>
     </div>
   )
