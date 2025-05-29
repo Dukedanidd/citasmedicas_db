@@ -9,14 +9,19 @@ const dbConfig = {
   database: process.env.DB_NAME || 'clinica_db'
 };
 
-// GET - Obtener todas las alergias o una alergia específica
+// GET - Obtener alergias
 export async function GET(request) {
   console.log('[GET /api/alergias] Iniciando petición...');
   try {
     const { searchParams } = new URL(request.url);
     const alergiaId = searchParams.get('alergiaId');
     const expedienteId = searchParams.get('expedienteId');
+
     console.log('[GET /api/alergias] Parámetros:', { alergiaId, expedienteId });
+
+    if (!alergiaId && !expedienteId) {
+      return NextResponse.json({ error: 'Se requiere ID de alergia o expediente' }, { status: 400 });
+    }
 
     console.log('[GET /api/alergias] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -27,26 +32,22 @@ export async function GET(request) {
     console.log('[GET /api/alergias] current_user_id asignado');
 
     let query = `
-      SELECT 
-        a.*,
-        e.expediente_id,
-        p.paciente_id,
-        u.primer_nombre,
-        u.apellido_paterno
+      SELECT a.*, e.paciente_id
       FROM alergias a
       JOIN expedientes e ON a.expediente_id = e.expediente_id
-      JOIN pacientes p ON e.paciente_id = p.paciente_id
-      JOIN usuarios u ON p.paciente_id = u.user_id
+      WHERE 1=1
     `;
     const params = [];
 
     if (alergiaId) {
-      query += ' WHERE a.alergia_id = ?';
+      query += ' AND a.alergia_id = ?';
       params.push(alergiaId);
     } else if (expedienteId) {
-      query += ' WHERE a.expediente_id = ?';
+      query += ' AND a.expediente_id = ?';
       params.push(expedienteId);
     }
+
+    query += ' ORDER BY a.alergia_id';
 
     console.log('[GET /api/alergias] Ejecutando consulta...');
     const [rows] = await conn.execute(query, params);
@@ -67,14 +68,20 @@ export async function GET(request) {
   }
 }
 
-// POST - Crear una nueva alergia
+// POST - Crear nueva alergia
 export async function POST(request) {
   console.log('[POST /api/alergias] Iniciando petición...');
   try {
     const data = await request.json();
     console.log('[POST /api/alergias] Datos recibidos:', data);
 
-    const { expediente_id, nombre_alergia, descripcion, severidad } = data;
+    const { expediente_id, descripcion } = data;
+
+    if (!expediente_id || !descripcion) {
+      return NextResponse.json({ 
+        error: 'expediente_id y descripcion son requeridos' 
+      }, { status: 400 });
+    }
 
     console.log('[POST /api/alergias] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -84,7 +91,7 @@ export async function POST(request) {
     await conn.execute('SET @current_user_id = 1');
     console.log('[POST /api/alergias] current_user_id asignado');
 
-    // Verificar si el expediente existe
+    // Verificar que el expediente existe
     console.log('[POST /api/alergias] Verificando expediente...');
     const [expediente] = await conn.execute(
       'SELECT expediente_id FROM expedientes WHERE expediente_id = ?',
@@ -92,28 +99,23 @@ export async function POST(request) {
     );
 
     if (!expediente[0]) {
-      console.log('[POST /api/alergias] Expediente no encontrado');
       await conn.end();
-      return NextResponse.json(
-        { error: 'Expediente no encontrado' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Expediente no encontrado' }, { status: 404 });
     }
 
-    // Crear la alergia
+    // Insertar la nueva alergia
     console.log('[POST /api/alergias] Creando alergia...');
-    const [result] = await conn.execute(
-      'INSERT INTO alergias (expediente_id, nombre_alergia, descripcion, severidad) VALUES (?, ?, ?, ?)',
-      [expediente_id, nombre_alergia, descripcion, severidad]
-    );
-    console.log('[POST /api/alergias] Alergia creada:', result);
+    const [result] = await conn.execute(`
+      INSERT INTO alergias (expediente_id, descripcion)
+      VALUES (?, ?)
+    `, [expediente_id, descripcion]);
 
     await conn.end();
-    console.log('[POST /api/alergias] Conexión cerrada');
+    console.log('[POST /api/alergias] Alergia creada exitosamente');
 
-    return NextResponse.json({
+    return NextResponse.json({ 
       message: 'Alergia creada exitosamente',
-      alergia_id: result.insertId
+      alergia_id: result.insertId 
     }, { status: 201 });
   } catch (error) {
     console.error('[POST /api/alergias] Error:', error);
@@ -122,14 +124,18 @@ export async function POST(request) {
   }
 }
 
-// PUT - Actualizar una alergia
+// PUT - Actualizar alergia
 export async function PUT(request) {
   console.log('[PUT /api/alergias] Iniciando petición...');
   try {
     const data = await request.json();
     console.log('[PUT /api/alergias] Datos recibidos:', data);
 
-    const { alergia_id, nombre_alergia, descripcion, severidad } = data;
+    const { alergia_id, descripcion } = data;
+
+    if (!alergia_id) {
+      return NextResponse.json({ error: 'alergia_id es requerido' }, { status: 400 });
+    }
 
     console.log('[PUT /api/alergias] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -139,32 +145,28 @@ export async function PUT(request) {
     await conn.execute('SET @current_user_id = 1');
     console.log('[PUT /api/alergias] current_user_id asignado');
 
-    // Verificar si la alergia existe
-    console.log('[PUT /api/alergias] Verificando alergia...');
-    const [existing] = await conn.execute(
+    // Verificar que la alergia existe
+    console.log('[PUT /api/alergias] Verificando existencia de la alergia...');
+    const [alergia] = await conn.execute(
       'SELECT alergia_id FROM alergias WHERE alergia_id = ?',
       [alergia_id]
     );
 
-    if (!existing[0]) {
-      console.log('[PUT /api/alergias] Alergia no encontrada');
+    if (!alergia[0]) {
       await conn.end();
-      return NextResponse.json(
-        { error: 'Alergia no encontrada' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Alergia no encontrada' }, { status: 404 });
     }
 
     // Actualizar la alergia
     console.log('[PUT /api/alergias] Actualizando alergia...');
-    await conn.execute(
-      'UPDATE alergias SET nombre_alergia = ?, descripcion = ?, severidad = ? WHERE alergia_id = ?',
-      [nombre_alergia, descripcion, severidad, alergia_id]
-    );
-    console.log('[PUT /api/alergias] Alergia actualizada');
+    await conn.execute(`
+      UPDATE alergias
+      SET descripcion = ?
+      WHERE alergia_id = ?
+    `, [descripcion, alergia_id]);
 
     await conn.end();
-    console.log('[PUT /api/alergias] Conexión cerrada');
+    console.log('[PUT /api/alergias] Alergia actualizada exitosamente');
 
     return NextResponse.json({ message: 'Alergia actualizada exitosamente' });
   } catch (error) {
@@ -174,20 +176,15 @@ export async function PUT(request) {
   }
 }
 
-// DELETE - Eliminar una alergia
+// DELETE - Eliminar alergia
 export async function DELETE(request) {
   console.log('[DELETE /api/alergias] Iniciando petición...');
   try {
     const { searchParams } = new URL(request.url);
     const alergiaId = searchParams.get('alergiaId');
-    console.log('[DELETE /api/alergias] ID de la alergia:', alergiaId);
 
     if (!alergiaId) {
-      console.log('[DELETE /api/alergias] ID de alergia no proporcionado');
-      return NextResponse.json(
-        { error: 'ID de alergia requerido' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'ID de alergia requerido' }, { status: 400 });
     }
 
     console.log('[DELETE /api/alergias] Conectando a la base de datos...');
@@ -198,32 +195,24 @@ export async function DELETE(request) {
     await conn.execute('SET @current_user_id = 1');
     console.log('[DELETE /api/alergias] current_user_id asignado');
 
-    // Verificar si la alergia existe
-    console.log('[DELETE /api/alergias] Verificando alergia...');
-    const [existing] = await conn.execute(
+    // Verificar que la alergia existe
+    console.log('[DELETE /api/alergias] Verificando existencia de la alergia...');
+    const [alergia] = await conn.execute(
       'SELECT alergia_id FROM alergias WHERE alergia_id = ?',
       [alergiaId]
     );
 
-    if (!existing[0]) {
-      console.log('[DELETE /api/alergias] Alergia no encontrada');
+    if (!alergia[0]) {
       await conn.end();
-      return NextResponse.json(
-        { error: 'Alergia no encontrada' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Alergia no encontrada' }, { status: 404 });
     }
 
     // Eliminar la alergia
     console.log('[DELETE /api/alergias] Eliminando alergia...');
-    await conn.execute(
-      'DELETE FROM alergias WHERE alergia_id = ?',
-      [alergiaId]
-    );
-    console.log('[DELETE /api/alergias] Alergia eliminada');
+    await conn.execute('DELETE FROM alergias WHERE alergia_id = ?', [alergiaId]);
 
     await conn.end();
-    console.log('[DELETE /api/alergias] Conexión cerrada');
+    console.log('[DELETE /api/alergias] Alergia eliminada exitosamente');
 
     return NextResponse.json({ message: 'Alergia eliminada exitosamente' });
   } catch (error) {

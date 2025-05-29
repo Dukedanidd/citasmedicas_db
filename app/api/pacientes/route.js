@@ -12,13 +12,14 @@ const dbConfig = {
 // GET - Obtener todos los pacientes o un paciente específico
 export async function GET(request) {
   console.log('[GET /api/pacientes] Iniciando petición...');
+  let conn;
   try {
     const { searchParams } = new URL(request.url);
     const pacienteId = searchParams.get('pacienteId');
     console.log('[GET /api/pacientes] ID del paciente:', pacienteId);
 
     console.log('[GET /api/pacientes] Conectando a la base de datos...');
-    const conn = await mysql.createConnection(dbConfig);
+    conn = await mysql.createConnection(dbConfig);
     console.log('[GET /api/pacientes] Conexión exitosa');
 
     // Asignar current_user_id para los triggers
@@ -45,12 +46,9 @@ export async function GET(request) {
 
       if (!rows[0]) {
         console.log('[GET /api/pacientes] Paciente no encontrado');
-        await conn.end();
         return NextResponse.json({ error: 'Paciente no encontrado' }, { status: 404 });
       }
 
-      await conn.end();
-      console.log('[GET /api/pacientes] Conexión cerrada');
       return NextResponse.json(rows[0]);
     }
 
@@ -70,19 +68,23 @@ export async function GET(request) {
     `);
     console.log('[GET /api/pacientes] Resultados:', rows);
 
-    await conn.end();
-    console.log('[GET /api/pacientes] Conexión cerrada');
     return NextResponse.json(rows);
   } catch (error) {
     console.error('[GET /api/pacientes] Error:', error);
     console.error('[GET /api/pacientes] Stack trace:', error.stack);
     return NextResponse.json({ error: 'Error al obtener pacientes' }, { status: 500 });
+  } finally {
+    if (conn) {
+      await conn.end();
+      console.log('[GET /api/pacientes] Conexión cerrada');
+    }
   }
 }
 
 // POST - Crear un nuevo paciente
 export async function POST(request) {
   console.log('[POST /api/pacientes] Iniciando petición...');
+  let conn;
   try {
     const data = await request.json();
     console.log('[POST /api/pacientes] Datos recibidos:', { ...data, password: '***' });
@@ -99,9 +101,20 @@ export async function POST(request) {
       doctor_id
     } = data;
 
+    if (!primer_nombre || !apellido_paterno || !email || !password || !fecha_nacimiento || !sexo || !doctor_id) {
+      return NextResponse.json(
+        { error: 'Faltan campos requeridos' },
+        { status: 400 }
+      );
+    }
+
     console.log('[POST /api/pacientes] Conectando a la base de datos...');
-    const conn = await mysql.createConnection(dbConfig);
+    conn = await mysql.createConnection(dbConfig);
     console.log('[POST /api/pacientes] Conexión exitosa');
+
+    // Iniciar transacción
+    await conn.beginTransaction();
+    console.log('[POST /api/pacientes] Transacción iniciada');
 
     // Asignar current_user_id para los triggers
     await conn.execute('SET @current_user_id = 1');
@@ -115,8 +128,8 @@ export async function POST(request) {
     );
     
     if (!roles[0]) {
+      await conn.rollback();
       console.log('[POST /api/pacientes] No se encontró el rol de paciente');
-      await conn.end();
       return NextResponse.json(
         { error: 'No se encontró el rol de paciente en la base de datos' },
         { status: 500 }
@@ -126,81 +139,93 @@ export async function POST(request) {
     const role_id = roles[0].role_id;
     console.log('[POST /api/pacientes] Role_id obtenido:', role_id);
 
-    // Iniciar transacción
-    console.log('[POST /api/pacientes] Iniciando transacción...');
-    await conn.beginTransaction();
+    // Verificar si el email ya existe
+    console.log('[POST /api/pacientes] Verificando email...');
+    const [existingUser] = await conn.execute(
+      'SELECT user_id FROM usuarios WHERE email = ?',
+      [email]
+    );
 
-    try {
-      // 1. Crear el usuario
-      console.log('[POST /api/pacientes] Creando usuario...');
-      const [userResult] = await conn.execute(`
-        INSERT INTO usuarios (
-          primer_nombre,
-          segundo_nombre,
-          apellido_paterno,
-          apellido_materno,
-          email,
-          password,
-          role_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [
-        primer_nombre,
-        segundo_nombre,
-        apellido_paterno,
-        apellido_materno,
-        email,
-        password,
-        role_id
-      ]);
-      console.log('[POST /api/pacientes] Usuario creado:', userResult);
-
-      const paciente_id = userResult.insertId;
-      console.log('[POST /api/pacientes] ID del nuevo usuario:', paciente_id);
-
-      // 2. Crear el paciente
-      console.log('[POST /api/pacientes] Creando paciente...');
-      await conn.execute(`
-        INSERT INTO pacientes (
-          paciente_id,
-          fecha_nacimiento,
-          sexo,
-          doctor_id
-        ) VALUES (?, ?, ?, ?)
-      `, [paciente_id, fecha_nacimiento, sexo, doctor_id]);
-      console.log('[POST /api/pacientes] Paciente creado');
-
-      // Confirmar transacción
-      console.log('[POST /api/pacientes] Confirmando transacción...');
-      await conn.commit();
-      console.log('[POST /api/pacientes] Transacción confirmada');
-
-      await conn.end();
-      console.log('[POST /api/pacientes] Conexión cerrada');
-
-      return NextResponse.json({ 
-        message: 'Paciente creado exitosamente',
-        paciente_id 
-      }, { status: 201 });
-    } catch (error) {
-      // Revertir transacción en caso de error
-      console.error('[POST /api/pacientes] Error en la transacción:', error);
+    if (existingUser[0]) {
       await conn.rollback();
-      console.log('[POST /api/pacientes] Transacción revertida');
-      throw error;
+      console.log('[POST /api/pacientes] Email ya existe');
+      return NextResponse.json(
+        { error: 'El email ya está registrado' },
+        { status: 400 }
+      );
     }
+
+    // Verificar si el doctor existe
+    console.log('[POST /api/pacientes] Verificando doctor...');
+    const [doctor] = await conn.execute(
+      'SELECT doctor_id FROM medicos WHERE doctor_id = ?',
+      [doctor_id]
+    );
+
+    if (!doctor[0]) {
+      await conn.rollback();
+      console.log('[POST /api/pacientes] Doctor no encontrado');
+      return NextResponse.json(
+        { error: 'El doctor especificado no existe' },
+        { status: 400 }
+      );
+    }
+
+    // Insertar usuario
+    console.log('[POST /api/pacientes] Creando usuario...');
+    const [userResult] = await conn.execute(`
+      INSERT INTO usuarios (
+        primer_nombre, segundo_nombre, apellido_paterno, apellido_materno,
+        email, password, role_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [
+      primer_nombre, segundo_nombre || null, apellido_paterno,
+      apellido_materno || null, email, password, role_id
+    ]);
+
+    const paciente_id = userResult.insertId;
+    console.log('[POST /api/pacientes] Usuario creado con ID:', paciente_id);
+
+    // Insertar paciente
+    console.log('[POST /api/pacientes] Creando paciente...');
+    await conn.execute(`
+      INSERT INTO pacientes (paciente_id, fecha_nacimiento, sexo, doctor_id)
+      VALUES (?, ?, ?, ?)
+    `, [paciente_id, fecha_nacimiento, sexo, doctor_id]);
+
+    await conn.commit();
+    console.log('[POST /api/pacientes] Transacción completada');
+
+    return NextResponse.json({
+      message: 'Paciente creado exitosamente',
+      paciente_id
+    }, { status: 201 });
   } catch (error) {
     console.error('[POST /api/pacientes] Error:', error);
     console.error('[POST /api/pacientes] Stack trace:', error.stack);
-    return NextResponse.json({ error: 'Error al crear paciente' }, { status: 500 });
+    if (conn) {
+      await conn.rollback();
+      console.log('[POST /api/pacientes] Transacción revertida');
+    }
+    return NextResponse.json(
+      { error: 'Error al crear paciente' },
+      { status: 500 }
+    );
+  } finally {
+    if (conn) {
+      await conn.end();
+      console.log('[POST /api/pacientes] Conexión cerrada');
+    }
   }
 }
 
 // PUT - Actualizar un paciente
 export async function PUT(request) {
   console.log('[PUT /api/pacientes] Iniciando petición...');
+  let conn;
   try {
     const data = await request.json();
-    console.log('[PUT /api/pacientes] Datos recibidos:', { ...data, password: '***' });
+    console.log('[PUT /api/pacientes] Datos recibidos:', data);
 
     const { 
       paciente_id,
@@ -214,72 +239,110 @@ export async function PUT(request) {
       doctor_id
     } = data;
 
+    if (!paciente_id) {
+      return NextResponse.json(
+        { error: 'ID de paciente requerido' },
+        { status: 400 }
+      );
+    }
+
     console.log('[PUT /api/pacientes] Conectando a la base de datos...');
-    const conn = await mysql.createConnection(dbConfig);
+    conn = await mysql.createConnection(dbConfig);
     console.log('[PUT /api/pacientes] Conexión exitosa');
+
+    // Iniciar transacción
+    await conn.beginTransaction();
+    console.log('[PUT /api/pacientes] Transacción iniciada');
 
     // Asignar current_user_id para los triggers
     await conn.execute('SET @current_user_id = 1');
     console.log('[PUT /api/pacientes] current_user_id asignado');
 
-    // Iniciar transacción
-    console.log('[PUT /api/pacientes] Iniciando transacción...');
-    await conn.beginTransaction();
+    // Verificar si el paciente existe
+    console.log('[PUT /api/pacientes] Verificando paciente...');
+    const [paciente] = await conn.execute(
+      'SELECT paciente_id FROM pacientes WHERE paciente_id = ?',
+      [paciente_id]
+    );
 
-    try {
-      // 1. Actualizar usuario
-      console.log('[PUT /api/pacientes] Actualizando usuario...');
-      const [userResult] = await conn.execute(`
-        UPDATE usuarios
-        SET 
-          primer_nombre = ?,
+    if (!paciente[0]) {
+      await conn.rollback();
+      console.log('[PUT /api/pacientes] Paciente no encontrado');
+      return NextResponse.json(
+        { error: 'Paciente no encontrado' },
+        { status: 404 }
+      );
+    }
+
+    // Verificar si el doctor existe si se está actualizando
+    if (doctor_id) {
+      console.log('[PUT /api/pacientes] Verificando doctor...');
+      const [doctor] = await conn.execute(
+        'SELECT doctor_id FROM medicos WHERE doctor_id = ?',
+        [doctor_id]
+      );
+
+      if (!doctor[0]) {
+        await conn.rollback();
+        console.log('[PUT /api/pacientes] Doctor no encontrado');
+        return NextResponse.json(
+          { error: 'El doctor especificado no existe' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Actualizar usuario
+    console.log('[PUT /api/pacientes] Actualizando usuario...');
+    await conn.execute(`
+      UPDATE usuarios
+      SET primer_nombre = ?,
           segundo_nombre = ?,
           apellido_paterno = ?,
           apellido_materno = ?,
           email = ?
-        WHERE user_id = ?
-      `, [
-        primer_nombre,
-        segundo_nombre,
-        apellido_paterno,
-        apellido_materno,
-        email,
-        paciente_id
-      ]);
-      console.log('[PUT /api/pacientes] Usuario actualizado:', userResult);
+      WHERE user_id = ?
+    `, [
+      primer_nombre,
+      segundo_nombre || null,
+      apellido_paterno,
+      apellido_materno || null,
+      email,
+      paciente_id
+    ]);
 
-      // 2. Actualizar paciente
-      console.log('[PUT /api/pacientes] Actualizando paciente...');
-      const [pacienteResult] = await conn.execute(`
-        UPDATE pacientes
-        SET 
-          fecha_nacimiento = ?,
+    // Actualizar paciente
+    console.log('[PUT /api/pacientes] Actualizando paciente...');
+    await conn.execute(`
+      UPDATE pacientes
+      SET fecha_nacimiento = ?,
           sexo = ?,
           doctor_id = ?
-        WHERE paciente_id = ?
-      `, [fecha_nacimiento, sexo, doctor_id, paciente_id]);
-      console.log('[PUT /api/pacientes] Paciente actualizado:', pacienteResult);
+      WHERE paciente_id = ?
+    `, [fecha_nacimiento, sexo, doctor_id, paciente_id]);
 
-      // Confirmar transacción
-      console.log('[PUT /api/pacientes] Confirmando transacción...');
-      await conn.commit();
-      console.log('[PUT /api/pacientes] Transacción confirmada');
+    await conn.commit();
+    console.log('[PUT /api/pacientes] Transacción completada');
 
-      await conn.end();
-      console.log('[PUT /api/pacientes] Conexión cerrada');
-
-      return NextResponse.json({ message: 'Paciente actualizado exitosamente' });
-    } catch (error) {
-      // Revertir transacción en caso de error
-      console.error('[PUT /api/pacientes] Error en la transacción:', error);
-      await conn.rollback();
-      console.log('[PUT /api/pacientes] Transacción revertida');
-      throw error;
-    }
+    return NextResponse.json({
+      message: 'Paciente actualizado exitosamente'
+    });
   } catch (error) {
     console.error('[PUT /api/pacientes] Error:', error);
     console.error('[PUT /api/pacientes] Stack trace:', error.stack);
-    return NextResponse.json({ error: 'Error al actualizar paciente' }, { status: 500 });
+    if (conn) {
+      await conn.rollback();
+      console.log('[PUT /api/pacientes] Transacción revertida');
+    }
+    return NextResponse.json(
+      { error: 'Error al actualizar paciente' },
+      { status: 500 }
+    );
+  } finally {
+    if (conn) {
+      await conn.end();
+      console.log('[PUT /api/pacientes] Conexión cerrada');
+    }
   }
 }
 

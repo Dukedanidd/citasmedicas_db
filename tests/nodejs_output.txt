@@ -1,0 +1,667 @@
+ ╭─senorbuen0@Trimethy in repo: citasmedicas_db on  main [x!?] via  v23.11.1 via  v3.13.3 (.venv) took 16m15s
+ ╰─λ npm run dev
+
+> clinica@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.1.8 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.86:3000
+
+ ✓ Starting...
+ ⚠ Invalid next.config.mjs options detected: 
+ ⚠     Unrecognized key(s) in object: 'appDir' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ ✓ Ready in 1327ms
+ ○ Compiling / ...
+ ✓ Compiled / in 17s
+ GET / 200 in 17405ms
+ ○ Compiling /api/expedientes ...
+ ✓ Compiled /api/expedientes in 1053ms
+[POST /api/expedientes] Iniciando petición...
+[POST /api/expedientes] Datos recibidos: { paciente_id: 27, notas_generales: 'Notas de prueba' }
+[POST /api/expedientes] Conectando a la base de datos...
+[POST /api/expedientes] Conexión exitosa
+[POST /api/expedientes] current_user_id asignado
+[POST /api/expedientes] Verificando expediente existente...
+[POST /api/expedientes] Creando expediente...
+[POST /api/expedientes] Error: Error: Cannot add or update a child row: a foreign key constraint fails (`clinica_db`.`expedientes`, CONSTRAINT `expedientes_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`paciente_id`))
+    at POST (app/api/expedientes/route.js:105:32)
+  103 |     // Crear el expediente
+  104 |     console.log('[POST /api/expedientes] Creando expediente...');
+> 105 |     const [result] = await conn.execute(
+      |                                ^
+  106 |       'INSERT INTO expedientes (paciente_id, notas_generales) VALUES (?, ?)',
+  107 |       [paciente_id, notas_generales]
+  108 |     ); {
+  code: 'ER_NO_REFERENCED_ROW_2',
+  errno: 1452,
+  sql: 'INSERT INTO expedientes (paciente_id, notas_generales) VALUES (?, ?)',
+  sqlState: '23000',
+  sqlMessage: 'Cannot add or update a child row: a foreign key constraint fails (`clinica_db`.`expedientes`, CONSTRAINT `expedientes_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`paciente_id`))'
+}
+[POST /api/expedientes] Stack trace: Error: Cannot add or update a child row: a foreign key constraint fails (`clinica_db`.`expedientes`, CONSTRAINT `expedientes_ibfk_1` FOREIGN KEY (`paciente_id`) REFERENCES `pacientes` (`paciente_id`))
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at POST (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__0a7dc1._.js:256:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+ POST /api/expedientes 500 in 1600ms
+[GET /api/expedientes] Iniciando petición...
+[GET /api/expedientes] Parámetros: { expedienteId: '2', pacienteId: null }
+[GET /api/expedientes] Conectando a la base de datos...
+[GET /api/expedientes] Conexión exitosa
+[GET /api/expedientes] current_user_id asignado
+[GET /api/expedientes] Ejecutando consulta...
+[GET /api/expedientes] Resultados: []
+[GET /api/expedientes] Conexión cerrada
+ GET /api/expedientes?expedienteId=2 404 in 79ms
+[GET /api/expedientes] Iniciando petición...
+[GET /api/expedientes] Parámetros: { expedienteId: null, pacienteId: '27' }
+[GET /api/expedientes] Conectando a la base de datos...
+[GET /api/expedientes] Conexión exitosa
+[GET /api/expedientes] current_user_id asignado
+[GET /api/expedientes] Ejecutando consulta...
+[GET /api/expedientes] Resultados: []
+[GET /api/expedientes] Conexión cerrada
+ GET /api/expedientes?pacienteId=27 200 in 76ms
+[PUT /api/expedientes] Iniciando petición...
+[PUT /api/expedientes] Datos recibidos: { expediente_id: 2, notas_generales: 'Notas actualizadas' }
+[PUT /api/expedientes] Conectando a la base de datos...
+[PUT /api/expedientes] Conexión exitosa
+[PUT /api/expedientes] current_user_id asignado
+[PUT /api/expedientes] Verificando expediente...
+[PUT /api/expedientes] Expediente no encontrado
+ PUT /api/expedientes 404 in 53ms
+ ✓ Compiled /api/historial in 173ms
+[POST /api/historial] Iniciando petición...
+[POST /api/historial] Datos recibidos: {
+  expediente_id: 2,
+  descripcion: 'Consulta de rutina - Paciente presenta síntomas de gripe'
+}
+[POST /api/historial] Conectando a la base de datos...
+[POST /api/historial] Conexión exitosa
+[POST /api/historial] Transacción iniciada
+[POST /api/historial] current_user_id asignado
+[POST /api/historial] Verificando expediente...
+[POST /api/historial] Conexión cerrada
+ POST /api/historial 404 in 210ms
+[GET /api/historial] Iniciando petición...
+[GET /api/historial] Parámetros: { historialId: '2', expedienteId: null }
+[GET /api/historial] Conectando a la base de datos...
+[GET /api/historial] Conexión exitosa
+[GET /api/historial] current_user_id asignado
+[GET /api/historial] Ejecutando consulta...
+[GET /api/historial] Error: Error: Unknown column 'h.fecha' in 'order clause'
+    at GET (app/api/historial/route.js:54:30)
+  52 |
+  53 |     console.log('[GET /api/historial] Ejecutando consulta...');
+> 54 |     const [rows] = await conn.execute(query, params);
+     |                              ^
+  55 |     console.log('[GET /api/historial] Resultados:', rows);
+  56 |
+  57 |     if (historialId && !rows[0]) { {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sql: '\n' +
+    '      SELECT h.*, e.paciente_id\n' +
+    '      FROM historial_medico h\n' +
+    '      JOIN expedientes e ON h.expediente_id = e.expediente_id\n' +
+    '      WHERE 1=1\n' +
+    '     AND h.historial_id = ? ORDER BY h.fecha DESC',
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'h.fecha' in 'order clause'"
+}
+[GET /api/historial] Stack trace: Error: Unknown column 'h.fecha' in 'order clause'
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at GET (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__4a64bb._.js:209:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[GET /api/historial] Conexión cerrada
+ GET /api/historial?historialId=2 500 in 157ms
+[GET /api/historial] Iniciando petición...
+[GET /api/historial] Parámetros: { historialId: null, expedienteId: '2' }
+[GET /api/historial] Conectando a la base de datos...
+[GET /api/historial] Conexión exitosa
+[GET /api/historial] current_user_id asignado
+[GET /api/historial] Ejecutando consulta...
+[GET /api/historial] Error: Error: Unknown column 'h.fecha' in 'order clause'
+    at GET (app/api/historial/route.js:54:30)
+  52 |
+  53 |     console.log('[GET /api/historial] Ejecutando consulta...');
+> 54 |     const [rows] = await conn.execute(query, params);
+     |                              ^
+  55 |     console.log('[GET /api/historial] Resultados:', rows);
+  56 |
+  57 |     if (historialId && !rows[0]) { {
+  code: 'ER_BAD_FIELD_ERROR',
+  errno: 1054,
+  sql: '\n' +
+    '      SELECT h.*, e.paciente_id\n' +
+    '      FROM historial_medico h\n' +
+    '      JOIN expedientes e ON h.expediente_id = e.expediente_id\n' +
+    '      WHERE 1=1\n' +
+    '     AND h.expediente_id = ? ORDER BY h.fecha DESC',
+  sqlState: '42S22',
+  sqlMessage: "Unknown column 'h.fecha' in 'order clause'"
+}
+[GET /api/historial] Stack trace: Error: Unknown column 'h.fecha' in 'order clause'
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at GET (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__4a64bb._.js:209:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[GET /api/historial] Conexión cerrada
+ GET /api/historial?expedienteId=2 500 in 126ms
+[PUT /api/historial] Iniciando petición...
+[PUT /api/historial] Datos recibidos: {
+  historial_id: 2,
+  descripcion: 'Seguimiento - Paciente mejora con el tratamiento'
+}
+[PUT /api/historial] Conectando a la base de datos...
+[PUT /api/historial] Conexión exitosa
+[PUT /api/historial] Transacción iniciada
+[PUT /api/historial] current_user_id asignado
+[PUT /api/historial] Verificando existencia del registro...
+[PUT /api/historial] Conexión cerrada
+ PUT /api/historial 404 in 52ms
+ ✓ Compiled /api/alergias in 165ms
+[POST /api/alergias] Iniciando petición...
+[POST /api/alergias] Datos recibidos: { expediente_id: 2, descripcion: 'Alergia a penicilina' }
+[POST /api/alergias] Conectando a la base de datos...
+[POST /api/alergias] Conexión exitosa
+[POST /api/alergias] current_user_id asignado
+[POST /api/alergias] Verificando expediente...
+ POST /api/alergias 404 in 202ms
+[GET /api/alergias] Iniciando petición...
+[GET /api/alergias] Parámetros: { alergiaId: '2', expedienteId: null }
+[GET /api/alergias] Conectando a la base de datos...
+[GET /api/alergias] Conexión exitosa
+[GET /api/alergias] current_user_id asignado
+[GET /api/alergias] Ejecutando consulta...
+[GET /api/alergias] Resultados: []
+[GET /api/alergias] Conexión cerrada
+ GET /api/alergias?alergiaId=2 404 in 58ms
+[GET /api/alergias] Iniciando petición...
+[GET /api/alergias] Parámetros: { alergiaId: null, expedienteId: '2' }
+[GET /api/alergias] Conectando a la base de datos...
+[GET /api/alergias] Conexión exitosa
+[GET /api/alergias] current_user_id asignado
+[GET /api/alergias] Ejecutando consulta...
+[GET /api/alergias] Resultados: []
+[GET /api/alergias] Conexión cerrada
+ GET /api/alergias?expedienteId=2 200 in 52ms
+[PUT /api/alergias] Iniciando petición...
+[PUT /api/alergias] Datos recibidos: { alergia_id: 2, descripcion: 'Alergia severa a penicilina' }
+[PUT /api/alergias] Conectando a la base de datos...
+[PUT /api/alergias] Conexión exitosa
+[PUT /api/alergias] current_user_id asignado
+[PUT /api/alergias] Verificando existencia de la alergia...
+ PUT /api/alergias 404 in 52ms
+ ✓ Compiled /api/doctores in 164ms
+[POST /api/doctores] Iniciando petición...
+[POST /api/doctores] Datos recibidos: {
+  primer_nombre: 'Juan',
+  segundo_nombre: 'Carlos',
+  apellido_paterno: 'Pérez',
+  apellido_materno: 'García',
+  email: 'juan.perez@example.com',
+  password: '***',
+  especialidad: 'Cardiología',
+  consultorio_id: 1
+}
+[POST /api/doctores] Conectando a la base de datos...
+[POST /api/doctores] Conexión exitosa
+[POST /api/doctores] Transacción iniciada
+[POST /api/doctores] current_user_id asignado
+[POST /api/doctores] Obteniendo role_id para médicos...
+[POST /api/doctores] Role_id obtenido: 2
+[POST /api/doctores] Verificando email...
+[POST /api/doctores] Email ya existe
+[POST /api/doctores] Conexión cerrada
+ POST /api/doctores 400 in 197ms
+ ✓ Compiled /api/doctores/[id] in 168ms
+[GET /api/doctores/[id]] Iniciando petición...
+Error: Route "/api/doctores/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at GET (app/api/doctores/[id]/route.ts:19:12)
+  17 |   console.log('[GET /api/doctores/[id]] Iniciando petición...');
+  18 |   try {
+> 19 |     const { id } = params;
+     |            ^
+  20 |     console.log('[GET /api/doctores/[id]] ID del doctor:', id);
+  21 |
+  22 |     console.log('[GET /api/doctores/[id]] Conectando a la base de datos...');
+[GET /api/doctores/[id]] ID del doctor: 2
+[GET /api/doctores/[id]] Conectando a la base de datos...
+[GET /api/doctores/[id]] Conexión exitosa
+[GET /api/doctores/[id]] current_user_id asignado
+[GET /api/doctores/[id]] Ejecutando consulta SQL...
+[GET /api/doctores/[id]] Consulta ejecutada. Resultados: []
+[GET /api/doctores/[id]] Conexión cerrada
+ GET /api/doctores/2 404 in 988ms
+[PUT /api/doctores/[id]] Iniciando petición...
+Error: Route "/api/doctores/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at PUT (app/api/doctores/[id]/route.ts:70:29)
+  68 |   console.log('[PUT /api/doctores/[id]] Iniciando petición...');
+  69 |   try {
+> 70 |     const doctor_id = params.id;
+     |                             ^
+  71 |     console.log('[PUT /api/doctores/[id]] ID del doctor:', doctor_id);
+  72 |
+  73 |     const body = await request.json();
+[PUT /api/doctores/[id]] ID del doctor: 2
+[PUT /api/doctores/[id]] Datos recibidos: {
+  primer_nombre: 'Juan',
+  apellido_paterno: 'Pérez',
+  especialidad: 'Cardiología Pediátrica',
+  consultorio_id: 1
+}
+[PUT /api/doctores/[id]] Conectando a la base de datos...
+[PUT /api/doctores/[id]] Conexión exitosa
+[PUT /api/doctores/[id]] current_user_id asignado
+[PUT /api/doctores/[id]] Iniciando transacción...
+[PUT /api/doctores/[id]] Actualizando tabla usuarios...
+[PUT /api/doctores/[id]] Resultado de actualización de usuario: ResultSetHeader {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+  serverStatus: 3,
+  warningStatus: 0,
+  changedRows: 1
+}
+[PUT /api/doctores/[id]] Usuario actualizado
+[PUT /api/doctores/[id]] Actualizando tabla medicos...
+[PUT /api/doctores/[id]] Resultado de actualización de médico: ResultSetHeader {
+  fieldCount: 0,
+  affectedRows: 0,
+  insertId: 0,
+  info: 'Rows matched: 0  Changed: 0  Warnings: 0',
+  serverStatus: 3,
+  warningStatus: 0,
+  changedRows: 0
+}
+[PUT /api/doctores/[id]] Médico actualizado
+[PUT /api/doctores/[id]] Confirmando transacción...
+[PUT /api/doctores/[id]] Transacción confirmada
+[PUT /api/doctores/[id]] Conexión cerrada
+ PUT /api/doctores/2 200 in 216ms
+ ✓ Compiled /api/pacientes in 262ms
+[POST /api/pacientes] Iniciando petición...
+[POST /api/pacientes] Datos recibidos: {
+  primer_nombre: 'María',
+  segundo_nombre: 'Isabel',
+  apellido_paterno: 'López',
+  apellido_materno: 'Martínez',
+  email: 'maria.lopez@example.com',
+  password: '***',
+  fecha_nacimiento: '1990-01-01',
+  sexo: 'F',
+  doctor_id: 2
+}
+[POST /api/pacientes] Conectando a la base de datos...
+[POST /api/pacientes] Conexión exitosa
+[POST /api/pacientes] Transacción iniciada
+[POST /api/pacientes] current_user_id asignado
+[POST /api/pacientes] Obteniendo role_id para pacientes...
+[POST /api/pacientes] Role_id obtenido: 3
+[POST /api/pacientes] Verificando email...
+[POST /api/pacientes] Email ya existe
+[POST /api/pacientes] Conexión cerrada
+ POST /api/pacientes 400 in 323ms
+[GET /api/pacientes] Iniciando petición...
+[GET /api/pacientes] ID del paciente: 27
+[GET /api/pacientes] Conectando a la base de datos...
+[GET /api/pacientes] Conexión exitosa
+[GET /api/pacientes] current_user_id asignado
+[GET /api/pacientes] Obteniendo paciente específico...
+[GET /api/pacientes] Resultados: []
+[GET /api/pacientes] Paciente no encontrado
+[GET /api/pacientes] Conexión cerrada
+ GET /api/pacientes?pacienteId=27 404 in 69ms
+[PUT /api/pacientes] Iniciando petición...
+[PUT /api/pacientes] Datos recibidos: {
+  paciente_id: 27,
+  primer_nombre: 'María',
+  segundo_nombre: 'Isabel',
+  apellido_paterno: 'López',
+  apellido_materno: 'Martínez',
+  email: 'maria.lopez@example.com',
+  fecha_nacimiento: '1990-01-01',
+  sexo: 'F',
+  doctor_id: 2
+}
+[PUT /api/pacientes] Conectando a la base de datos...
+[PUT /api/pacientes] Conexión exitosa
+[PUT /api/pacientes] Transacción iniciada
+[PUT /api/pacientes] current_user_id asignado
+[PUT /api/pacientes] Verificando paciente...
+[PUT /api/pacientes] Paciente no encontrado
+[PUT /api/pacientes] Conexión cerrada
+ PUT /api/pacientes 404 in 71ms
+ ✓ Compiled /api/citas in 198ms
+[POST /api/citas] Iniciando petición...
+[POST /api/citas] Datos recibidos: {
+  paciente_id: 27,
+  doctor_id: 2,
+  fecha_hora: '2024-03-20 10:00:00',
+  estado_id: 1,
+  notas: 'Consulta de rutina'
+}
+[POST /api/citas] Conectando a la base de datos...
+[POST /api/citas] Conexión exitosa
+[POST /api/citas] Transacción iniciada
+[POST /api/citas] current_user_id asignado
+[POST /api/citas] Verificando paciente...
+[POST /api/citas] Verificando doctor...
+[POST /api/citas] Verificando estado...
+[POST /api/citas] Error: Error: Table 'clinica_db.estados' doesn't exist
+    at POST (app/api/citas/route.js:163:32)
+  161 |     // Verificar si el estado existe
+  162 |     console.log('[POST /api/citas] Verificando estado...');
+> 163 |     const [estado] = await conn.execute(
+      |                                ^
+  164 |       'SELECT estado_id FROM estados WHERE estado_id = ?',
+  165 |       [estado_id]
+  166 |     ); {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: 'SELECT estado_id FROM estados WHERE estado_id = ?',
+  sqlState: '42S02',
+  sqlMessage: "Table 'clinica_db.estados' doesn't exist"
+}
+[POST /api/citas] Stack trace: Error: Table 'clinica_db.estados' doesn't exist
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at POST (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__d96ddc._.js:301:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[POST /api/citas] Transacción revertida
+[POST /api/citas] Conexión cerrada
+ POST /api/citas 500 in 309ms
+[GET /api/citas] Iniciando petición...
+[GET /api/citas] Parámetros: { citaId: '2', pacienteId: null, doctorId: null }
+[GET /api/citas] Conectando a la base de datos...
+[GET /api/citas] Conexión exitosa
+[GET /api/citas] current_user_id asignado
+[GET /api/citas] Ejecutando query: 
+      SELECT 
+        c.*,
+        p.primer_nombre as paciente_nombre,
+        p.apellido_paterno as paciente_apellido,
+        d.primer_nombre as doctor_nombre,
+        d.apellido_paterno as doctor_apellido,
+        e.nombre as estado_nombre
+      FROM citas c
+      JOIN usuarios p ON c.paciente_id = p.user_id
+      JOIN usuarios d ON c.doctor_id = d.user_id
+      JOIN estados e ON c.estado_id = e.estado_id
+      WHERE 1=1
+     AND c.cita_id = ?
+[GET /api/citas] Error: Error: Table 'clinica_db.estados' doesn't exist
+    at GET (app/api/citas/route.js:68:30)
+  66 |
+  67 |     console.log('[GET /api/citas] Ejecutando query:', query);
+> 68 |     const [rows] = await conn.execute(query, params);
+     |                              ^
+  69 |     console.log('[GET /api/citas] Resultados:', rows);
+  70 |
+  71 |     if (citaId && !rows[0]) { {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        c.*,\n' +
+    '        p.primer_nombre as paciente_nombre,\n' +
+    '        p.apellido_paterno as paciente_apellido,\n' +
+    '        d.primer_nombre as doctor_nombre,\n' +
+    '        d.apellido_paterno as doctor_apellido,\n' +
+    '        e.nombre as estado_nombre\n' +
+    '      FROM citas c\n' +
+    '      JOIN usuarios p ON c.paciente_id = p.user_id\n' +
+    '      JOIN usuarios d ON c.doctor_id = d.user_id\n' +
+    '      JOIN estados e ON c.estado_id = e.estado_id\n' +
+    '      WHERE 1=1\n' +
+    '     AND c.cita_id = ?',
+  sqlState: '42S02',
+  sqlMessage: "Table 'clinica_db.estados' doesn't exist"
+}
+[GET /api/citas] Stack trace: Error: Table 'clinica_db.estados' doesn't exist
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at GET (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__d96ddc._.js:223:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[GET /api/citas] Conexión cerrada
+ GET /api/citas?citaId=2 500 in 130ms
+[GET /api/citas] Iniciando petición...
+[GET /api/citas] Parámetros: { citaId: null, pacienteId: '27', doctorId: null }
+[GET /api/citas] Conectando a la base de datos...
+[GET /api/citas] Conexión exitosa
+[GET /api/citas] current_user_id asignado
+[GET /api/citas] Ejecutando query: 
+      SELECT 
+        c.*,
+        p.primer_nombre as paciente_nombre,
+        p.apellido_paterno as paciente_apellido,
+        d.primer_nombre as doctor_nombre,
+        d.apellido_paterno as doctor_apellido,
+        e.nombre as estado_nombre
+      FROM citas c
+      JOIN usuarios p ON c.paciente_id = p.user_id
+      JOIN usuarios d ON c.doctor_id = d.user_id
+      JOIN estados e ON c.estado_id = e.estado_id
+      WHERE 1=1
+     AND c.paciente_id = ?
+[GET /api/citas] Error: Error: Table 'clinica_db.estados' doesn't exist
+    at GET (app/api/citas/route.js:68:30)
+  66 |
+  67 |     console.log('[GET /api/citas] Ejecutando query:', query);
+> 68 |     const [rows] = await conn.execute(query, params);
+     |                              ^
+  69 |     console.log('[GET /api/citas] Resultados:', rows);
+  70 |
+  71 |     if (citaId && !rows[0]) { {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        c.*,\n' +
+    '        p.primer_nombre as paciente_nombre,\n' +
+    '        p.apellido_paterno as paciente_apellido,\n' +
+    '        d.primer_nombre as doctor_nombre,\n' +
+    '        d.apellido_paterno as doctor_apellido,\n' +
+    '        e.nombre as estado_nombre\n' +
+    '      FROM citas c\n' +
+    '      JOIN usuarios p ON c.paciente_id = p.user_id\n' +
+    '      JOIN usuarios d ON c.doctor_id = d.user_id\n' +
+    '      JOIN estados e ON c.estado_id = e.estado_id\n' +
+    '      WHERE 1=1\n' +
+    '     AND c.paciente_id = ?',
+  sqlState: '42S02',
+  sqlMessage: "Table 'clinica_db.estados' doesn't exist"
+}
+[GET /api/citas] Stack trace: Error: Table 'clinica_db.estados' doesn't exist
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at GET (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__d96ddc._.js:223:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[GET /api/citas] Conexión cerrada
+ GET /api/citas?pacienteId=27 500 in 123ms
+[GET /api/citas] Iniciando petición...
+[GET /api/citas] Parámetros: { citaId: null, pacienteId: null, doctorId: '2' }
+[GET /api/citas] Conectando a la base de datos...
+[GET /api/citas] Conexión exitosa
+[GET /api/citas] current_user_id asignado
+[GET /api/citas] Ejecutando query: 
+      SELECT 
+        c.*,
+        p.primer_nombre as paciente_nombre,
+        p.apellido_paterno as paciente_apellido,
+        d.primer_nombre as doctor_nombre,
+        d.apellido_paterno as doctor_apellido,
+        e.nombre as estado_nombre
+      FROM citas c
+      JOIN usuarios p ON c.paciente_id = p.user_id
+      JOIN usuarios d ON c.doctor_id = d.user_id
+      JOIN estados e ON c.estado_id = e.estado_id
+      WHERE 1=1
+     AND c.doctor_id = ?
+[GET /api/citas] Error: Error: Table 'clinica_db.estados' doesn't exist
+    at GET (app/api/citas/route.js:68:30)
+  66 |
+  67 |     console.log('[GET /api/citas] Ejecutando query:', query);
+> 68 |     const [rows] = await conn.execute(query, params);
+     |                              ^
+  69 |     console.log('[GET /api/citas] Resultados:', rows);
+  70 |
+  71 |     if (citaId && !rows[0]) { {
+  code: 'ER_NO_SUCH_TABLE',
+  errno: 1146,
+  sql: '\n' +
+    '      SELECT \n' +
+    '        c.*,\n' +
+    '        p.primer_nombre as paciente_nombre,\n' +
+    '        p.apellido_paterno as paciente_apellido,\n' +
+    '        d.primer_nombre as doctor_nombre,\n' +
+    '        d.apellido_paterno as doctor_apellido,\n' +
+    '        e.nombre as estado_nombre\n' +
+    '      FROM citas c\n' +
+    '      JOIN usuarios p ON c.paciente_id = p.user_id\n' +
+    '      JOIN usuarios d ON c.doctor_id = d.user_id\n' +
+    '      JOIN estados e ON c.estado_id = e.estado_id\n' +
+    '      WHERE 1=1\n' +
+    '     AND c.doctor_id = ?',
+  sqlState: '42S02',
+  sqlMessage: "Table 'clinica_db.estados' doesn't exist"
+}
+[GET /api/citas] Stack trace: Error: Table 'clinica_db.estados' doesn't exist
+    at PromiseConnection.execute (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/node_modules_mysql2_a3ea85._.js:11354:26)
+    at GET (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/.next/server/chunks/[root of the server]__d96ddc._.js:223:35)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async AppRouteRouteModule.do (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:32847)
+    at async AppRouteRouteModule.handle (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:10:39868)
+    at async doRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1452:42)
+    at async responseGenerator (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1822:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:1832:28)
+    at async DevServer.renderPageComponent (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2257:24)
+    at async DevServer.renderToResponseImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:2295:32)
+    at async DevServer.pipeImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:959:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/next-server.js:281:17)
+    at async DevServer.handleRequestImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/base-server.js:853:17)
+    at async /home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:371:20
+    at async Span.traceAsyncFn (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/trace/trace.js:153:20)
+    at async DevServer.handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/dev/next-dev-server.js:368:24)
+    at async invokeRender (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:230:21)
+    at async handleRequest (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:408:24)
+    at async requestHandlerImpl (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/router-server.js:432:13)
+    at async Server.requestListener (/home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/node_modules/next/dist/server/lib/start-server.js:146:13)
+[GET /api/citas] Conexión cerrada
+ GET /api/citas?doctorId=2 500 in 121ms
+[PUT /api/citas] Iniciando petición...
+[PUT /api/citas] Datos recibidos: {
+  cita_id: 2,
+  fecha_hora: '2024-03-20 11:00:00',
+  estado_id: 2,
+  notas: 'Consulta de seguimiento'
+}
+[PUT /api/citas] Conectando a la base de datos...
+[PUT /api/citas] Conexión exitosa
+[PUT /api/citas] Transacción iniciada
+[PUT /api/citas] current_user_id asignado
+[PUT /api/citas] Verificando cita...
+[PUT /api/citas] Cita no encontrada
+[PUT /api/citas] Conexión cerrada
+ PUT /api/citas 404 in 59ms

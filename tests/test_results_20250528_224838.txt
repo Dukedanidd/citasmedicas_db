@@ -1,0 +1,87 @@
+[TEST] Testing Expedientes endpoints...
+Respuesta: {"error":"Error al crear expediente"}
+Código de estado: 500
+Código esperado: 201
+---
+Respuesta: {"error":"Expediente no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+Respuesta: {"error":"Expediente no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Historial Médico endpoints...
+Respuesta: {"error":"Expediente no encontrado"}
+Código de estado: 404
+Código esperado: 201
+---
+Respuesta: {"error":"Error al obtener historial médico"}
+Código de estado: 500
+Código esperado: 200
+---
+Respuesta: {"error":"Error al obtener historial médico"}
+Código de estado: 500
+Código esperado: 200
+---
+Respuesta: {"error":"Registro de historial no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Alergias endpoints...
+Respuesta: {"error":"Expediente no encontrado"}
+Código de estado: 404
+Código esperado: 201
+---
+Respuesta: {"error":"Alergia no encontrada"}
+Código de estado: 404
+Código esperado: 200
+---
+Respuesta: {"error":"Alergia no encontrada"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Doctores endpoints...
+Respuesta: {"error":"El email ya está registrado"}
+Código de estado: 400
+Código esperado: 201
+---
+Respuesta: {"error":"Doctor no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Pacientes endpoints...
+Respuesta: {"error":"El email ya está registrado"}
+Código de estado: 400
+Código esperado: 201
+---
+Respuesta: {"error":"Paciente no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+Respuesta: {"error":"Paciente no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Citas endpoints...
+Respuesta: {"error":"Error al crear cita"}
+Código de estado: 500
+Código esperado: 201
+---
+Respuesta: {"error":"Error al obtener citas"}
+Código de estado: 500
+Código esperado: 200
+---
+Respuesta: {"error":"Error al obtener citas"}
+Código de estado: 500
+Código esperado: 200
+---
+Respuesta: {"error":"Error al obtener citas"}
+Código de estado: 500
+Código esperado: 200
+---
+Respuesta: {"error":"Cita no encontrada"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] All tests completed!

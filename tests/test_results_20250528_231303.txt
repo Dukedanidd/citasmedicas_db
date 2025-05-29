@@ -1,0 +1,35 @@
+[TEST] Testing Doctores endpoints...
+[TEST] Testing Pacientes endpoints...
+[TEST] Testing Expedientes endpoints...
+Respuesta: {"error":"El paciente ya tiene un expediente registrado"}
+Código de estado: 400
+Código esperado: 201
+---
+[TEST] Testing Historial Médico endpoints...
+Respuesta: {"error":"Error al crear registro de historial médico"}
+Código de estado: 500
+Código esperado: 201
+---
+Respuesta: {"error":"Registro de historial no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+Respuesta: {"error":"Registro de historial no encontrado"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] Testing Alergias endpoints...
+[TEST] Testing Citas endpoints...
+Respuesta: {"error":"El estado especificado no existe"}
+Código de estado: 400
+Código esperado: 201
+---
+Respuesta: {"error":"Cita no encontrada"}
+Código de estado: 404
+Código esperado: 200
+---
+Respuesta: {"error":"Cita no encontrada"}
+Código de estado: 404
+Código esperado: 200
+---
+[TEST] All tests completed!

@@ -226,7 +226,7 @@ CREATE TABLE `bitacora` (
   PRIMARY KEY (`log_id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `bitacora_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +235,7 @@ CREATE TABLE `bitacora` (
 
 LOCK TABLES `bitacora` WRITE;
 /*!40000 ALTER TABLE `bitacora` DISABLE KEYS */;
-INSERT INTO `bitacora` VALUES (1,'ingreso','consultorios',1,1,'2025-05-18 17:57:41','Creado consultorio id=1 nombre=Buenavista'),(2,'ingreso','medicos',1,1,'2025-05-18 18:01:09','Creado médico id=1 especialidad=Medicina de Emergencia'),(3,'ingreso','usuarios',3,1,'2025-05-18 20:41:25','Creado usuario id=3 (Pablo Gomez)'),(4,'delete','usuarios',3,1,'2025-05-18 20:42:08','Eliminado usuario id=3'),(5,'ingreso','usuarios',2,1,'2025-05-18 20:42:46','Creado usuario id=2 (Pablo Gomez)'),(6,'ingreso','usuarios',6,1,'2025-05-18 20:54:21','Creado usuario id=6 (Gustavo Fernandez)'),(7,'actualizacion','usuarios',6,1,'2025-05-18 20:55:20','Actualizado usuario id=6'),(8,'delete','usuarios',6,1,'2025-05-18 20:56:00','Eliminado usuario id=6'),(9,'ingreso','usuarios',3,1,'2025-05-18 21:05:20','Creado usuario id=3 (Arturo Chavez)'),(10,'delete','usuarios',3,1,'2025-05-18 21:06:23','Eliminado usuario id=3'),(11,'ingreso','usuarios',4,1,'2025-05-19 15:14:32','Creado usuario id=4 (Juan Marquez)'),(12,'ingreso','usuarios',9,1,'2025-05-26 19:36:54','Creado usuario id=9 (Juan Villa)'),(17,'ingreso','medicos',2,1,'2025-05-27 01:47:08','Creado médico id=2 especialidad=Cardiología'),(18,'delete','medicos',2,1,'2025-05-27 01:49:51','Eliminado médico id=2'),(24,'ingreso','usuarios',21,1,'2025-05-27 02:06:47','Creado usuario id=21 (Juan Pérez)'),(25,'ingreso','medicos',21,1,'2025-05-27 02:06:47','Creado médico id=21 especialidad=General'),(26,'actualizacion','medicos',21,1,'2025-05-27 02:06:47','Actualizado médico id=21'),(27,'actualizacion','usuarios',1,1,'2025-05-27 02:18:53','Actualizado usuario id=1'),(28,'delete','medicos',21,1,'2025-05-27 02:19:01','Eliminado médico id=21'),(29,'delete','usuarios',21,1,'2025-05-27 02:19:01','Eliminado usuario id=21'),(30,'ingreso','usuarios',22,1,'2025-05-27 02:22:20','Creado usuario id=22 (Juan Pérez)'),(31,'ingreso','medicos',22,1,'2025-05-27 02:22:20','Creado médico id=22 especialidad=General'),(32,'actualizacion','medicos',22,1,'2025-05-27 02:22:20','Actualizado médico id=22'),(33,'actualizacion','usuarios',22,1,'2025-05-27 02:24:36','Actualizado usuario id=22'),(34,'actualizacion','usuarios',22,1,'2025-05-27 02:25:45','Actualizado usuario id=22'),(35,'actualizacion','usuarios',22,1,'2025-05-27 02:25:59','Actualizado usuario id=22'),(37,'actualizacion','usuarios',22,1,'2025-05-27 02:30:13','Actualizado usuario id=22'),(38,'actualizacion','medicos',22,1,'2025-05-27 02:30:13','Actualizado médico id=22');
+INSERT INTO `bitacora` VALUES (1,'ingreso','consultorios',1,1,'2025-05-18 17:57:41','Creado consultorio id=1 nombre=Buenavista'),(2,'ingreso','medicos',1,1,'2025-05-18 18:01:09','Creado médico id=1 especialidad=Medicina de Emergencia'),(3,'ingreso','usuarios',3,1,'2025-05-18 20:41:25','Creado usuario id=3 (Pablo Gomez)'),(4,'delete','usuarios',3,1,'2025-05-18 20:42:08','Eliminado usuario id=3'),(5,'ingreso','usuarios',2,1,'2025-05-18 20:42:46','Creado usuario id=2 (Pablo Gomez)'),(6,'ingreso','usuarios',6,1,'2025-05-18 20:54:21','Creado usuario id=6 (Gustavo Fernandez)'),(7,'actualizacion','usuarios',6,1,'2025-05-18 20:55:20','Actualizado usuario id=6'),(8,'delete','usuarios',6,1,'2025-05-18 20:56:00','Eliminado usuario id=6'),(9,'ingreso','usuarios',3,1,'2025-05-18 21:05:20','Creado usuario id=3 (Arturo Chavez)'),(10,'delete','usuarios',3,1,'2025-05-18 21:06:23','Eliminado usuario id=3'),(11,'ingreso','usuarios',4,1,'2025-05-19 15:14:32','Creado usuario id=4 (Juan Marquez)'),(12,'ingreso','usuarios',9,1,'2025-05-26 19:36:54','Creado usuario id=9 (Juan Villa)'),(17,'ingreso','medicos',2,1,'2025-05-27 01:47:08','Creado médico id=2 especialidad=Cardiología'),(18,'delete','medicos',2,1,'2025-05-27 01:49:51','Eliminado médico id=2'),(24,'ingreso','usuarios',21,1,'2025-05-27 02:06:47','Creado usuario id=21 (Juan Pérez)'),(25,'ingreso','medicos',21,1,'2025-05-27 02:06:47','Creado médico id=21 especialidad=General'),(26,'actualizacion','medicos',21,1,'2025-05-27 02:06:47','Actualizado médico id=21'),(27,'actualizacion','usuarios',1,1,'2025-05-27 02:18:53','Actualizado usuario id=1'),(28,'delete','medicos',21,1,'2025-05-27 02:19:01','Eliminado médico id=21'),(29,'delete','usuarios',21,1,'2025-05-27 02:19:01','Eliminado usuario id=21'),(30,'ingreso','usuarios',22,1,'2025-05-27 02:22:20','Creado usuario id=22 (Juan Pérez)'),(31,'ingreso','medicos',22,1,'2025-05-27 02:22:20','Creado médico id=22 especialidad=General'),(32,'actualizacion','medicos',22,1,'2025-05-27 02:22:20','Actualizado médico id=22'),(33,'actualizacion','usuarios',22,1,'2025-05-27 02:24:36','Actualizado usuario id=22'),(34,'actualizacion','usuarios',22,1,'2025-05-27 02:25:45','Actualizado usuario id=22'),(35,'actualizacion','usuarios',22,1,'2025-05-27 02:25:59','Actualizado usuario id=22'),(37,'actualizacion','usuarios',22,1,'2025-05-27 02:30:13','Actualizado usuario id=22'),(38,'actualizacion','medicos',22,1,'2025-05-27 02:30:13','Actualizado médico id=22'),(39,'ingreso','usuarios',26,1,'2025-05-27 15:16:50','Creado usuario id=26 (Rodrigo Fernandez)'),(40,'ingreso','pacientes',26,1,'2025-05-27 15:17:42','Creado paciente id=26'),(41,'ingreso','usuarios',27,1,'2025-05-27 15:25:41','Creado usuario id=27 (Gabriela Quintero)'),(42,'ingreso','pacientes',27,1,'2025-05-27 15:25:41','Creado paciente id=27'),(43,'actualizacion','usuarios',27,1,'2025-05-27 15:38:07','Actualizado usuario id=27'),(44,'actualizacion','pacientes',27,1,'2025-05-27 15:38:07','Actualizado paciente id=27'),(45,'delete','pacientes',27,1,'2025-05-27 15:38:50','Eliminado paciente id=27'),(46,'ingreso','usuarios',28,1,'2025-05-28 20:51:31','Creado usuario id=28 (Emilio Gutierrez)'),(47,'ingreso','medicos',28,1,'2025-05-28 20:51:31','Creado médico id=28 especialidad=General'),(48,'actualizacion','medicos',28,1,'2025-05-28 20:51:31','Actualizado médico id=28'),(49,'actualizacion','usuarios',28,1,'2025-05-28 21:05:18','Actualizado usuario id=28'),(50,'actualizacion','medicos',28,1,'2025-05-28 21:05:18','Actualizado médico id=28'),(51,'ingreso','usuarios',29,1,'2025-05-28 21:07:00','Creado usuario id=29 (MR TONOTO)'),(52,'ingreso','medicos',29,1,'2025-05-28 21:07:00','Creado médico id=29 especialidad=General'),(53,'actualizacion','medicos',29,1,'2025-05-28 21:07:00','Actualizado médico id=29'),(54,'delete','medicos',29,1,'2025-05-28 21:07:25','Eliminado médico id=29'),(55,'delete','usuarios',29,1,'2025-05-28 21:07:26','Eliminado usuario id=29'),(56,'ingreso','usuarios',30,1,'2025-05-28 21:08:06','Creado usuario id=30 (María López)'),(57,'ingreso','pacientes',30,1,'2025-05-28 21:08:06','Creado paciente id=30'),(58,'actualizacion','usuarios',1,1,'2025-05-28 21:09:25','Actualizado usuario id=1'),(59,'delete','pacientes',30,1,'2025-05-28 21:12:19','Eliminado paciente id=30'),(60,'actualizacion','usuarios',1,1,'2025-05-28 21:16:54','Actualizado usuario id=1');
 /*!40000 ALTER TABLE `bitacora` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -740,7 +740,7 @@ CREATE TABLE `medicos` (
   KEY `consultorio_id` (`consultorio_id`),
   CONSTRAINT `medicos_ibfk_1` FOREIGN KEY (`doctor_id`) REFERENCES `usuarios` (`user_id`),
   CONSTRAINT `medicos_ibfk_2` FOREIGN KEY (`consultorio_id`) REFERENCES `consultorios` (`consultorio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -749,7 +749,7 @@ CREATE TABLE `medicos` (
 
 LOCK TABLES `medicos` WRITE;
 /*!40000 ALTER TABLE `medicos` DISABLE KEYS */;
-INSERT INTO `medicos` VALUES (1,1,'Medicina de Emergencia'),(22,1,'Neurología');
+INSERT INTO `medicos` VALUES (1,1,'Medicina de Emergencia'),(22,1,'Neurología'),(28,1,'Veterinaria');
 /*!40000 ALTER TABLE `medicos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -847,6 +847,7 @@ CREATE TABLE `pacientes` (
 
 LOCK TABLES `pacientes` WRITE;
 /*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
+INSERT INTO `pacientes` VALUES (26,'1990-01-01','M',1);
 /*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -964,7 +965,7 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `email` (`email`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -973,7 +974,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Juan',NULL,'Pérez',NULL,'sysadmin@clinica.com','sysadmin_password',1),(2,'Pablo',NULL,'Gomez',NULL,'pablo.gomez@remed.com','remos',2),(4,'Juan','Anchondo','Marquez','Martinez','juan.marquez@remed.com','juanito',1),(9,'Juan','Alberto','Villa','Gutierrez','juan.gut@email.com','juan',3),(22,'Juan','Carlos','Pérez','García','juan.perez@example.com','password123',2);
+INSERT INTO `usuarios` VALUES (1,'Sys','','Admin','','sysadmin@clinica.com','sysadmin_password',1),(2,'Pablo',NULL,'Gomez',NULL,'pablo.gomez@remed.com','remos',2),(4,'Juan','Anchondo','Marquez','Martinez','juan.marquez@remed.com','juanito',1),(9,'Juan','Alberto','Villa','Gutierrez','juan.gut@email.com','juan',3),(22,'Juan','Carlos','Pérez','García','juan.perez@example.com','password123',2),(26,'Rodrigo',NULL,'Fernandez',NULL,'rod@rg.com','password123',3),(27,'Francisco','Guillermo','Ochoa','Magaña','memo.ochoa@gmail.com','password123',3),(28,'Emilio','','Gutierrez','','emil.gut@chimed.com','password123',2),(30,'María','Isabel','López','Martínez','maria.lopez@example.com','password123',3);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1130,4 +1131,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-27 14:05:54
+-- Dump completed on 2025-05-28 22:10:57
