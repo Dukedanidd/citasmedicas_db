@@ -178,7 +178,7 @@ async function GET(request, { params }) {
         console.log('[GET /api/doctores/[id]] current_user_id asignado');
         console.log('[GET /api/doctores/[id]] Ejecutando consulta SQL...');
         const [rows] = await conn.execute(`SELECT u.user_id AS doctor_id, u.primer_nombre, u.apellido_paterno,
-              m.especialidad, c.nombre AS consultorio
+              u.email, m.especialidad, c.nombre AS consultorio
        FROM medicos m
        JOIN usuarios u ON m.doctor_id = u.user_id
        JOIN consultorios c ON m.consultorio_id = c.consultorio_id
@@ -243,7 +243,8 @@ async function PUT(request, { params }) {
             console.log('[PUT /api/doctores/[id]] Actualizando tabla medicos...');
             try {
                 const [medicoResult] = await conn.execute(`UPDATE medicos 
-           SET especialidad = ?, consultorio_id = ? 
+           SET especialidad = ?, 
+               consultorio_id = NULLIF(?, '')
            WHERE doctor_id = ?`, [
                     body.especialidad,
                     body.consultorio_id,

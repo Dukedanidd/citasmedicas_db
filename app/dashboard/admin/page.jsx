@@ -27,14 +27,13 @@ export default function AdminDashboard() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [activeTab, setActiveTab] = useState("doctors") // doctors, patients, appointments
   const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false)
+  const [selectedDoctor, setSelectedDoctor] = useState(null)
   const [isPatientModalOpen, setIsPatientModalOpen] = useState(false)
   const [editingPatient, setEditingPatient] = useState(null)
   
-  const [doctores, setDoctores] = useState([
-    { id: 1, nombre: "Dr. Juan Pérez", especialidad: "Cardiología", pacientes: 45, citas: 12 },
-    { id: 2, nombre: "Dra. María García", especialidad: "Pediatría", pacientes: 60, citas: 8 },
-    { id: 3, nombre: "Dr. Carlos López", especialidad: "Dermatología", pacientes: 30, citas: 5 },
-  ])
+  const [doctores, setDoctores] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const [pacientes, setPacientes] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -60,18 +59,32 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    const fetchPacientes = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/pacientes')
-        const data = await response.json()
-        setPacientes(data)
-        setTotalPages(Math.ceil(data.length / itemsPerPage))
+        const [doctoresRes, pacientesRes] = await Promise.all([
+          fetch('/api/doctores'),
+          fetch('/api/pacientes')
+        ])
+
+        if (!doctoresRes.ok || !pacientesRes.ok) {
+          throw new Error('Error al cargar los datos')
+        }
+
+        const [doctoresData, pacientesData] = await Promise.all([
+          doctoresRes.json(),
+          pacientesRes.json()
+        ])
+
+        setDoctores(doctoresData)
+        setPacientes(pacientesData)
       } catch (error) {
-        console.error('Error al obtener pacientes:', error)
+        setError(error.message)
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    fetchPacientes()
+    fetchData()
   }, [])
 
   const getCurrentPageData = () => {
@@ -84,15 +97,69 @@ export default function AdminDashboard() {
     router.push("/")
   }
 
-  const handleAddDoctor = (newDoctor) => {
-    const doctorWithId = {
-      ...newDoctor,
-      id: doctores.length + 1,
-      pacientes: 0,
-      citas: 0
+  const handleAddDoctor = async (doctorData) => {
+    try {
+      const response = await fetch('/api/doctores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(doctorData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al crear el doctor')
+      }
+
+      const newDoctor = await response.json()
+      setDoctores(prev => [...prev, newDoctor])
+      setIsDoctorModalOpen(false)
+    } catch (error) {
+      setError(error.message)
     }
-    setDoctores([...doctores, doctorWithId])
-    setIsDoctorModalOpen(false)
+  }
+
+  const handleEditDoctor = async (doctorData) => {
+    try {
+      const response = await fetch(`/api/doctores/${doctorData.doctor_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(doctorData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar el doctor')
+      }
+
+      const updatedDoctor = await response.json()
+      setDoctores(prev => prev.map(d => d.doctor_id === updatedDoctor.doctor_id ? updatedDoctor : d))
+      setIsDoctorModalOpen(false)
+      setEditingPatient(null)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const handleDeleteDoctor = async (doctorId) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar este doctor?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/doctores/${doctorId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el doctor')
+      }
+
+      setDoctores(prev => prev.filter(d => d.doctor_id !== doctorId))
+    } catch (error) {
+      setError(error.message)
+    }
   }
 
   const handleEditPatient = (paciente) => {
@@ -194,6 +261,16 @@ export default function AdminDashboard() {
     setEditingPatient(null)
   }
 
+  const openDoctorModal = (doctor = null) => {
+    setSelectedDoctor(doctor)
+    setIsDoctorModalOpen(true)
+  }
+
+  const closeDoctorModal = () => {
+    setIsDoctorModalOpen(false)
+    setSelectedDoctor(null)
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "doctors":
@@ -205,7 +282,7 @@ export default function AdminDashboard() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
-                  onClick={() => setIsDoctorModalOpen(true)}
+                  onClick={() => openDoctorModal()}
                 >
                   <UserPlus className="h-4 w-4 mr-2" />
                   Agregar Doctor
@@ -241,10 +318,7 @@ export default function AdminDashboard() {
                         Especialidad
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Pacientes
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Citas
+                        Consultorio
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Acciones
@@ -252,45 +326,66 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {doctores.map((doctor) => (
-                      <tr key={doctor.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
-                              <Stethoscope className="h-5 w-5 text-sky-500" />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{doctor.nombre}</div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {doctor.especialidad}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {doctor.pacientes}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {doctor.citas}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              className="text-sky-600 hover:text-sky-900"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </motion.button>
-                          </div>
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                          Cargando doctores...
                         </td>
                       </tr>
-                    ))}
+                    ) : error ? (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-4 text-center text-sm text-red-500">
+                          {error}
+                        </td>
+                      </tr>
+                    ) : doctores.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                          No hay doctores registrados
+                        </td>
+                      </tr>
+                    ) : (
+                      doctores.map((doctor) => (
+                        <tr key={doctor.doctor_id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
+                                <Stethoscope className="h-5 w-5 text-sky-500" />
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {`${doctor.primer_nombre} ${doctor.segundo_nombre || ''} ${doctor.apellido_paterno} ${doctor.apellido_materno || ''}`}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {doctor.especialidad}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {doctor.consultorio?.nombre || 'No asignado'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <div className="flex space-x-3">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                className="text-sky-600 hover:text-sky-900"
+                                onClick={() => openDoctorModal(doctor)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                className="text-red-600 hover:text-red-900"
+                                onClick={() => handleDeleteDoctor(doctor.doctor_id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </motion.button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -384,10 +479,10 @@ export default function AdminDashboard() {
                           {paciente.sexo}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.doctor_especialidad}
+                          {paciente.doctor ? `${paciente.doctor.primer_nombre} ${paciente.doctor.apellido_paterno}` : 'No asignado'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.doctor_especialidad}
+                          {paciente.doctor ? paciente.doctor.especialidad : 'No asignado'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
@@ -691,10 +786,14 @@ export default function AdminDashboard() {
       {/* Modales */}
       <Modal 
         isOpen={isDoctorModalOpen} 
-        onClose={() => setIsDoctorModalOpen(false)}
-        title="Agregar Nuevo Doctor"
+        onClose={closeDoctorModal}
+        title={selectedDoctor ? "Editar Doctor" : "Agregar Nuevo Doctor"}
       >
-        <DoctorForm onClose={() => setIsDoctorModalOpen(false)} onSubmit={handleAddDoctor} />
+        <DoctorForm 
+          onClose={closeDoctorModal} 
+          onSubmit={selectedDoctor ? handleEditDoctor : handleAddDoctor}
+          initialData={selectedDoctor}
+        />
       </Modal>
 
       <Modal 
