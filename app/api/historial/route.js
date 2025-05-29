@@ -114,7 +114,7 @@ export async function POST(request) {
     // Insertar el nuevo registro
     console.log('[POST /api/historial] Creando registro...');
     const [result] = await conn.execute(`
-      INSERT INTO historial_medico (expediente_id, descripcion, fecha)
+      INSERT INTO historial_medico (expediente_id, descripcion, fecha_registro)
       VALUES (?, ?, NOW())
     `, [expediente_id, descripcion]);
 
