@@ -43,10 +43,18 @@ export default function LoginPage() {
         return
       }
 
+      // Guardar información del usuario en sessionStorage
+      if (data.user && data.user.id) {
+        console.log('[LOGIN PAGE] Guardando información del usuario:', data.user.id)
+        sessionStorage.setItem('patient_id', data.user.id.toString())
+        sessionStorage.setItem('user_email', data.user.email)
+        sessionStorage.setItem('user_role', data.user.role_id.toString())
+      }
+
       // Verificar que tenemos una ruta de redirección
       if (!data.redirectTo) {
         console.error('[LOGIN PAGE] No se recibió ruta de redirección en la respuesta:', data)
-        setError('Error en la redirección')
+        setError('Error en la configuración de redirección')
         setIsLoading(false)
         return
       }

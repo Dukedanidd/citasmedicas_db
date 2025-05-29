@@ -25,19 +25,41 @@ export default function PatientCalendar() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [today, setToday] = useState(null)
+  const [patientInfo, setPatientInfo] = useState(null)
 
-  // Simular ID del paciente (esto debería venir de la autenticación)
-  const pacienteId = 1
+  const fetchPatientInfo = async () => {
+    try {
+      const patientId = sessionStorage.getItem('patient_id')
+      
+      if (!patientId) {
+        throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
+      }
+      
+      // Obtener información del paciente incluyendo su doctor asignado
+      const patientResponse = await fetch(`/api/pacientes?pacienteId=${patientId}`)
+      if (!patientResponse.ok) throw new Error('Error al cargar información del paciente')
+      const patientData = await patientResponse.json()
+      setPatientInfo(patientData)
+      
+      // Después obtener las citas
+      await fetchAppointments(patientId)
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
+    }
+  }
 
-  useEffect(() => {
-    setToday(new Date())
-    fetchAppointments()
-  }, [])
-
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (patientId = null) => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/citas?pacienteId=${pacienteId}`)
+      
+      const patientIdToUse = patientId || sessionStorage.getItem('patient_id')
+      
+      if (!patientIdToUse) {
+        throw new Error('No se encontró información de sesión.')
+      }
+      
+      const response = await fetch(`/api/citas?pacienteId=${patientIdToUse}`)
       if (!response.ok) throw new Error('Error al cargar las citas')
       const data = await response.json()
       setAppointments(data)
@@ -47,6 +69,11 @@ export default function PatientCalendar() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    setToday(new Date())
+    fetchPatientInfo()
+  }, [])
 
   const handleDateSelect = (day) => {
     if (today) {
@@ -69,19 +96,30 @@ export default function PatientCalendar() {
   }
 
   const handleNewAppointment = async () => {
-    if (appointmentReason && selectedTime && selectedDate) {
+    if (appointmentReason && selectedTime && selectedDate && patientInfo) {
       try {
+        // Obtener ID del paciente desde sessionStorage
+        const patientId = sessionStorage.getItem('patient_id')
+        
+        if (!patientId) {
+          throw new Error('No se encontró información de sesión.')
+        }
+
+        if (!patientInfo.doctor_id) {
+          throw new Error('No tienes un doctor asignado. Contacta al administrador.')
+        }
+        
         const response = await fetch('/api/citas', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            paciente_id: pacienteId,
-            doctor_id: 1, // Esto debería venir de una selección del usuario
-            fecha: selectedDate,
-            hora: selectedTime,
-            motivo: appointmentReason
+            paciente_id: patientId,
+            doctor_id: patientInfo.doctor_id,
+            fecha_hora: `${selectedDate} ${selectedTime}:00`,
+            estado_id: 1, // Estado "Programada"
+            notas: appointmentReason
           })
         })
 

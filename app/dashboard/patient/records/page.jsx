@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   FileText,
@@ -16,44 +16,106 @@ import {
 
 export default function PatientRecords() {
   const [activeTab, setActiveTab] = useState("general")
+  const [patientData, setPatientData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const patientData = {
-    general: {
-      nombre: "Juan Pérez",
-      edad: 35,
-      genero: "Masculino",
-      tipoSangre: "O+",
-      alergias: ["Penicilina", "Polen"],
-      condiciones: ["Hipertensión"],
-    },
-    historial: [
-      {
-        fecha: "2024-03-15",
-        doctor: "Dr. Carlos López",
-        diagnostico: "Control de presión arterial",
-        tratamiento: "Continuar medicación actual",
-      },
-      {
-        fecha: "2024-02-20",
-        doctor: "Dra. María García",
-        diagnostico: "Resfriado común",
-        tratamiento: "Reposo y medicamentos",
-      },
-    ],
-    medicamentos: [
-      {
-        nombre: "Losartan",
-        dosis: "50mg",
-        frecuencia: "1 vez al día",
-        inicio: "2024-01-15",
-      },
-      {
-        nombre: "Aspirina",
-        dosis: "100mg",
-        frecuencia: "1 vez al día",
-        inicio: "2024-02-01",
-      },
-    ],
+  // Función para calcular la edad a partir de la fecha de nacimiento
+  const calculateAge = (birthDateStr) => {
+    try {
+      const today = new Date()
+      const birthDate = new Date(birthDateStr)
+      
+      // Verificar que la fecha sea válida
+      if (isNaN(birthDate.getTime())) {
+        console.warn('Fecha de nacimiento inválida:', birthDateStr)
+        return 'No disponible'
+      }
+      
+      let age = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+      
+      // Ajustar la edad si aún no ha llegado el mes de cumpleaños
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+      }
+      
+      return age
+    } catch (error) {
+      console.error('Error calculando edad:', error)
+      return 'No disponible'
+    }
+  }
+
+  // Función para formatear la fecha en formato legible
+  const formatDate = (dateStr) => {
+    try {
+      const date = new Date(dateStr)
+      
+      // Verificar que la fecha sea válida
+      if (isNaN(date.getTime())) {
+        console.warn('Fecha inválida:', dateStr)
+        return 'No disponible'
+      }
+      
+      return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    } catch (error) {
+      console.error('Error formateando fecha:', error)
+      return 'No disponible'
+    }
+  }
+
+  useEffect(() => {
+    fetchPatientData()
+  }, [])
+
+  const fetchPatientData = async () => {
+    try {
+      setLoading(true)
+      
+      // Obtener ID del paciente desde sessionStorage
+      const patientId = sessionStorage.getItem('patient_id')
+      
+      if (!patientId) {
+        throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
+      }
+      
+      // Obtener información del paciente
+      const response = await fetch(`/api/pacientes?pacienteId=${patientId}`)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al cargar datos del paciente')
+      }
+      
+      const data = await response.json()
+      
+      // Formatear los datos para la interfaz
+      const formattedData = {
+        general: {
+          nombre: `${data.primer_nombre} ${data.segundo_nombre || ''} ${data.apellido_paterno} ${data.apellido_materno || ''}`.trim(),
+          edad: data.fecha_nacimiento ? calculateAge(data.fecha_nacimiento) : 'No disponible',
+          genero: data.sexo || 'No especificado',
+          email: data.email || 'No disponible',
+          fechaNacimiento: data.fecha_nacimiento ? formatDate(data.fecha_nacimiento) : 'No disponible',
+          doctorEspecialidad: data.doctor_especialidad || 'No asignado'
+        },
+        // Por ahora, datos de ejemplo para historial y medicamentos
+        // TODO: Implementar endpoints específicos para estas secciones
+        historial: [],
+        medicamentos: []
+      }
+      
+      setPatientData(formattedData)
+    } catch (err) {
+      console.error('Error al cargar datos del paciente:', err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const containerVariants = {
@@ -74,6 +136,42 @@ export default function PatientRecords() {
       y: 0,
       transition: { duration: 0.5 },
     },
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="text-slate-600">Cargando expediente...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-red-200 shadow-lg max-w-md">
+          <div className="text-red-600 flex items-center gap-2 mb-4">
+            <AlertCircle size={24} />
+            <span className="text-lg font-semibold">Error al cargar datos</span>
+          </div>
+          <p className="text-slate-700 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 w-full bg-sky-500 text-white py-2 px-4 rounded-lg hover:bg-sky-600 transition-colors"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!patientData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="text-slate-600">No se encontraron datos del paciente</div>
+      </div>
+    )
   }
 
   return (
@@ -205,7 +303,10 @@ export default function PatientRecords() {
                           <span className="font-medium">Género:</span> {patientData.general.genero}
                         </p>
                         <p className="text-slate-600">
-                          <span className="font-medium">Tipo de Sangre:</span> {patientData.general.tipoSangre}
+                          <span className="font-medium">Email:</span> {patientData.general.email}
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-medium">Fecha de Nacimiento:</span> {patientData.general.fechaNacimiento}
                         </p>
                       </div>
                     </div>
@@ -213,32 +314,10 @@ export default function PatientRecords() {
                     <div className="bg-sky-50 rounded-xl p-4">
                       <h3 className="text-lg font-semibold text-slate-800 mb-3">Información Médica</h3>
                       <div className="space-y-2">
-                        <div>
-                          <p className="font-medium text-slate-600 mb-1">Alergias:</p>
-                          <div className="flex flex-wrap gap-2">
-                            {patientData.general.alergias.map((alergia, index) => (
-                              <span
-                                key={index}
-                                className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm"
-                              >
-                                {alergia}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div>
-                          <p className="font-medium text-slate-600 mb-1">Condiciones:</p>
-                          <div className="flex flex-wrap gap-2">
-                            {patientData.general.condiciones.map((condicion, index) => (
-                              <span
-                                key={index}
-                                className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm"
-                              >
-                                {condicion}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
+                        <p className="text-slate-600">
+                          <span className="font-medium">Doctor Asignado:</span>{' '}
+                          {patientData.general.doctorEspecialidad}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -247,62 +326,74 @@ export default function PatientRecords() {
 
               {activeTab === "historial" && (
                 <div className="space-y-4">
-                  {patientData.historial.map((registro, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-sky-50 border border-sky-200 rounded-xl p-4"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="text-slate-800 font-medium">{registro.doctor}</p>
-                          <p className="text-slate-600 text-sm">{registro.fecha}</p>
+                  {patientData.historial.length > 0 ? (
+                    patientData.historial.map((registro, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-sky-50 border border-sky-200 rounded-xl p-4"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <p className="text-slate-800 font-medium">{registro.doctor}</p>
+                            <p className="text-slate-600 text-sm">{registro.fecha}</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="space-y-2">
-                        <p className="text-slate-700">
-                          <span className="font-medium">Diagnóstico:</span> {registro.diagnostico}
-                        </p>
-                        <p className="text-slate-700">
-                          <span className="font-medium">Tratamiento:</span> {registro.tratamiento}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
+                        <div className="space-y-2">
+                          <p className="text-slate-700">
+                            <span className="font-medium">Diagnóstico:</span> {registro.diagnostico}
+                          </p>
+                          <p className="text-slate-700">
+                            <span className="font-medium">Tratamiento:</span> {registro.tratamiento}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="text-center text-slate-600 py-8">
+                      No hay registros en el historial médico
+                    </div>
+                  )}
                 </div>
               )}
 
               {activeTab === "medicamentos" && (
                 <div className="space-y-4">
-                  {patientData.medicamentos.map((medicamento, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-sky-50 border border-sky-200 rounded-xl p-4"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h3 className="text-lg font-semibold text-slate-800">{medicamento.nombre}</h3>
-                          <div className="mt-2 space-y-1">
-                            <p className="text-slate-600">
-                              <span className="font-medium">Dosis:</span> {medicamento.dosis}
-                            </p>
-                            <p className="text-slate-600">
-                              <span className="font-medium">Frecuencia:</span> {medicamento.frecuencia}
-                            </p>
-                            <p className="text-slate-600">
-                              <span className="font-medium">Inicio:</span> {medicamento.inicio}
-                            </p>
+                  {patientData.medicamentos.length > 0 ? (
+                    patientData.medicamentos.map((medicamento, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-sky-50 border border-sky-200 rounded-xl p-4"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-800">{medicamento.nombre}</h3>
+                            <div className="mt-2 space-y-1">
+                              <p className="text-slate-600">
+                                <span className="font-medium">Dosis:</span> {medicamento.dosis}
+                              </p>
+                              <p className="text-slate-600">
+                                <span className="font-medium">Frecuencia:</span> {medicamento.frecuencia}
+                              </p>
+                              <p className="text-slate-600">
+                                <span className="font-medium">Inicio:</span> {medicamento.inicio}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="p-2 bg-sky-100 rounded-lg">
+                            <Pill className="text-sky-600" size={24} />
                           </div>
                         </div>
-                        <div className="p-2 bg-sky-100 rounded-lg">
-                          <Pill className="text-sky-600" size={24} />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="text-center text-slate-600 py-8">
+                      No hay medicamentos registrados
+                    </div>
+                  )}
                 </div>
               )}
             </motion.div>

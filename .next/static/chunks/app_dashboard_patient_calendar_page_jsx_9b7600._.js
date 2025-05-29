@@ -35,18 +35,33 @@ function PatientCalendar() {
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [today, setToday] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Simular ID del paciente (esto debería venir de la autenticación)
-    const pacienteId = 1;
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "PatientCalendar.useEffect": ()=>{
-            setToday(new Date());
-            fetchAppointments();
+    const [patientInfo, setPatientInfo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const fetchPatientInfo = async ()=>{
+        try {
+            const patientId = sessionStorage.getItem('patient_id');
+            if (!patientId) {
+                throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.');
+            }
+            // Obtener información del paciente incluyendo su doctor asignado
+            const patientResponse = await fetch(`/api/pacientes?pacienteId=${patientId}`);
+            if (!patientResponse.ok) throw new Error('Error al cargar información del paciente');
+            const patientData = await patientResponse.json();
+            setPatientInfo(patientData);
+            // Después obtener las citas
+            await fetchAppointments(patientId);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
         }
-    }["PatientCalendar.useEffect"], []);
-    const fetchAppointments = async ()=>{
+    };
+    const fetchAppointments = async (patientId = null)=>{
         try {
             setLoading(true);
-            const response = await fetch(`/api/citas?pacienteId=${pacienteId}`);
+            const patientIdToUse = patientId || sessionStorage.getItem('patient_id');
+            if (!patientIdToUse) {
+                throw new Error('No se encontró información de sesión.');
+            }
+            const response = await fetch(`/api/citas?pacienteId=${patientIdToUse}`);
             if (!response.ok) throw new Error('Error al cargar las citas');
             const data = await response.json();
             setAppointments(data);
@@ -56,6 +71,12 @@ function PatientCalendar() {
             setLoading(false);
         }
     };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "PatientCalendar.useEffect": ()=>{
+            setToday(new Date());
+            fetchPatientInfo();
+        }
+    }["PatientCalendar.useEffect"], []);
     const handleDateSelect = (day)=>{
         if (today) {
             const date = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
@@ -75,19 +96,27 @@ function PatientCalendar() {
         }
     };
     const handleNewAppointment = async ()=>{
-        if (appointmentReason && selectedTime && selectedDate) {
+        if (appointmentReason && selectedTime && selectedDate && patientInfo) {
             try {
+                // Obtener ID del paciente desde sessionStorage
+                const patientId = sessionStorage.getItem('patient_id');
+                if (!patientId) {
+                    throw new Error('No se encontró información de sesión.');
+                }
+                if (!patientInfo.doctor_id) {
+                    throw new Error('No tienes un doctor asignado. Contacta al administrador.');
+                }
                 const response = await fetch('/api/citas', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        paciente_id: pacienteId,
-                        doctor_id: 1,
-                        fecha: selectedDate,
-                        hora: selectedTime,
-                        motivo: appointmentReason
+                        paciente_id: patientId,
+                        doctor_id: patientInfo.doctor_id,
+                        fecha_hora: `${selectedDate} ${selectedTime}:00`,
+                        estado_id: 1,
+                        notas: appointmentReason
                     })
                 });
                 if (!response.ok) {
@@ -154,12 +183,12 @@ function PatientCalendar() {
                 children: "Cargando calendario..."
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                lineNumber: 133,
+                lineNumber: 171,
                 columnNumber: 7
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-            lineNumber: 132,
+            lineNumber: 170,
             columnNumber: 12
         }, this);
     }
@@ -174,12 +203,12 @@ function PatientCalendar() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                lineNumber: 139,
+                lineNumber: 177,
                 columnNumber: 7
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-            lineNumber: 138,
+            lineNumber: 176,
             columnNumber: 12
         }, this);
     }
@@ -209,12 +238,12 @@ function PatientCalendar() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 154,
+                                        lineNumber: 192,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 153,
+                                    lineNumber: 191,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -224,7 +253,7 @@ function PatientCalendar() {
                                             children: "MediCare Pro"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 157,
+                                            lineNumber: 195,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -232,19 +261,19 @@ function PatientCalendar() {
                                             children: "Paciente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 158,
+                                            lineNumber: 196,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 156,
+                                    lineNumber: 194,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 152,
+                            lineNumber: 190,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -259,12 +288,12 @@ function PatientCalendar() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 167,
+                                        lineNumber: 205,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 163,
+                                    lineNumber: 201,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -276,29 +305,29 @@ function PatientCalendar() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 173,
+                                        lineNumber: 211,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 169,
+                                    lineNumber: 207,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 162,
+                            lineNumber: 200,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                    lineNumber: 151,
+                    lineNumber: 189,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                lineNumber: 146,
+                lineNumber: 184,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -331,7 +360,7 @@ function PatientCalendar() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 193,
+                                            lineNumber: 231,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -339,13 +368,13 @@ function PatientCalendar() {
                                             children: "Calendario"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 194,
+                                            lineNumber: 232,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 187,
+                                    lineNumber: 225,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -362,7 +391,7 @@ function PatientCalendar() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 203,
+                                            lineNumber: 241,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -370,24 +399,24 @@ function PatientCalendar() {
                                             children: "Expediente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 204,
+                                            lineNumber: 242,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 197,
+                                    lineNumber: 235,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 186,
+                            lineNumber: 224,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                        lineNumber: 181,
+                        lineNumber: 219,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -412,14 +441,14 @@ function PatientCalendar() {
                                                         size: 24
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                        lineNumber: 220,
+                                                        lineNumber: 258,
                                                         columnNumber: 21
                                                     }, this),
                                                     "Calendario de Citas"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 219,
+                                                lineNumber: 257,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -434,13 +463,13 @@ function PatientCalendar() {
                                                 children: "Agendar Cita"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 223,
+                                                lineNumber: 261,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 218,
+                                        lineNumber: 256,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -448,7 +477,7 @@ function PatientCalendar() {
                                         children: `${currentMonth} ${currentYear}`
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 234,
+                                        lineNumber: 272,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -481,13 +510,13 @@ function PatientCalendar() {
                                                 children: day
                                             }, day, false, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 264,
+                                                lineNumber: 302,
                                                 columnNumber: 23
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 239,
+                                        lineNumber: 277,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -498,7 +527,7 @@ function PatientCalendar() {
                                                 children: "Simbología de Colores:"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 278,
+                                                lineNumber: 316,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -511,14 +540,14 @@ function PatientCalendar() {
                                                                 className: "block w-4 h-4 bg-purple-500 rounded-full mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                lineNumber: 281,
+                                                                lineNumber: 319,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " Día Actual"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                        lineNumber: 280,
+                                                        lineNumber: 318,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -528,14 +557,14 @@ function PatientCalendar() {
                                                                 className: "block w-4 h-4 bg-orange-200 rounded-full mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                lineNumber: 284,
+                                                                lineNumber: 322,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " Cita Pasada"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                        lineNumber: 283,
+                                                        lineNumber: 321,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -545,26 +574,26 @@ function PatientCalendar() {
                                                                 className: "block w-4 h-4 bg-green-100 rounded-full mr-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                lineNumber: 287,
+                                                                lineNumber: 325,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " Cita Futura"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                        lineNumber: 286,
+                                                        lineNumber: 324,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 279,
+                                                lineNumber: 317,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 277,
+                                        lineNumber: 315,
                                         columnNumber: 17
                                     }, this),
                                     selectedDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -578,7 +607,7 @@ function PatientCalendar() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 295,
+                                                lineNumber: 333,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -607,7 +636,7 @@ function PatientCalendar() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                            lineNumber: 310,
+                                                                            lineNumber: 348,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -615,13 +644,13 @@ function PatientCalendar() {
                                                                             children: appointment.motivo
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                            lineNumber: 313,
+                                                                            lineNumber: 351,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                    lineNumber: 309,
+                                                                    lineNumber: 347,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -637,63 +666,63 @@ function PatientCalendar() {
                                                                         size: 16
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                        lineNumber: 323,
+                                                                        lineNumber: 361,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                                    lineNumber: 317,
+                                                                    lineNumber: 355,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                            lineNumber: 308,
+                                                            lineNumber: 346,
                                                             columnNumber: 29
                                                         }, this)
                                                     }, appointment.cita_id, false, {
                                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                        lineNumber: 302,
+                                                        lineNumber: 340,
                                                         columnNumber: 27
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                lineNumber: 298,
+                                                lineNumber: 336,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 294,
+                                        lineNumber: 332,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                lineNumber: 214,
+                                lineNumber: 252,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 212,
+                            lineNumber: 250,
                             columnNumber: 13
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "text-center text-slate-600",
                             children: "Cargando calendario..."
                         }, void 0, false, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 334,
+                            lineNumber: 372,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                        lineNumber: 210,
+                        lineNumber: 248,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                lineNumber: 179,
+                lineNumber: 217,
                 columnNumber: 7
             }, this),
             showAppointmentModal && today && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -723,7 +752,7 @@ function PatientCalendar() {
                                     children: "Agendar Nueva Cita"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 352,
+                                    lineNumber: 390,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -739,18 +768,18 @@ function PatientCalendar() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                        lineNumber: 359,
+                                        lineNumber: 397,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 353,
+                                    lineNumber: 391,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 351,
+                            lineNumber: 389,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -763,7 +792,7 @@ function PatientCalendar() {
                                             children: "Motivo de la Consulta"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 365,
+                                            lineNumber: 403,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -773,13 +802,13 @@ function PatientCalendar() {
                                             placeholder: "Describe el motivo de tu consulta..."
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 368,
+                                            lineNumber: 406,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 364,
+                                    lineNumber: 402,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -789,7 +818,7 @@ function PatientCalendar() {
                                             children: "Horario Disponible"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 377,
+                                            lineNumber: 415,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -806,18 +835,18 @@ function PatientCalendar() {
                                                     children: time
                                                 }, time, false, {
                                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 420,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                            lineNumber: 380,
+                                            lineNumber: 418,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 376,
+                                    lineNumber: 414,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -833,34 +862,34 @@ function PatientCalendar() {
                                     children: "Confirmar Cita"
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                                    lineNumber: 399,
+                                    lineNumber: 437,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                            lineNumber: 363,
+                            lineNumber: 401,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                    lineNumber: 346,
+                    lineNumber: 384,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-                lineNumber: 341,
+                lineNumber: 379,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/patient/calendar/page.jsx",
-        lineNumber: 144,
+        lineNumber: 182,
         columnNumber: 5
     }, this);
 }
-_s(PatientCalendar, "P2rwNOKoM+LtxRz1QIGHr81U49E=");
+_s(PatientCalendar, "L2bO7pR0QYWpLHcNX5kGGD5rrsY=");
 _c = PatientCalendar;
 var _c;
 __turbopack_refresh__.register(_c, "PatientCalendar");

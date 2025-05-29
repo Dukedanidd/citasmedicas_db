@@ -21,18 +21,36 @@ export default function PatientDashboardOverview() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Simular ID del paciente (esto debería venir de la autenticación)
-  const pacienteId = 1
-
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`/api/pacientes?pacienteId=${pacienteId}`)
-        if (!response.ok) throw new Error('Error al cargar datos del paciente')
+        
+        // Obtener ID del paciente desde sessionStorage
+        const patientId = sessionStorage.getItem('patient_id')
+        
+        if (!patientId) {
+          throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
+        }
+        
+        console.log('Fetching patient data for ID:', patientId)
+        const response = await fetch(`/api/pacientes?pacienteId=${patientId}`)
+        console.log('Response status:', response.status)
+        console.log('Response ok:', response.ok)
+        
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('API Error Response:', errorData)
+          throw new Error(errorData.error || 'Error al cargar datos del paciente')
+        }
         const data = await response.json()
+        console.log('Patient data received:', data)
+        if (!data) {
+          throw new Error('No se encontraron datos del paciente')
+        }
         setPatient(data)
       } catch (err) {
+        console.error('Error al cargar datos del paciente:', err)
         setError(err.message)
       } finally {
         setLoading(false)
@@ -51,11 +69,29 @@ export default function PatientDashboardOverview() {
   }
 
   if (error) {
+    const patientId = sessionStorage.getItem('patient_id') || 'No disponible'
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
-        <div className="text-red-600 flex items-center gap-2">
-          <AlertCircle size={20} />
-          <span>Error: {error}</span>
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-red-200 shadow-lg max-w-md">
+          <div className="text-red-600 flex items-center gap-2 mb-4">
+            <AlertCircle size={24} />
+            <span className="text-lg font-semibold">Error al cargar datos</span>
+          </div>
+          <p className="text-slate-700 mb-4">{error}</p>
+          <div className="bg-red-50 rounded-lg p-4">
+            <p className="text-sm text-red-700">
+              <strong>ID del paciente:</strong> {patientId}
+            </p>
+            <p className="text-sm text-red-700 mt-2">
+              Verifica la consola del navegador para más detalles del error.
+            </p>
+          </div>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 w-full bg-sky-500 text-white py-2 px-4 rounded-lg hover:bg-sky-600 transition-colors"
+          >
+            Reintentar
+          </button>
         </div>
       </div>
     )

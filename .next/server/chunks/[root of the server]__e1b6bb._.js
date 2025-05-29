@@ -176,9 +176,11 @@ async function GET(request) {
         console.log('[GET /api/pacientes] Conectando a la base de datos...');
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
         console.log('[GET /api/pacientes] Conexión exitosa');
-        // Asignar current_user_id para los triggers
-        await conn.execute('SET @current_user_id = 1');
-        console.log('[GET /api/pacientes] current_user_id asignado');
+        // Asignar current_user_id para los triggers usando el ID del paciente
+        await conn.execute('SET @current_user_id = ?', [
+            pacienteId || null
+        ]);
+        console.log('[GET /api/pacientes] current_user_id asignado:', pacienteId);
         if (pacienteId) {
             console.log('[GET /api/pacientes] Obteniendo paciente específico...');
             const [rows] = await conn.execute(`
@@ -192,7 +194,7 @@ async function GET(request) {
           m.especialidad as doctor_especialidad
         FROM pacientes p
         JOIN usuarios u ON p.paciente_id = u.user_id
-        JOIN medicos m ON p.doctor_id = m.doctor_id
+        LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
         WHERE p.paciente_id = ?
       `, [
                 pacienteId
@@ -220,7 +222,7 @@ async function GET(request) {
         m.especialidad as doctor_especialidad
       FROM pacientes p
       JOIN usuarios u ON p.paciente_id = u.user_id
-      JOIN medicos m ON p.doctor_id = m.doctor_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
     `);
         console.log('[GET /api/pacientes] Resultados:', rows);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows);

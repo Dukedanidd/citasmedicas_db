@@ -1,8 +1,10 @@
 {
-  "/dashboard/admin/page": "app/dashboard/admin/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
+  "/dashboard/patient/page": "app/dashboard/patient/page.js",
   "/api/pacientes/route": "app/api/pacientes/route.js",
-  "/api/doctores/route": "app/api/doctores/route.js",
-  "/api/consultorios/route": "app/api/consultorios/route.js",
-  "/api/doctores/[id]/route": "app/api/doctores/[id]/route.js"
+  "/page": "app/page.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/dashboard/patient/calendar/page": "app/dashboard/patient/calendar/page.js",
+  "/api/citas/route": "app/api/citas/route.js",
+  "/dashboard/patient/records/page": "app/dashboard/patient/records/page.js",
+  "/dashboard/doctor/page": "app/dashboard/doctor/page.js"
 }

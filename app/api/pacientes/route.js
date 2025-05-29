@@ -22,9 +22,9 @@ export async function GET(request) {
     conn = await mysql.createConnection(dbConfig);
     console.log('[GET /api/pacientes] Conexión exitosa');
 
-    // Asignar current_user_id para los triggers
-    await conn.execute('SET @current_user_id = 1');
-    console.log('[GET /api/pacientes] current_user_id asignado');
+    // Asignar current_user_id para los triggers usando el ID del paciente
+    await conn.execute('SET @current_user_id = ?', [pacienteId || null]);
+    console.log('[GET /api/pacientes] current_user_id asignado:', pacienteId);
 
     if (pacienteId) {
       console.log('[GET /api/pacientes] Obteniendo paciente específico...');
@@ -39,7 +39,7 @@ export async function GET(request) {
           m.especialidad as doctor_especialidad
         FROM pacientes p
         JOIN usuarios u ON p.paciente_id = u.user_id
-        JOIN medicos m ON p.doctor_id = m.doctor_id
+        LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
         WHERE p.paciente_id = ?
       `, [pacienteId]);
       console.log('[GET /api/pacientes] Resultados:', rows);
@@ -64,7 +64,7 @@ export async function GET(request) {
         m.especialidad as doctor_especialidad
       FROM pacientes p
       JOIN usuarios u ON p.paciente_id = u.user_id
-      JOIN medicos m ON p.doctor_id = m.doctor_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
     `);
     console.log('[GET /api/pacientes] Resultados:', rows);
 
