@@ -35,11 +35,7 @@ export default function AdminDashboard() {
     { id: 3, nombre: "Dr. Carlos López", especialidad: "Dermatología", pacientes: 30, citas: 5 },
   ])
 
-  const [pacientes, setPacientes] = useState([
-    { id: 1, nombre: "Ana Martínez", edad: 35, ultimaCita: "2024-03-15", doctor: "Dr. Juan Pérez" },
-    { id: 2, nombre: "Pedro Sánchez", edad: 28, ultimaCita: "2024-03-14", doctor: "Dra. María García" },
-    { id: 3, nombre: "Laura Torres", edad: 42, ultimaCita: "2024-03-13", doctor: "Dr. Carlos López" },
-  ])
+  const [pacientes, setPacientes] = useState([])
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -58,6 +54,20 @@ export default function AdminDashboard() {
 
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    const fetchPacientes = async () => {
+      try {
+        const response = await fetch('/api/pacientes')
+        const data = await response.json()
+        setPacientes(data)
+      } catch (error) {
+        console.error('Error al obtener pacientes:', error)
+      }
+    }
+
+    fetchPacientes()
+  }, [])
 
   const handleLogout = () => {
     router.push("/")
@@ -203,7 +213,7 @@ export default function AdminDashboard() {
                   Agregar Paciente
                 </motion.button>
               </div>
-
+              
               <div className="flex space-x-4 mb-6">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -227,16 +237,22 @@ export default function AdminDashboard() {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Nombre
+                        Nombre Completo
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Edad
+                        Email
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Última Cita
+                        Fecha de Nacimiento
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Doctor Asignado
+                        Sexo
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Doctor
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Especialidad
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Acciones
@@ -245,25 +261,33 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {pacientes.map((paciente) => (
-                      <tr key={paciente.id}>
+                      <tr key={paciente.paciente_id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                              <Users className="h-5 w-5 text-indigo-500" />
+                            <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
+                              <Users className="h-5 w-5 text-sky-500" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">{paciente.nombre}</div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {`${paciente.primer_nombre} ${paciente.segundo_nombre || ''} ${paciente.apellido_paterno} ${paciente.apellido_materno || ''}`}
+                              </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.edad} años
+                          {paciente.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.ultimaCita}
+                          {new Date(paciente.fecha_nacimiento).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.doctor}
+                          {paciente.sexo}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {paciente.doctor_especialidad}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {paciente.doctor_especialidad}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
