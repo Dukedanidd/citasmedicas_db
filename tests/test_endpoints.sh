@@ -135,7 +135,7 @@ print_message "Testing Expedientes endpoints..."
 
 # Crear expediente
 test_endpoint "POST" "/expedientes" \
-    '{"paciente_id": 26, "notas_generales": "Notas de prueba"}' \
+    '{"paciente_id": 27, "notas_generales": "Notas de prueba"}' \
     "201" "Create expediente"
 
 # Obtener expediente por ID
@@ -202,7 +202,7 @@ test_endpoint "POST" "/citas" \
     "201" "Create cita"
 
 # Obtener cita por ID
-test_endpoint "GET" "/citas?citaId=1" \
+test_endpoint "GET" "/citas?citaId=2" \
     "" "200" "Get cita by ID"
 
 # Obtener citas por paciente
@@ -215,7 +215,7 @@ test_endpoint "GET" "/citas?doctorId=1" \
 
 # Actualizar cita
 test_endpoint "PUT" "/citas" \
-    '{"cita_id": 1, "fecha_hora": "2024-03-20 11:00:00", "estado_id": 2, "notas": "Consulta de seguimiento"}' \
+    '{"cita_id": 2, "fecha_hora": "2024-03-20 11:00:00", "estado_id": 2, "notas": "Consulta de seguimiento"}' \
     "200" "Update cita"
 
 print_message "All tests completed!"
