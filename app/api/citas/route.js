@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connection from '@/database/connection';
+import connection from '../../../database/connection';
 import { promisify } from 'util';
 
 // Convertir los métodos de callback a promesas

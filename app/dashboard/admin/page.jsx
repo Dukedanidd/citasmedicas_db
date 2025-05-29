@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import Modal from "@/components/ui/Modal"
-import DoctorForm from "@/components/ui/DoctorForm"
-import PatientForm from "@/components/ui/PatientForm"
+import Modal from "../../../components/ui/Modal"
+import DoctorForm from "../../../components/ui/DoctorForm"
+import PatientForm from "../../../components/ui/PatientForm"
 import { useRouter } from "next/navigation"
 import {
   Users,

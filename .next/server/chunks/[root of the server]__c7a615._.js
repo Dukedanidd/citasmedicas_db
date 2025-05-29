@@ -190,7 +190,13 @@ async function authenticateUser(email, password) {
     try {
         // Buscamos en la tabla usuarios
         console.log('[AUTH] Ejecutando consulta SQL...');
-        const [users] = await __TURBOPACK__imported__module__$5b$project$5d2f$database$2f$connection$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].promise().query('SELECT user_id as id, email, password, rol FROM usuarios WHERE email = ? AND password = ?', [
+        const query = 'SELECT user_id as id, email, password, role_id FROM usuarios WHERE email = ? AND password = ?';
+        console.log('[AUTH] Query SQL:', query);
+        console.log('[AUTH] Parámetros:', {
+            email,
+            password: '***'
+        });
+        const [users] = await __TURBOPACK__imported__module__$5b$project$5d2f$database$2f$connection$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].promise().query(query, [
             email,
             password
         ]);
@@ -207,11 +213,24 @@ async function authenticateUser(email, password) {
             ...user,
             password: '***'
         });
+        // Obtener el nombre del rol
+        console.log('[AUTH] Obteniendo nombre del rol...');
+        const [roles] = await __TURBOPACK__imported__module__$5b$project$5d2f$database$2f$connection$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].promise().query('SELECT nombre FROM roles WHERE role_id = ?', [
+            user.role_id
+        ]);
+        if (!roles || roles.length === 0) {
+            console.log('[AUTH] No se encontró el rol para el usuario');
+            return {
+                error: 'Error en la configuración del usuario'
+            };
+        }
+        const rol = roles[0].nombre;
+        console.log('[AUTH] Rol del usuario:', rol);
         // No enviar la contraseña al cliente
         const { password: _, ...userWithoutPassword } = user;
         console.log('[AUTH] Usuario autenticado:', userWithoutPassword);
-        console.log('[AUTH] Rol del usuario:', user.rol);
-        const redirectPath = getRedirectPath(user.rol);
+        console.log('[AUTH] Rol del usuario:', rol);
+        const redirectPath = getRedirectPath(rol);
         console.log('[AUTH] Ruta de redirección:', redirectPath);
         return {
             user: userWithoutPassword,
@@ -280,6 +299,7 @@ async function POST(request) {
                 status: 400
             });
         }
+        console.log('[LOGIN] Autenticando usuario...');
         const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$libs$2f$auth$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["authenticateUser"])(email, password);
         console.log('[LOGIN] Resultado de autenticación:', result);
         if (result.error) {
@@ -290,10 +310,11 @@ async function POST(request) {
                 status: 401
             });
         }
-        console.log('[LOGIN] Login exitoso, redirigiendo a:', result.redirectTo);
+        console.log('[LOGIN] Usuario autenticado exitosamente');
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(result);
     } catch (error) {
-        console.error('[LOGIN] Error en el servidor:', error);
+        console.error('[LOGIN] Error en el proceso de login:', error);
+        console.error('[LOGIN] Stack trace:', error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             error: 'Error en el servidor'
         }, {

@@ -19,7 +19,8 @@ export default function LoginPage() {
     setError("")
 
     try {
-      console.log('Intentando iniciar sesión con:', { email, password })
+      console.log('[LOGIN PAGE] Iniciando proceso de login...')
+      console.log('[LOGIN PAGE] Datos del formulario:', { email, password: '***' })
       
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -29,10 +30,14 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       })
 
+      console.log('[LOGIN PAGE] Status de la respuesta:', res.status)
+      console.log('[LOGIN PAGE] Headers de la respuesta:', Object.fromEntries(res.headers.entries()))
+
       const data = await res.json()
-      console.log('Respuesta del servidor:', data)
+      console.log('[LOGIN PAGE] Respuesta del servidor:', data)
 
       if (data.error) {
+        console.log('[LOGIN PAGE] Error recibido:', data.error)
         setError(data.error)
         setIsLoading(false)
         return
@@ -40,19 +45,20 @@ export default function LoginPage() {
 
       // Verificar que tenemos una ruta de redirección
       if (!data.redirectTo) {
-        console.error('No se recibió ruta de redirección')
+        console.error('[LOGIN PAGE] No se recibió ruta de redirección en la respuesta:', data)
         setError('Error en la redirección')
         setIsLoading(false)
         return
       }
 
-      console.log('Redirigiendo a:', data.redirectTo)
+      console.log('[LOGIN PAGE] Redirigiendo a:', data.redirectTo)
       
       // Usar router.push para la redirección
       router.push(data.redirectTo)
       
     } catch (error) {
-      console.error('Error durante el login:', error)
+      console.error('[LOGIN PAGE] Error durante el login:', error)
+      console.error('[LOGIN PAGE] Stack trace:', error.stack)
       setError("Error al iniciar sesión")
     } finally {
       setIsLoading(false)

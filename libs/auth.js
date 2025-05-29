@@ -9,10 +9,11 @@ export async function authenticateUser(email, password) {
     try {
         // Buscamos en la tabla usuarios
         console.log('[AUTH] Ejecutando consulta SQL...');
-        const [users] = await connection.promise().query(
-            'SELECT user_id as id, email, password, rol FROM usuarios WHERE email = ? AND password = ?',
-            [email, password]
-        );
+        const query = 'SELECT user_id as id, email, password, role_id FROM usuarios WHERE email = ? AND password = ?';
+        console.log('[AUTH] Query SQL:', query);
+        console.log('[AUTH] Parámetros:', { email, password: '***' });
+
+        const [users] = await connection.promise().query(query, [email, password]);
 
         console.log('[AUTH] Resultado de la consulta:', users);
         console.log('[AUTH] Número de resultados:', users.length);
@@ -25,13 +26,28 @@ export async function authenticateUser(email, password) {
         const user = users[0];
         console.log('[AUTH] Usuario encontrado:', { ...user, password: '***' });
 
+        // Obtener el nombre del rol
+        console.log('[AUTH] Obteniendo nombre del rol...');
+        const [roles] = await connection.promise().query(
+            'SELECT nombre FROM roles WHERE role_id = ?',
+            [user.role_id]
+        );
+        
+        if (!roles || roles.length === 0) {
+            console.log('[AUTH] No se encontró el rol para el usuario');
+            return { error: 'Error en la configuración del usuario' };
+        }
+
+        const rol = roles[0].nombre;
+        console.log('[AUTH] Rol del usuario:', rol);
+
         // No enviar la contraseña al cliente
         const { password: _, ...userWithoutPassword } = user;
 
         console.log('[AUTH] Usuario autenticado:', userWithoutPassword);
-        console.log('[AUTH] Rol del usuario:', user.rol);
+        console.log('[AUTH] Rol del usuario:', rol);
 
-        const redirectPath = getRedirectPath(user.rol);
+        const redirectPath = getRedirectPath(rol);
         console.log('[AUTH] Ruta de redirección:', redirectPath);
 
         return {
