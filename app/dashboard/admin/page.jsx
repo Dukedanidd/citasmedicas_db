@@ -36,6 +36,9 @@ export default function AdminDashboard() {
   ])
 
   const [pacientes, setPacientes] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const itemsPerPage = 5
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -61,6 +64,7 @@ export default function AdminDashboard() {
         const response = await fetch('/api/pacientes')
         const data = await response.json()
         setPacientes(data)
+        setTotalPages(Math.ceil(data.length / itemsPerPage))
       } catch (error) {
         console.error('Error al obtener pacientes:', error)
       }
@@ -68,6 +72,12 @@ export default function AdminDashboard() {
 
     fetchPacientes()
   }, [])
+
+  const getCurrentPageData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return pacientes.slice(startIndex, endIndex)
+  }
 
   const handleLogout = () => {
     router.push("/")
@@ -260,7 +270,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {pacientes.map((paciente) => (
+                    {getCurrentPageData().map((paciente) => (
                       <tr key={paciente.paciente_id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -309,6 +319,95 @@ export default function AdminDashboard() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                <div className="flex justify-between flex-1 sm:hidden">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      currentPage === 1
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Anterior
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      currentPage === totalPages
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Siguiente
+                  </motion.button>
+                </div>
+                <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Mostrando{' '}
+                      <span className="font-medium">
+                        {(currentPage - 1) * itemsPerPage + 1}
+                      </span>{' '}
+                      a{' '}
+                      <span className="font-medium">
+                        {Math.min(currentPage * itemsPerPage, pacientes.length)}
+                      </span>{' '}
+                      de{' '}
+                      <span className="font-medium">{pacientes.length}</span>{' '}
+                      resultados
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
+                          currentPage === 1
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Anterior
+                      </motion.button>
+                      {[...Array(totalPages)].map((_, index) => (
+                        <motion.button
+                          key={index + 1}
+                          whileHover={{ scale: 1.05 }}
+                          onClick={() => setCurrentPage(index + 1)}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            currentPage === index + 1
+                              ? 'z-10 bg-sky-50 border-sky-500 text-sky-600'
+                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          {index + 1}
+                        </motion.button>
+                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
+                          currentPage === totalPages
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Siguiente
+                      </motion.button>
+                    </nav>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
