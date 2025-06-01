@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   Users,
@@ -14,12 +14,65 @@ import {
   Clock,
   Stethoscope,
   LogOut,
+  AlertCircle,
 } from "lucide-react"
 
 export default function DashboardPage() {
   const [notes, setNotes] = useState("")
   const [savedNotes, setSavedNotes] = useState([])
   const [isEditingNote, setIsEditingNote] = useState(null)
+  const [doctorData, setDoctorData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [stats, setStats] = useState({
+    pacientesHoy: 0,
+    citasPendientes: 0,
+    urgencias: 0
+  })
+
+  useEffect(() => {
+    fetchDoctorData()
+  }, [])
+
+  const fetchDoctorData = async () => {
+    try {
+      setLoading(true)
+      
+      // Obtener ID del doctor desde sessionStorage
+      const doctorId = sessionStorage.getItem('user_id')
+      
+      if (!doctorId) {
+        throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
+      }
+      
+      console.log('[DOCTOR DASHBOARD] ID del doctor:', doctorId)
+      
+      // Obtener información del doctor
+      const response = await fetch(`/api/doctores/${doctorId}`)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Error al cargar datos del doctor')
+      }
+      
+      const data = await response.json()
+      console.log('[DOCTOR DASHBOARD] Datos del doctor:', data)
+      setDoctorData(data)
+      
+      // TODO: Implementar endpoints para obtener estadísticas reales
+      // Por ahora usamos datos de ejemplo
+      setStats({
+        pacientesHoy: 12,
+        citasPendientes: 8,
+        urgencias: 3
+      })
+      
+    } catch (err) {
+      console.error('[DOCTOR DASHBOARD] Error al cargar datos del doctor:', err)
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSaveNote = () => {
     if (notes.trim()) {
@@ -69,6 +122,42 @@ export default function DashboardPage() {
     },
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="text-slate-600">Cargando información del doctor...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-red-200 shadow-lg max-w-md">
+          <div className="text-red-600 flex items-center gap-2 mb-4">
+            <AlertCircle size={24} />
+            <span className="text-lg font-semibold">Error al cargar datos</span>
+          </div>
+          <p className="text-slate-700 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="mt-4 w-full bg-sky-500 text-white py-2 px-4 rounded-lg hover:bg-sky-600 transition-colors"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!doctorData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
+        <div className="text-slate-600">No se encontraron datos del doctor</div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
       {/* Header */}
@@ -84,7 +173,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-800">MediCare Pro</h1>
-              <p className="text-sm text-slate-600">Dr. María González</p>
+              <p className="text-sm text-slate-600">Dr. {doctorData.primer_nombre} {doctorData.apellido_paterno}</p>
             </div>
           </div>
 
@@ -163,7 +252,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Pacientes Hoy</p>
-                    <p className="text-2xl font-bold text-slate-800">12</p>
+                    <p className="text-2xl font-bold text-slate-800">{stats.pacientesHoy}</p>
                   </div>
                   <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
                     <Users className="text-sky-600" size={24} />
@@ -178,7 +267,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Citas Pendientes</p>
-                    <p className="text-2xl font-bold text-slate-800">8</p>
+                    <p className="text-2xl font-bold text-slate-800">{stats.citasPendientes}</p>
                   </div>
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                     <Clock className="text-blue-600" size={24} />
@@ -193,7 +282,7 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-slate-600 text-sm">Urgencias</p>
-                    <p className="text-2xl font-bold text-slate-800">3</p>
+                    <p className="text-2xl font-bold text-slate-800">{stats.urgencias}</p>
                   </div>
                   <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
                     <Activity className="text-red-600" size={24} />

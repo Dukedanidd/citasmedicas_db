@@ -1,11 +1,40 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Search, Plus, User, Bell, Stethoscope, LogOut, Users, Calendar, Activity } from "lucide-react"
 
 export default function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState("")
+  const [doctorName, setDoctorName] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      try {
+        const userId = sessionStorage.getItem('user_id')
+        if (!userId) {
+          throw new Error('No se encontró información de sesión')
+        }
+
+        const response = await fetch(`/api/doctores/${userId}`)
+        if (!response.ok) {
+          throw new Error('Error al cargar datos del doctor')
+        }
+
+        const data = await response.json()
+        setDoctorName(`${data.primer_nombre} ${data.segundo_nombre || ''} ${data.apellido_paterno} ${data.apellido_materno || ''}`)
+      } catch (err) {
+        console.error('Error al cargar datos del doctor:', err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDoctorData()
+  }, [])
 
   const patients = [
     { id: 1, name: "Ana García", age: 45, condition: "Hipertensión", lastVisit: "2024-01-15", status: "Estable" },
@@ -35,7 +64,7 @@ export default function PatientsPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-800">Gestión de Pacientes</h1>
-              <p className="text-sm text-slate-600">Dr. María González</p>
+              <p className="text-sm text-slate-600">{loading ? 'Cargando...' : error ? 'Error al cargar datos' : doctorName}</p>
             </div>
           </div>
 

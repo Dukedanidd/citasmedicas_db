@@ -29,7 +29,7 @@ export default function PatientCalendar() {
 
   const fetchPatientInfo = async () => {
     try {
-      const patientId = sessionStorage.getItem('patient_id')
+      const patientId = sessionStorage.getItem('user_id')
       
       if (!patientId) {
         throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
@@ -53,7 +53,7 @@ export default function PatientCalendar() {
     try {
       setLoading(true)
       
-      const patientIdToUse = patientId || sessionStorage.getItem('patient_id')
+      const patientIdToUse = patientId || sessionStorage.getItem('user_id')
       
       if (!patientIdToUse) {
         throw new Error('No se encontró información de sesión.')
@@ -99,7 +99,7 @@ export default function PatientCalendar() {
     if (appointmentReason && selectedTime && selectedDate && patientInfo) {
       try {
         // Obtener ID del paciente desde sessionStorage
-        const patientId = sessionStorage.getItem('patient_id')
+        const patientId = sessionStorage.getItem('user_id')
         
         if (!patientId) {
           throw new Error('No se encontró información de sesión.')

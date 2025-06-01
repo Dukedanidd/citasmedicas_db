@@ -27,7 +27,7 @@ export default function PatientDashboardOverview() {
         setLoading(true)
         
         // Obtener ID del paciente desde sessionStorage
-        const patientId = sessionStorage.getItem('patient_id')
+        const patientId = sessionStorage.getItem('user_id')
         
         if (!patientId) {
           throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.')
@@ -69,7 +69,7 @@ export default function PatientDashboardOverview() {
   }
 
   if (error) {
-    const patientId = sessionStorage.getItem('patient_id') || 'No disponible'
+    const patientId = sessionStorage.getItem('user_id') || 'No disponible'
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
         <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 border border-red-200 shadow-lg max-w-md">

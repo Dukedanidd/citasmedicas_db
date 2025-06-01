@@ -38,7 +38,7 @@ function PatientCalendar() {
     const [patientInfo, setPatientInfo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const fetchPatientInfo = async ()=>{
         try {
-            const patientId = sessionStorage.getItem('patient_id');
+            const patientId = sessionStorage.getItem('user_id');
             if (!patientId) {
                 throw new Error('No se encontró información de sesión. Por favor, inicia sesión nuevamente.');
             }
@@ -57,7 +57,7 @@ function PatientCalendar() {
     const fetchAppointments = async (patientId = null)=>{
         try {
             setLoading(true);
-            const patientIdToUse = patientId || sessionStorage.getItem('patient_id');
+            const patientIdToUse = patientId || sessionStorage.getItem('user_id');
             if (!patientIdToUse) {
                 throw new Error('No se encontró información de sesión.');
             }
@@ -99,7 +99,7 @@ function PatientCalendar() {
         if (appointmentReason && selectedTime && selectedDate && patientInfo) {
             try {
                 // Obtener ID del paciente desde sessionStorage
-                const patientId = sessionStorage.getItem('patient_id');
+                const patientId = sessionStorage.getItem('user_id');
                 if (!patientId) {
                     throw new Error('No se encontró información de sesión.');
                 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   Plus,
@@ -18,6 +18,35 @@ import {
 export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [doctorName, setDoctorName] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      try {
+        const userId = sessionStorage.getItem('user_id')
+        if (!userId) {
+          throw new Error('No se encontró información de sesión')
+        }
+
+        const response = await fetch(`/api/doctores/${userId}`)
+        if (!response.ok) {
+          throw new Error('Error al cargar datos del doctor')
+        }
+
+        const data = await response.json()
+        setDoctorName(`${data.primer_nombre} ${data.segundo_nombre || ''} ${data.apellido_paterno} ${data.apellido_materno || ''}`)
+      } catch (err) {
+        console.error('Error al cargar datos del doctor:', err)
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDoctorData()
+  }, [])
 
   const appointments = [
     { id: 1, time: "09:00", patient: "Ana García", type: "Consulta General", duration: "30 min", status: "confirmada" },
@@ -142,7 +171,7 @@ export default function CalendarPage() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-800">Calendario de Citas</h1>
-              <p className="text-sm text-slate-600">Dr. María González</p>
+              <p className="text-sm text-slate-600">{loading ? 'Cargando...' : error ? 'Error al cargar datos' : doctorName}</p>
             </div>
           </div>
 

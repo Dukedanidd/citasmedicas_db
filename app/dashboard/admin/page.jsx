@@ -44,19 +44,30 @@ export default function AdminDashboard() {
     // Aquí podrías verificar si el usuario está autenticado
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/check');
-        const data = await res.json();
+        const userId = sessionStorage.getItem('user_id')
+        if (!userId) {
+          router.push('/login')
+          return
+        }
+
+        const res = await fetch('/api/auth/check', {
+          headers: {
+            'user-id': userId
+          }
+        })
+        const data = await res.json()
         
         if (!data.authenticated || data.user?.rol !== 'admin') {
-          router.push('/login');
+          router.push('/login')
         }
       } catch (error) {
-        console.error('Error verificando autenticación:', error);
+        console.error('Error verificando autenticación:', error)
+        router.push('/login')
       }
-    };
+    }
 
-    checkAuth();
-  }, []);
+    checkAuth()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {

@@ -97,7 +97,7 @@ function LoginPage() {
             // Guardar información del usuario en sessionStorage
             if (data.user && data.user.id) {
                 console.log('[LOGIN PAGE] Guardando información del usuario:', data.user.id);
-                sessionStorage.setItem('patient_id', data.user.id.toString());
+                sessionStorage.setItem('user_id', data.user.id.toString());
                 sessionStorage.setItem('user_email', data.user.email);
                 sessionStorage.setItem('user_role', data.user.role_id.toString());
             }
