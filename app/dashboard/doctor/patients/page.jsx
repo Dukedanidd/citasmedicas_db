@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Plus, User, Bell, Stethoscope, LogOut, Users, Calendar, Activity, X, Eye, EyeOff, Clock } from "lucide-react"
+import { Search, Plus, User, Bell, Stethoscope, LogOut, Users, Calendar, Activity, X, Eye, EyeOff, Clock, FileText } from "lucide-react"
 import { useRouter } from 'next/navigation'
 
 export default function PatientsPage() {
@@ -35,6 +35,13 @@ export default function PatientsPage() {
   })
   const [isSubmittingAppointment, setIsSubmittingAppointment] = useState(false)
   const [appointmentError, setAppointmentError] = useState(null)
+  const [showHistoryModal, setShowHistoryModal] = useState(false)
+  const [selectedPatientHistory, setSelectedPatientHistory] = useState(null)
+  const [medicalHistory, setMedicalHistory] = useState([])
+  const [loadingHistory, setLoadingHistory] = useState(false)
+  const [historyError, setHistoryError] = useState(null)
+  const [expedientes, setExpedientes] = useState([])
+  const [medicalHistoryMap, setMedicalHistoryMap] = useState({})
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -282,6 +289,40 @@ export default function PatientsPage() {
     router.push('/login')
   }
 
+  const handleViewHistory = async (patient) => {
+    setSelectedPatientHistory(patient)
+    setShowHistoryModal(true)
+    setLoadingHistory(true)
+    setHistoryError(null)
+    setMedicalHistory([])
+
+    try {
+      console.log('Fetching expediente for patient:', patient.paciente_id)
+      const expedienteRes = await fetch(`/api/expedientes?pacienteId=${patient.paciente_id}`)
+      if (!expedienteRes.ok) throw new Error('Error al obtener el expediente')
+      const expedientes = await expedienteRes.json()
+      
+      if (!expedientes || !Array.isArray(expedientes) || expedientes.length === 0) {
+        setMedicalHistory([])
+        return
+      }
+
+      const expediente = expedientes[0]
+      console.log('Fetching history for expediente:', expediente.expediente_id)
+      
+      const historyRes = await fetch(`/api/historial?expedienteId=${expediente.expediente_id}`)
+      if (!historyRes.ok) throw new Error('Error al obtener el historial')
+      const history = await historyRes.json()
+      
+      setMedicalHistory(history)
+    } catch (error) {
+      console.error('Error fetching medical history:', error)
+      setHistoryError(error.message)
+    } finally {
+      setLoadingHistory(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
       {/* Header */}
@@ -492,9 +533,11 @@ export default function PatientsPage() {
                 <div className="mt-4 flex space-x-2">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
-                    className="flex-1 px-3 py-2 bg-sky-100 text-sky-800 rounded-lg text-sm hover:bg-sky-200 transition-colors"
+                    onClick={() => handleViewHistory(patient)}
+                    className="p-2 text-sky-600 hover:text-sky-700 transition-colors"
+                    title="Ver historial"
                   >
-                    Ver Historial
+                    <FileText size={20} />
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -762,6 +805,70 @@ export default function PatientsPage() {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Medical History Modal */}
+      <AnimatePresence>
+        {showHistoryModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden"
+            >
+              <div className="p-6 border-b border-slate-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold text-slate-800">
+                    Historial Médico - {selectedPatientHistory?.primer_nombre} {selectedPatientHistory?.apellido_paterno}
+                  </h2>
+                  <button
+                    onClick={() => setShowHistoryModal(false)}
+                    className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 overflow-y-auto max-h-[calc(80vh-8rem)]">
+                {loadingHistory ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500"></div>
+                  </div>
+                ) : historyError ? (
+                  <div className="text-red-500 text-center py-4">{historyError}</div>
+                ) : medicalHistory.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="text-slate-500 mb-2">No hay historial médico disponible</div>
+                    <p className="text-sm text-slate-400">Este paciente aún no tiene registros en su historial médico.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {medicalHistory.map((entry) => (
+                      <div
+                        key={entry.historial_id}
+                        className="bg-slate-50 rounded-lg p-4 border border-slate-200"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <p className="text-sm text-slate-600">
+                            {new Date(entry.fecha_registro).toLocaleString()}
+                          </p>
+                        </div>
+                        <p className="text-slate-800">{entry.descripcion}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </motion.div>
           </motion.div>
         )}
