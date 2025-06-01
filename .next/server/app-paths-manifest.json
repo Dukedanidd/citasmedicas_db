@@ -1,6 +1,5 @@
 {
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/dashboard/doctor/page": "app/dashboard/doctor/page.js",
   "/api/doctores/[id]/route": "app/api/doctores/[id]/route.js",
@@ -9,6 +8,5 @@
   "/api/citas/route": "app/api/citas/route.js",
   "/dashboard/doctor/patients/page": "app/dashboard/doctor/patients/page.js",
   "/dashboard/doctor/appointments/page": "app/dashboard/doctor/appointments/page.js",
-  "/api/pacientes/route": "app/api/pacientes/route.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js"
+  "/api/pacientes/route": "app/api/pacientes/route.js"
 }

@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, Plus, User, Bell, Stethoscope, LogOut, Users, Calendar, Activity, X, Eye, EyeOff, Clock } from "lucide-react"
+import { useRouter } from 'next/navigation'
 
 export default function PatientsPage() {
+  const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [doctorName, setDoctorName] = useState("")
   const [loading, setLoading] = useState(true)
@@ -271,6 +273,15 @@ export default function PatientsPage() {
     }
   }
 
+  const handleLogout = () => {
+    // Clear any stored tokens or user data
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    
+    // Redirect to login page
+    router.push('/login')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
       {/* Header */}
@@ -307,6 +318,7 @@ export default function PatientsPage() {
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
+              onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 transition-colors"
             >
               <LogOut size={20} />
@@ -385,25 +397,40 @@ export default function PatientsPage() {
             <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg">
               <div className="text-center">
                 <p className="text-2xl font-bold text-green-600">
-                  {patients.filter((p) => p.estado === "Estable").length}
+                  {patients.filter(p => {
+                    const today = new Date();
+                    const birthDate = new Date(p.fecha_nacimiento);
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    return age < 18;
+                  }).length}
                 </p>
-                <p className="text-sm text-slate-600">Estables</p>
-              </div>
-            </div>
-            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-yellow-600">
-                  {patients.filter((p) => p.estado === "Control").length}
-                </p>
-                <p className="text-sm text-slate-600">En Control</p>
+                <p className="text-sm text-slate-600">Pacientes Menores</p>
               </div>
             </div>
             <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg">
               <div className="text-center">
                 <p className="text-2xl font-bold text-blue-600">
-                  {patients.filter((p) => p.estado === "Mejoría").length}
+                  {patients.filter(p => {
+                    const today = new Date();
+                    const birthDate = new Date(p.fecha_nacimiento);
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    return age >= 18 && age < 65;
+                  }).length}
                 </p>
-                <p className="text-sm text-slate-600">En Mejoría</p>
+                <p className="text-sm text-slate-600">Pacientes Adultos</p>
+              </div>
+            </div>
+            <div className="bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple-600">
+                  {patients.filter(p => {
+                    const today = new Date();
+                    const birthDate = new Date(p.fecha_nacimiento);
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    return age >= 65;
+                  }).length}
+                </p>
+                <p className="text-sm text-slate-600">Pacientes Mayores</p>
               </div>
             </div>
           </motion.div>

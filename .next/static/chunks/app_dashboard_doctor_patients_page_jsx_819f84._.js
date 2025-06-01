@@ -10,6 +10,7 @@ __turbopack_esm__({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$stethoscope$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Stethoscope$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/stethoscope.js [app-client] (ecmascript) <export default as Stethoscope>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Bell$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/bell.js [app-client] (ecmascript) <export default as Bell>");
@@ -30,8 +31,10 @@ var _s = __turbopack_refresh__.signature();
 ;
 ;
 ;
+;
 function PatientsPage() {
     _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [doctorName, setDoctorName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
@@ -272,6 +275,13 @@ function PatientsPage() {
             setIsSubmittingAppointment(false);
         }
     };
+    const handleLogout = ()=>{
+        // Clear any stored tokens or user data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        // Redirect to login page
+        router.push('/login');
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100",
         children: [
@@ -298,12 +308,12 @@ function PatientsPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 285,
+                                        lineNumber: 296,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 284,
+                                    lineNumber: 295,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -313,7 +323,7 @@ function PatientsPage() {
                                             children: "Gestión de Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 288,
+                                            lineNumber: 299,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -321,19 +331,19 @@ function PatientsPage() {
                                             children: loading ? 'Cargando...' : error ? 'Error al cargar datos' : doctorName
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 289,
+                                            lineNumber: 300,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 287,
+                                    lineNumber: 298,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 283,
+                            lineNumber: 294,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -348,12 +358,12 @@ function PatientsPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 298,
+                                        lineNumber: 309,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 294,
+                                    lineNumber: 305,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -367,54 +377,55 @@ function PatientsPage() {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 305,
+                                            lineNumber: 316,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Nuevo Paciente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 306,
+                                            lineNumber: 317,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 300,
+                                    lineNumber: 311,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
                                     whileHover: {
                                         scale: 1.05
                                     },
+                                    onClick: handleLogout,
                                     className: "p-2 text-slate-600 hover:text-red-600 transition-colors",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__["LogOut"], {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 312,
+                                        lineNumber: 324,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 308,
+                                    lineNumber: 319,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 293,
+                            lineNumber: 304,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                    lineNumber: 282,
+                    lineNumber: 293,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 277,
+                lineNumber: 288,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -447,7 +458,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 332,
+                                            lineNumber: 344,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -455,13 +466,13 @@ function PatientsPage() {
                                             children: "Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 333,
+                                            lineNumber: 345,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 326,
+                                    lineNumber: 338,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -474,7 +485,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 340,
+                                            lineNumber: 352,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -482,13 +493,13 @@ function PatientsPage() {
                                             children: "Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 341,
+                                            lineNumber: 353,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 336,
+                                    lineNumber: 348,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -505,7 +516,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 350,
+                                            lineNumber: 362,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -513,24 +524,24 @@ function PatientsPage() {
                                             children: "Calendario"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 351,
+                                            lineNumber: 363,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 344,
+                                    lineNumber: 356,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 325,
+                            lineNumber: 337,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 320,
+                        lineNumber: 332,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -554,7 +565,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 361,
+                                            lineNumber: 373,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -565,18 +576,18 @@ function PatientsPage() {
                                             className: "w-full pl-10 pr-4 py-3 bg-white/80 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300 text-slate-800 placeholder:text-slate-400"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 362,
+                                            lineNumber: 374,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 360,
+                                    lineNumber: 372,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 359,
+                                lineNumber: 371,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -603,7 +614,7 @@ function PatientsPage() {
                                                     children: patients.length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 381,
+                                                    lineNumber: 393,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -611,18 +622,18 @@ function PatientsPage() {
                                                     children: "Total Pacientes"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 382,
+                                                    lineNumber: 394,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 380,
+                                            lineNumber: 392,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 379,
+                                        lineNumber: 391,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -632,61 +643,34 @@ function PatientsPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-2xl font-bold text-green-600",
-                                                    children: patients.filter((p)=>p.estado === "Estable").length
+                                                    children: patients.filter((p)=>{
+                                                        const today = new Date();
+                                                        const birthDate = new Date(p.fecha_nacimiento);
+                                                        const age = today.getFullYear() - birthDate.getFullYear();
+                                                        return age < 18;
+                                                    }).length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 387,
+                                                    lineNumber: 399,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-sm text-slate-600",
-                                                    children: "Estables"
+                                                    children: "Pacientes Menores"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 390,
+                                                    lineNumber: 407,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 386,
+                                            lineNumber: 398,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 385,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-center",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-2xl font-bold text-yellow-600",
-                                                    children: patients.filter((p)=>p.estado === "Control").length
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 395,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-sm text-slate-600",
-                                                    children: "En Control"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 398,
-                                                    columnNumber: 17
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 394,
-                                            columnNumber: 15
-                                        }, this)
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 393,
+                                        lineNumber: 397,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -696,35 +680,77 @@ function PatientsPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-2xl font-bold text-blue-600",
-                                                    children: patients.filter((p)=>p.estado === "Mejoría").length
+                                                    children: patients.filter((p)=>{
+                                                        const today = new Date();
+                                                        const birthDate = new Date(p.fecha_nacimiento);
+                                                        const age = today.getFullYear() - birthDate.getFullYear();
+                                                        return age >= 18 && age < 65;
+                                                    }).length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 403,
+                                                    lineNumber: 412,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-sm text-slate-600",
-                                                    children: "En Mejoría"
+                                                    children: "Pacientes Adultos"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 406,
+                                                    lineNumber: 420,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 402,
+                                            lineNumber: 411,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 401,
+                                        lineNumber: 410,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-white/80 backdrop-blur-lg rounded-xl p-4 border border-sky-100 shadow-lg",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-center",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-2xl font-bold text-purple-600",
+                                                    children: patients.filter((p)=>{
+                                                        const today = new Date();
+                                                        const birthDate = new Date(p.fecha_nacimiento);
+                                                        const age = today.getFullYear() - birthDate.getFullYear();
+                                                        return age >= 65;
+                                                    }).length
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                    lineNumber: 425,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-sm text-slate-600",
+                                                    children: "Pacientes Mayores"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                    lineNumber: 433,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                            lineNumber: 424,
+                                            columnNumber: 15
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 423,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 373,
+                                lineNumber: 385,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -745,12 +771,12 @@ function PatientsPage() {
                                         children: "Cargando pacientes..."
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 420,
+                                        lineNumber: 447,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 419,
+                                    lineNumber: 446,
                                     columnNumber: 15
                                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "col-span-full text-center py-8",
@@ -759,12 +785,12 @@ function PatientsPage() {
                                         children: error
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 424,
+                                        lineNumber: 451,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 423,
+                                    lineNumber: 450,
                                     columnNumber: 15
                                 }, this) : filteredPatients.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "col-span-full text-center py-8",
@@ -773,12 +799,12 @@ function PatientsPage() {
                                         children: "No se encontraron pacientes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 428,
+                                        lineNumber: 455,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 427,
+                                    lineNumber: 454,
                                     columnNumber: 15
                                 }, this) : filteredPatients.map((patient, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                                         initial: {
@@ -807,12 +833,12 @@ function PatientsPage() {
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                            lineNumber: 442,
+                                                            lineNumber: 469,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 441,
+                                                        lineNumber: 468,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -822,7 +848,7 @@ function PatientsPage() {
                                                                 children: `${patient.primer_nombre} ${patient.segundo_nombre || ''} ${patient.apellido_paterno} ${patient.apellido_materno || ''}`
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 445,
+                                                                lineNumber: 472,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -830,19 +856,19 @@ function PatientsPage() {
                                                                 children: patient.email
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 448,
+                                                                lineNumber: 475,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 471,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 440,
+                                                lineNumber: 467,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -856,7 +882,7 @@ function PatientsPage() {
                                                                 children: "Fecha de Nacimiento:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 454,
+                                                                lineNumber: 481,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -864,13 +890,13 @@ function PatientsPage() {
                                                                 children: new Date(patient.fecha_nacimiento).toLocaleDateString()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 455,
+                                                                lineNumber: 482,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 453,
+                                                        lineNumber: 480,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -881,7 +907,7 @@ function PatientsPage() {
                                                                 children: "Sexo:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 460,
+                                                                lineNumber: 487,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -889,19 +915,19 @@ function PatientsPage() {
                                                                 children: patient.sexo
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 461,
+                                                                lineNumber: 488,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 459,
+                                                        lineNumber: 486,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 452,
+                                                lineNumber: 479,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -915,7 +941,7 @@ function PatientsPage() {
                                                         children: "Ver Historial"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 466,
+                                                        lineNumber: 493,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -927,36 +953,36 @@ function PatientsPage() {
                                                         children: "Nueva Cita"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 472,
+                                                        lineNumber: 499,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 465,
+                                                lineNumber: 492,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, patient.paciente_id, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 432,
+                                        lineNumber: 459,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 412,
+                                lineNumber: 439,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 357,
+                        lineNumber: 369,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 318,
+                lineNumber: 330,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -996,7 +1022,7 @@ function PatientsPage() {
                                         children: "Nuevo Paciente"
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 505,
+                                        lineNumber: 532,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1007,18 +1033,18 @@ function PatientsPage() {
                                             className: "text-slate-600"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 510,
+                                            lineNumber: 537,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 506,
+                                        lineNumber: 533,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 504,
+                                lineNumber: 531,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1035,7 +1061,7 @@ function PatientsPage() {
                                                         children: "Primer Nombre *"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 517,
+                                                        lineNumber: 544,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1049,13 +1075,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 520,
+                                                        lineNumber: 547,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 516,
+                                                lineNumber: 543,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1065,7 +1091,7 @@ function PatientsPage() {
                                                         children: "Segundo Nombre"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 529,
+                                                        lineNumber: 556,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1078,13 +1104,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 532,
+                                                        lineNumber: 559,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 528,
+                                                lineNumber: 555,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1094,7 +1120,7 @@ function PatientsPage() {
                                                         children: "Apellido Paterno *"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 540,
+                                                        lineNumber: 567,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1108,13 +1134,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 543,
+                                                        lineNumber: 570,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 539,
+                                                lineNumber: 566,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1124,7 +1150,7 @@ function PatientsPage() {
                                                         children: "Apellido Materno"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 552,
+                                                        lineNumber: 579,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1137,13 +1163,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 555,
+                                                        lineNumber: 582,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 551,
+                                                lineNumber: 578,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,7 +1179,7 @@ function PatientsPage() {
                                                         children: "Email *"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 563,
+                                                        lineNumber: 590,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1167,13 +1193,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 566,
+                                                        lineNumber: 593,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 562,
+                                                lineNumber: 589,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1183,7 +1209,7 @@ function PatientsPage() {
                                                         children: "Fecha de Nacimiento *"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 575,
+                                                        lineNumber: 602,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1197,13 +1223,13 @@ function PatientsPage() {
                                                         className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 578,
+                                                        lineNumber: 605,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 574,
+                                                lineNumber: 601,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1213,7 +1239,7 @@ function PatientsPage() {
                                                         children: "Sexo *"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 587,
+                                                        lineNumber: 614,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1230,7 +1256,7 @@ function PatientsPage() {
                                                                 children: "Masculino"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 596,
+                                                                lineNumber: 623,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1238,7 +1264,7 @@ function PatientsPage() {
                                                                 children: "Femenino"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 597,
+                                                                lineNumber: 624,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1246,19 +1272,19 @@ function PatientsPage() {
                                                                 children: "Otro"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 598,
+                                                                lineNumber: 625,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 590,
+                                                        lineNumber: 617,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 586,
+                                                lineNumber: 613,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1268,7 +1294,7 @@ function PatientsPage() {
                                                         children: "Contraseña (opcional)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 602,
+                                                        lineNumber: 629,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1285,7 +1311,7 @@ function PatientsPage() {
                                                                 className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800 pr-10"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 606,
+                                                                lineNumber: 633,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1296,24 +1322,24 @@ function PatientsPage() {
                                                                     size: 18
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                    lineNumber: 618,
+                                                                    lineNumber: 645,
                                                                     columnNumber: 41
                                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                                     size: 18
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                    lineNumber: 618,
+                                                                    lineNumber: 645,
                                                                     columnNumber: 64
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 613,
+                                                                lineNumber: 640,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 605,
+                                                        lineNumber: 632,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1321,19 +1347,19 @@ function PatientsPage() {
                                                         children: "Si no se proporciona una contraseña, se generará una aleatoria"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 621,
+                                                        lineNumber: 648,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 601,
+                                                lineNumber: 628,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 515,
+                                        lineNumber: 542,
                                         columnNumber: 17
                                     }, this),
                                     submitError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1341,7 +1367,7 @@ function PatientsPage() {
                                         children: submitError
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 628,
+                                        lineNumber: 655,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1354,7 +1380,7 @@ function PatientsPage() {
                                                 children: "Cancelar"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 634,
+                                                lineNumber: 661,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1364,35 +1390,35 @@ function PatientsPage() {
                                                 children: isSubmitting ? 'Guardando...' : 'Guardar Paciente'
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 641,
+                                                lineNumber: 668,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 633,
+                                        lineNumber: 660,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 514,
+                                lineNumber: 541,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 497,
+                        lineNumber: 524,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                    lineNumber: 490,
+                    lineNumber: 517,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 488,
+                lineNumber: 515,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -1434,7 +1460,7 @@ function PatientsPage() {
                                                 children: "Nueva Cita"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 674,
+                                                lineNumber: 701,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1451,13 +1477,13 @@ function PatientsPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 675,
+                                                lineNumber: 702,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 673,
+                                        lineNumber: 700,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1468,18 +1494,18 @@ function PatientsPage() {
                                             className: "text-slate-600"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 683,
+                                            lineNumber: 710,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 679,
+                                        lineNumber: 706,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 672,
+                                lineNumber: 699,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1493,7 +1519,7 @@ function PatientsPage() {
                                                 children: "Fecha y Hora *"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 689,
+                                                lineNumber: 716,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1508,13 +1534,13 @@ function PatientsPage() {
                                                 className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 692,
+                                                lineNumber: 719,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 688,
+                                        lineNumber: 715,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1524,7 +1550,7 @@ function PatientsPage() {
                                                 children: "Notas"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 703,
+                                                lineNumber: 730,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1538,13 +1564,13 @@ function PatientsPage() {
                                                 className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800 resize-none"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 706,
+                                                lineNumber: 733,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 702,
+                                        lineNumber: 729,
                                         columnNumber: 17
                                     }, this),
                                     appointmentError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1552,7 +1578,7 @@ function PatientsPage() {
                                         children: appointmentError
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 716,
+                                        lineNumber: 743,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1565,7 +1591,7 @@ function PatientsPage() {
                                                 children: "Cancelar"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 722,
+                                                lineNumber: 749,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1575,45 +1601,49 @@ function PatientsPage() {
                                                 children: isSubmittingAppointment ? 'Creando...' : 'Crear Cita'
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 729,
+                                                lineNumber: 756,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 721,
+                                        lineNumber: 748,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 687,
+                                lineNumber: 714,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 665,
+                        lineNumber: 692,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                    lineNumber: 658,
+                    lineNumber: 685,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 656,
+                lineNumber: 683,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-        lineNumber: 275,
+        lineNumber: 286,
         columnNumber: 5
     }, this);
 }
-_s(PatientsPage, "ZKEEIE7FJkW/ZSW39e0yJcpDjTs=");
+_s(PatientsPage, "yWSMo+8tMyxWmFxO2ObxdPdUwK4=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
+    ];
+});
 _c = PatientsPage;
 var _c;
 __turbopack_refresh__.register(_c, "PatientsPage");

@@ -17,8 +17,10 @@ import {
   AlertCircle,
   X,
 } from "lucide-react"
+import { useRouter } from 'next/navigation'
 
 export default function DashboardPage() {
+  const router = useRouter()
   const [notes, setNotes] = useState("")
   const [savedNotes, setSavedNotes] = useState([])
   const [isEditingNote, setIsEditingNote] = useState(null)
@@ -29,7 +31,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState({
     pacientesHoy: 0,
     citasPendientes: 0,
-    urgencias: 0
+    citasHoy: 0
   })
   const [showPacientesModal, setShowPacientesModal] = useState(false)
   const [showCitasModal, setShowCitasModal] = useState(false)
@@ -77,11 +79,21 @@ export default function DashboardPage() {
       const citasPendientesData = Array.isArray(citas) ? citas.filter(cita => cita.estado_id === 1 || cita.estado_id === 2) : []
       setCitasPendientes(citasPendientesData)
 
-      // Urgencias: si hay un estado específico, filtrar aquí. Por ahora, lo dejamos en 0.
+      // Citas de hoy
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const tomorrow = new Date(today)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      
+      const citasHoy = Array.isArray(citas) ? citas.filter(cita => {
+        const citaDate = new Date(cita.fecha_hora)
+        return citaDate >= today && citaDate < tomorrow
+      }).length : 0
+
       setStats({
         pacientesHoy: pacientesData.length,
         citasPendientes: citasPendientesData.length,
-        urgencias: 0
+        citasHoy: citasHoy
       })
       
     } catch (err) {
@@ -158,6 +170,15 @@ export default function DashboardPage() {
         fetchNotes()
       }
     } catch (err) {}
+  }
+
+  const handleLogout = () => {
+    // Clear any stored tokens or user data
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    
+    // Redirect to login page
+    router.push('/login')
   }
 
   const containerVariants = {
@@ -250,6 +271,7 @@ export default function DashboardPage() {
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
+              onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 transition-colors"
             >
               <LogOut size={20} />
@@ -345,11 +367,11 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm">Urgencias</p>
-                    <p className="text-2xl font-bold text-slate-800">{stats.urgencias}</p>
+                    <p className="text-slate-600 text-sm">Citas Hoy</p>
+                    <p className="text-2xl font-bold text-slate-800">{stats.citasHoy}</p>
                   </div>
-                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                    <Activity className="text-red-600" size={24} />
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Calendar className="text-green-600" size={24} />
                   </div>
                 </div>
               </motion.div>

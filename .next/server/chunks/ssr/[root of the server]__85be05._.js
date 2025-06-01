@@ -48,7 +48,7 @@ function DashboardPage() {
     const [stats, setStats] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         pacientesHoy: 0,
         citasPendientes: 0,
-        urgencias: 0
+        citasHoy: 0
     });
     const [showPacientesModal, setShowPacientesModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showCitasModal, setShowCitasModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -85,11 +85,19 @@ function DashboardPage() {
             // Citas pendientes: estado_id 1 (Programada) o 2 (Confirmada)
             const citasPendientesData = Array.isArray(citas) ? citas.filter((cita)=>cita.estado_id === 1 || cita.estado_id === 2) : [];
             setCitasPendientes(citasPendientesData);
-            // Urgencias: si hay un estado específico, filtrar aquí. Por ahora, lo dejamos en 0.
+            // Citas de hoy
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const citasHoy = Array.isArray(citas) ? citas.filter((cita)=>{
+                const citaDate = new Date(cita.fecha_hora);
+                return citaDate >= today && citaDate < tomorrow;
+            }).length : 0;
             setStats({
                 pacientesHoy: pacientesData.length,
                 citasPendientes: citasPendientesData.length,
-                urgencias: 0
+                citasHoy: citasHoy
             });
         } catch (err) {
             console.error('[DOCTOR DASHBOARD] Error al cargar datos del doctor:', err);
@@ -208,12 +216,12 @@ function DashboardPage() {
                 children: "Cargando información del doctor..."
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                lineNumber: 186,
+                lineNumber: 196,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/doctor/page.jsx",
-            lineNumber: 185,
+            lineNumber: 195,
             columnNumber: 7
         }, this);
     }
@@ -230,7 +238,7 @@ function DashboardPage() {
                                 size: 24
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                lineNumber: 196,
+                                lineNumber: 206,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -238,13 +246,13 @@ function DashboardPage() {
                                 children: "Error al cargar datos"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                lineNumber: 197,
+                                lineNumber: 207,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                        lineNumber: 195,
+                        lineNumber: 205,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -252,7 +260,7 @@ function DashboardPage() {
                         children: error
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                        lineNumber: 199,
+                        lineNumber: 209,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -261,18 +269,18 @@ function DashboardPage() {
                         children: "Reintentar"
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                        lineNumber: 200,
+                        lineNumber: 210,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                lineNumber: 194,
+                lineNumber: 204,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/doctor/page.jsx",
-            lineNumber: 193,
+            lineNumber: 203,
             columnNumber: 7
         }, this);
     }
@@ -284,12 +292,12 @@ function DashboardPage() {
                 children: "No se encontraron datos del doctor"
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                lineNumber: 214,
+                lineNumber: 224,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/dashboard/doctor/page.jsx",
-            lineNumber: 213,
+            lineNumber: 223,
             columnNumber: 7
         }, this);
     }
@@ -319,12 +327,12 @@ function DashboardPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 230,
+                                        lineNumber: 240,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 229,
+                                    lineNumber: 239,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -334,7 +342,7 @@ function DashboardPage() {
                                             children: "MediCare Pro"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 233,
+                                            lineNumber: 243,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -347,19 +355,19 @@ function DashboardPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 234,
+                                            lineNumber: 244,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 232,
+                                    lineNumber: 242,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                            lineNumber: 228,
+                            lineNumber: 238,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -374,12 +382,12 @@ function DashboardPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 243,
+                                        lineNumber: 253,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 239,
+                                    lineNumber: 249,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -391,12 +399,12 @@ function DashboardPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 249,
+                                        lineNumber: 259,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 245,
+                                    lineNumber: 255,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -408,29 +416,29 @@ function DashboardPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 255,
+                                        lineNumber: 265,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 251,
+                                    lineNumber: 261,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                            lineNumber: 238,
+                            lineNumber: 248,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                    lineNumber: 227,
+                    lineNumber: 237,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                lineNumber: 222,
+                lineNumber: 232,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -463,7 +471,7 @@ function DashboardPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 275,
+                                            lineNumber: 285,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -471,13 +479,13 @@ function DashboardPage() {
                                             children: "Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 276,
+                                            lineNumber: 286,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 269,
+                                    lineNumber: 279,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -494,7 +502,7 @@ function DashboardPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 285,
+                                            lineNumber: 295,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -502,13 +510,13 @@ function DashboardPage() {
                                             children: "Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 286,
+                                            lineNumber: 296,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 279,
+                                    lineNumber: 289,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -525,7 +533,7 @@ function DashboardPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 295,
+                                            lineNumber: 305,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -533,24 +541,24 @@ function DashboardPage() {
                                             children: "Calendario"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 296,
+                                            lineNumber: 306,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                    lineNumber: 289,
+                                    lineNumber: 299,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                            lineNumber: 268,
+                            lineNumber: 278,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                        lineNumber: 263,
+                        lineNumber: 273,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -585,7 +593,7 @@ function DashboardPage() {
                                                                     children: "Pacientes"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 315,
+                                                                    lineNumber: 325,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -593,13 +601,13 @@ function DashboardPage() {
                                                                     children: stats.pacientesHoy
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 316,
+                                                                    lineNumber: 326,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 314,
+                                                            lineNumber: 324,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -609,23 +617,23 @@ function DashboardPage() {
                                                                 size: 24
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 319,
+                                                                lineNumber: 329,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 318,
+                                                            lineNumber: 328,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 323,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                lineNumber: 306,
+                                                lineNumber: 316,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -648,7 +656,7 @@ function DashboardPage() {
                                                                     children: "Citas Pendientes"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 333,
+                                                                    lineNumber: 343,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -656,13 +664,13 @@ function DashboardPage() {
                                                                     children: stats.citasPendientes
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 334,
+                                                                    lineNumber: 344,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 332,
+                                                            lineNumber: 342,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -672,23 +680,23 @@ function DashboardPage() {
                                                                 size: 24
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 337,
+                                                                lineNumber: 347,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 336,
+                                                            lineNumber: 346,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 331,
+                                                    lineNumber: 341,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                lineNumber: 324,
+                                                lineNumber: 334,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -701,56 +709,56 @@ function DashboardPage() {
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                     className: "text-slate-600 text-sm",
-                                                                    children: "Urgencias"
+                                                                    children: "Citas Hoy"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 348,
+                                                                    lineNumber: 358,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                     className: "text-2xl font-bold text-slate-800",
-                                                                    children: stats.urgencias
+                                                                    children: stats.citasHoy
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 349,
+                                                                    lineNumber: 359,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 347,
+                                                            lineNumber: 357,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center",
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$activity$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Activity$3e$__["Activity"], {
-                                                                className: "text-red-600",
+                                                            className: "w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
+                                                                className: "text-green-600",
                                                                 size: 24
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 352,
+                                                                lineNumber: 362,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 351,
+                                                            lineNumber: 361,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 346,
+                                                    lineNumber: 356,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                lineNumber: 342,
+                                                lineNumber: 352,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 305,
+                                        lineNumber: 315,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -767,19 +775,19 @@ function DashboardPage() {
                                                             size: 24
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 365,
+                                                            lineNumber: 375,
                                                             columnNumber: 19
                                                         }, this),
                                                         "Apuntes Médicos"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 364,
+                                                    lineNumber: 374,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                lineNumber: 363,
+                                                lineNumber: 373,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -793,12 +801,12 @@ function DashboardPage() {
                                                             className: "w-full h-32 p-4 bg-sky-50/50 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300 text-slate-800 placeholder-slate-400 resize-none"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 372,
+                                                            lineNumber: 382,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                        lineNumber: 371,
+                                                        lineNumber: 381,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,20 +827,20 @@ function DashboardPage() {
                                                                             size: 16
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 389,
+                                                                            lineNumber: 399,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             children: "Actualizar"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 390,
+                                                                            lineNumber: 400,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 383,
+                                                                    lineNumber: 393,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -850,7 +858,7 @@ function DashboardPage() {
                                                                     children: "Cancelar"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 392,
+                                                                    lineNumber: 402,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
@@ -869,25 +877,25 @@ function DashboardPage() {
                                                                     size: 16
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 412,
+                                                                    lineNumber: 422,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: "Guardar Apunte"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 413,
+                                                                    lineNumber: 423,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 405,
+                                                            lineNumber: 415,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                        lineNumber: 380,
+                                                        lineNumber: 390,
                                                         columnNumber: 17
                                                     }, this),
                                                     savedNotes.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -898,7 +906,7 @@ function DashboardPage() {
                                                                 children: "Apuntes Guardados"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 421,
+                                                                lineNumber: 431,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -927,7 +935,7 @@ function DashboardPage() {
                                                                                                 rows: 2
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                lineNumber: 434,
+                                                                                                lineNumber: 444,
                                                                                                 columnNumber: 35
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -939,7 +947,7 @@ function DashboardPage() {
                                                                                                         children: "Guardar"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                        lineNumber: 441,
+                                                                                                        lineNumber: 451,
                                                                                                         columnNumber: 37
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -951,13 +959,13 @@ function DashboardPage() {
                                                                                                         children: "Cancelar"
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                        lineNumber: 445,
+                                                                                                        lineNumber: 455,
                                                                                                         columnNumber: 37
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                lineNumber: 440,
+                                                                                                lineNumber: 450,
                                                                                                 columnNumber: 35
                                                                                             }, this)
                                                                                         ]
@@ -968,7 +976,7 @@ function DashboardPage() {
                                                                                                 children: note.texto
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                lineNumber: 453,
+                                                                                                lineNumber: 463,
                                                                                                 columnNumber: 35
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -976,14 +984,14 @@ function DashboardPage() {
                                                                                                 children: new Date(note.fecha_hora).toLocaleString("es-ES")
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                                lineNumber: 454,
+                                                                                                lineNumber: 464,
                                                                                                 columnNumber: 35
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                    lineNumber: 431,
+                                                                                    lineNumber: 441,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -996,7 +1004,7 @@ function DashboardPage() {
                                                                                             children: "Editar"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                            lineNumber: 459,
+                                                                                            lineNumber: 469,
                                                                                             columnNumber: 31
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1006,53 +1014,53 @@ function DashboardPage() {
                                                                                             children: "Eliminar"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                            lineNumber: 464,
+                                                                                            lineNumber: 474,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                                    lineNumber: 458,
+                                                                                    lineNumber: 468,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 430,
+                                                                            lineNumber: 440,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     }, note.apunte_id, false, {
                                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                        lineNumber: 424,
+                                                                        lineNumber: 434,
                                                                         columnNumber: 25
                                                                     }, this))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 422,
+                                                                lineNumber: 432,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                        lineNumber: 420,
+                                                        lineNumber: 430,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                lineNumber: 370,
+                                                lineNumber: 380,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 359,
+                                        lineNumber: 369,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                lineNumber: 303,
+                                lineNumber: 313,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -1093,7 +1101,7 @@ function DashboardPage() {
                                                             children: "Pacientes Asignados"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 498,
+                                                            lineNumber: 508,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1104,18 +1112,18 @@ function DashboardPage() {
                                                                 className: "text-slate-600"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 503,
+                                                                lineNumber: 513,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 499,
+                                                            lineNumber: 509,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 497,
+                                                    lineNumber: 507,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1136,7 +1144,7 @@ function DashboardPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 512,
+                                                                    lineNumber: 522,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1144,7 +1152,7 @@ function DashboardPage() {
                                                                     children: paciente.email
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 515,
+                                                                    lineNumber: 525,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1155,29 +1163,29 @@ function DashboardPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 516,
+                                                                    lineNumber: 526,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, paciente.paciente_id, true, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 508,
+                                                            lineNumber: 518,
                                                             columnNumber: 23
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 506,
+                                                    lineNumber: 516,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 490,
+                                            lineNumber: 500,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 483,
+                                        lineNumber: 493,
                                         columnNumber: 15
                                     }, this),
                                     showCitasModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1216,7 +1224,7 @@ function DashboardPage() {
                                                             children: "Citas Pendientes"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 542,
+                                                            lineNumber: 552,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1227,18 +1235,18 @@ function DashboardPage() {
                                                                 className: "text-slate-600"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 547,
+                                                                lineNumber: 557,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 543,
+                                                            lineNumber: 553,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 541,
+                                                    lineNumber: 551,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1257,7 +1265,7 @@ function DashboardPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 558,
+                                                                            lineNumber: 568,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1268,7 +1276,7 @@ function DashboardPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 561,
+                                                                            lineNumber: 571,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1279,7 +1287,7 @@ function DashboardPage() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 564,
+                                                                            lineNumber: 574,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         cita.notas && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1287,63 +1295,63 @@ function DashboardPage() {
                                                                             children: cita.notas
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                            lineNumber: 568,
+                                                                            lineNumber: 578,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                    lineNumber: 557,
+                                                                    lineNumber: 567,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                                lineNumber: 556,
+                                                                lineNumber: 566,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, cita.cita_id, false, {
                                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                            lineNumber: 552,
+                                                            lineNumber: 562,
                                                             columnNumber: 23
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                                    lineNumber: 550,
+                                                    lineNumber: 560,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                            lineNumber: 534,
+                                            lineNumber: 544,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                        lineNumber: 527,
+                                        lineNumber: 537,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                                lineNumber: 481,
+                                lineNumber: 491,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/page.jsx",
-                        lineNumber: 302,
+                        lineNumber: 312,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/doctor/page.jsx",
-                lineNumber: 261,
+                lineNumber: 271,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/doctor/page.jsx",
-        lineNumber: 220,
+        lineNumber: 230,
         columnNumber: 5
     }, this);
 }
