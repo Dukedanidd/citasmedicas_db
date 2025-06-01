@@ -370,6 +370,35 @@ GET /citas?doctorId={id}
 ]
 ```
 
+#### Obtener Citas del Doctor por Fecha
+```http
+GET /citas/doctor/{doctorId}/{fecha}
+```
+**Respuesta Exitosa (200)**
+```json
+{
+  "citas": [
+    {
+      "cita_id": 2,
+      "paciente_id": 26,
+      "doctor_id": 1,
+      "fecha_hora": "2024-03-20 10:00:00",
+      "estado_id": 1,
+      "notas": "Consulta de rutina",
+      "paciente_nombre": "Rodrigo",
+      "paciente_apellido": "Fernandez",
+      "estado_nombre": "Programada",
+      "hora_cita": "10:00"
+    }
+  ],
+  "horario": {
+    "hora_inicio": "08:00:00",
+    "hora_fin": "20:00:00",
+    "disponible": true
+  }
+}
+```
+
 #### Actualizar Cita
 ```http
 PUT /citas
@@ -392,9 +421,80 @@ PUT /citas
 }
 ```
 
+### Apuntes de Doctor
+
+#### Obtener Apuntes de un Doctor
+```http
+GET /doctores/{id}/apuntes
+```
+**Respuesta Exitosa (200)**
+```json
+[
+  {
+    "apunte_id": 1,
+    "doctor_id": 28,
+    "texto": "Nota de ejemplo",
+    "fecha_hora": "2024-06-01 10:00:00"
+  }
+]
+```
+
+#### Crear Apunte
+```http
+POST /doctores/{id}/apuntes
+```
+**Cuerpo de la Petición**
+```json
+{
+  "texto": "Nuevo apunte"
+}
+```
+**Respuesta Exitosa (200)**
+```json
+{
+  "message": "Apunte agregado",
+  "apunte_id": 5
+}
+```
+
+#### Editar Apunte
+```http
+PUT /doctores/{id}/apuntes
+```
+**Cuerpo de la Petición**
+```json
+{
+  "apunte_id": 5,
+  "texto": "Texto actualizado"
+}
+```
+**Respuesta Exitosa (200)**
+```json
+{
+  "message": "Apunte actualizado"
+}
+```
+
+#### Eliminar Apunte
+```http
+DELETE /doctores/{id}/apuntes
+```
+**Cuerpo de la Petición**
+```json
+{
+  "apunte_id": 5
+}
+```
+**Respuesta Exitosa (200)**
+```json
+{
+  "message": "Apunte eliminado"
+}
+```
+
 ## Notas Importantes
 
-1. **Horarios de Citas**: Las citas deben programarse dentro del horario de disponibilidad del doctor (09:00:00 a 17:00:00).
+1. **Horarios de Citas**: Las citas deben programarse dentro del horario de disponibilidad del doctor (08:00:00 a 20:00:00).
 
 2. **Estados de Citas**:
    - 1: Programada

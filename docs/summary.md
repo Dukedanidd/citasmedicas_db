@@ -29,9 +29,15 @@
    - Backend implementation and testing
    - API endpoint validation
    - Test data management
+   - Appointment scheduling system with fixed hours (8:00 AM - 8:00 PM)
+
+5. **Notas/Apuntes Médicos**
+   - Los doctores pueden crear, leer, editar y eliminar apuntes médicos personales.
+   - Endpoints RESTful: `/api/doctores/{id}/apuntes` (GET, POST, PUT, DELETE)
+   - Los apuntes se almacenan en la tabla `apuntes` con referencia al doctor y fecha/hora.
 
 ## Important Notes
 - Using plain text passwords for testing (not for production)
-- Appointment times must be between 09:00:00 and 17:00:00
+- Appointment times must be between 08:00:00 and 20:00:00
 - All endpoints require JWT authentication
 - Test data includes various scenarios (patients with/without records, appointments in different states) 

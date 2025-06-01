@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Users,
   Calendar,
@@ -15,12 +15,14 @@ import {
   Stethoscope,
   LogOut,
   AlertCircle,
+  X,
 } from "lucide-react"
 
 export default function DashboardPage() {
   const [notes, setNotes] = useState("")
   const [savedNotes, setSavedNotes] = useState([])
   const [isEditingNote, setIsEditingNote] = useState(null)
+  const [editNoteText, setEditNoteText] = useState("")
   const [doctorData, setDoctorData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -29,6 +31,10 @@ export default function DashboardPage() {
     citasPendientes: 0,
     urgencias: 0
   })
+  const [showPacientesModal, setShowPacientesModal] = useState(false)
+  const [showCitasModal, setShowCitasModal] = useState(false)
+  const [pacientes, setPacientes] = useState([])
+  const [citasPendientes, setCitasPendientes] = useState([])
 
   useEffect(() => {
     fetchDoctorData()
@@ -57,13 +63,25 @@ export default function DashboardPage() {
       const data = await response.json()
       console.log('[DOCTOR DASHBOARD] Datos del doctor:', data)
       setDoctorData(data)
-      
-      // TODO: Implementar endpoints para obtener estadísticas reales
-      // Por ahora usamos datos de ejemplo
+
+      // Obtener pacientes asignados al doctor
+      const pacientesRes = await fetch(`/api/doctores/${data.doctor_id}/pacientes`)
+      const pacientesData = pacientesRes.ok ? await pacientesRes.json() : []
+      setPacientes(pacientesData)
+
+      // Obtener citas del doctor
+      const citasRes = await fetch(`/api/citas?doctorId=${data.doctor_id}`)
+      const citas = citasRes.ok ? await citasRes.json() : []
+
+      // Citas pendientes: estado_id 1 (Programada) o 2 (Confirmada)
+      const citasPendientesData = Array.isArray(citas) ? citas.filter(cita => cita.estado_id === 1 || cita.estado_id === 2) : []
+      setCitasPendientes(citasPendientesData)
+
+      // Urgencias: si hay un estado específico, filtrar aquí. Por ahora, lo dejamos en 0.
       setStats({
-        pacientesHoy: 12,
-        citasPendientes: 8,
-        urgencias: 3
+        pacientesHoy: pacientesData.length,
+        citasPendientes: citasPendientesData.length,
+        urgencias: 0
       })
       
     } catch (err) {
@@ -74,32 +92,72 @@ export default function DashboardPage() {
     }
   }
 
-  const handleSaveNote = () => {
-    if (notes.trim()) {
-      const newNote = {
-        id: Date.now(),
-        content: notes,
-        timestamp: new Date().toLocaleString("es-ES"),
-      }
-      setSavedNotes([newNote, ...savedNotes])
-      setNotes("")
+  // Cargar apuntes reales al cargar la página o doctorData
+  useEffect(() => {
+    if (doctorData && doctorData.doctor_id) {
+      fetchNotes()
     }
+  }, [doctorData])
+
+  const fetchNotes = async () => {
+    try {
+      const res = await fetch(`/api/doctores/${doctorData.doctor_id}/apuntes`)
+      if (res.ok) {
+        const data = await res.json()
+        setSavedNotes(data)
+      }
+    } catch (err) {}
+  }
+
+  const handleSaveNote = async () => {
+    if (!notes.trim() || !doctorData?.doctor_id) return
+    try {
+      const res = await fetch(`/api/doctores/${doctorData.doctor_id}/apuntes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto: notes })
+      })
+      if (res.ok) {
+        setNotes("")
+        fetchNotes()
+      }
+    } catch (err) {}
   }
 
   const handleEditNote = (id) => {
-    const noteToEdit = savedNotes.find((note) => note.id === id)
-    setNotes(noteToEdit.content)
+    const noteToEdit = savedNotes.find((note) => note.apunte_id === id)
+    setEditNoteText(noteToEdit?.texto || "")
     setIsEditingNote(id)
   }
 
-  const handleUpdateNote = () => {
-    setSavedNotes(
-      savedNotes.map((note) =>
-        note.id === isEditingNote ? { ...note, content: notes, timestamp: new Date().toLocaleString("es-ES") } : note,
-      ),
-    )
-    setNotes("")
-    setIsEditingNote(null)
+  const handleUpdateNote = async () => {
+    if (!editNoteText.trim() || !isEditingNote) return;
+    try {
+      const res = await fetch(`/api/doctores/${doctorData.doctor_id}/apuntes`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apunte_id: isEditingNote, texto: editNoteText })
+      })
+      if (res.ok) {
+        setIsEditingNote(null)
+        setEditNoteText("")
+        fetchNotes()
+      }
+    } catch (err) {}
+  }
+
+  const handleDeleteNote = async (apunte_id) => {
+    if (!apunte_id) return;
+    try {
+      const res = await fetch(`/api/doctores/${doctorData.doctor_id}/apuntes`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apunte_id })
+      })
+      if (res.ok) {
+        fetchNotes()
+      }
+    } catch (err) {}
   }
 
   const containerVariants = {
@@ -247,11 +305,14 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <motion.div
                 variants={itemVariants}
-                className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowPacientesModal(true)}
+                className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-slate-600 text-sm">Pacientes Hoy</p>
+                    <p className="text-slate-600 text-sm">Pacientes</p>
                     <p className="text-2xl font-bold text-slate-800">{stats.pacientesHoy}</p>
                   </div>
                   <div className="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center">
@@ -262,7 +323,10 @@ export default function DashboardPage() {
 
               <motion.div
                 variants={itemVariants}
-                className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setShowCitasModal(true)}
+                className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -358,24 +422,51 @@ export default function DashboardPage() {
                     <div className="space-y-3 max-h-64 overflow-y-auto">
                       {savedNotes.map((note) => (
                         <motion.div
-                          key={note.id}
+                          key={note.apunte_id}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="bg-sky-50 border border-sky-200 rounded-lg p-4"
                         >
-                          <div className="flex justify-between items-start">
+                          <div className="flex justify-between items-start gap-2">
                             <div className="flex-1">
-                              <p className="text-slate-800 text-sm">{note.content}</p>
-                              <p className="text-slate-500 text-xs mt-2">{note.timestamp}</p>
+                              {isEditingNote === note.apunte_id ? (
+                                <>
+                                  <textarea
+                                    value={editNoteText}
+                                    onChange={e => setEditNoteText(e.target.value)}
+                                    className="w-full p-2 border border-sky-200 rounded mb-2 text-slate-800"
+                                    rows={2}
+                                  />
+                                  <div className="flex gap-2">
+                                    <button
+                                      onClick={handleUpdateNote}
+                                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs"
+                                    >Guardar</button>
+                                    <button
+                                      onClick={() => { setIsEditingNote(null); setEditNoteText("") }}
+                                      className="px-3 py-1 bg-slate-400 text-white rounded hover:bg-slate-500 text-xs"
+                                    >Cancelar</button>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <p className="text-slate-800 text-sm whitespace-pre-line">{note.texto}</p>
+                                  <p className="text-slate-500 text-xs mt-2">{new Date(note.fecha_hora).toLocaleString("es-ES")}</p>
+                                </>
+                              )}
                             </div>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              onClick={() => handleEditNote(note.id)}
-                              className="ml-2 p-1 text-sky-600 hover:text-sky-800 transition-colors"
-                            >
-                              <Edit3 size={16} />
-                            </motion.button>
+                            <div className="flex flex-col gap-2 items-end">
+                              <button
+                                onClick={() => handleEditNote(note.apunte_id)}
+                                className="p-1 text-sky-600 hover:text-sky-800 transition-colors text-xs"
+                                disabled={isEditingNote === note.apunte_id}
+                              >Editar</button>
+                              <button
+                                onClick={() => handleDeleteNote(note.apunte_id)}
+                                className={`p-1 text-xs rounded transition-colors ${!note.apunte_id ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-red-100 text-red-700 hover:bg-red-200 hover:text-red-900'}`}
+                                disabled={!note.apunte_id}
+                              >Eliminar</button>
+                            </div>
                           </div>
                         </motion.div>
                       ))}
@@ -385,6 +476,106 @@ export default function DashboardPage() {
               </div>
             </motion.div>
           </motion.div>
+
+          {/* Modales */}
+          <AnimatePresence>
+            {showPacientesModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                onClick={() => setShowPacientesModal(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-slate-800">Pacientes Asignados</h2>
+                    <button
+                      onClick={() => setShowPacientesModal(false)}
+                      className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                    >
+                      <X size={20} className="text-slate-600" />
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {pacientes.map((paciente) => (
+                      <div
+                        key={paciente.paciente_id}
+                        className="bg-sky-50 border border-sky-200 rounded-lg p-4"
+                      >
+                        <h3 className="font-semibold text-slate-800">
+                          {paciente.primer_nombre} {paciente.segundo_nombre} {paciente.apellido_paterno} {paciente.apellido_materno}
+                        </h3>
+                        <p className="text-slate-600 text-sm mt-1">{paciente.email}</p>
+                        <p className="text-slate-500 text-xs mt-2">
+                          Fecha de Nacimiento: {new Date(paciente.fecha_nacimiento).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {showCitasModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+                onClick={() => setShowCitasModal(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-slate-800">Citas Pendientes</h2>
+                    <button
+                      onClick={() => setShowCitasModal(false)}
+                      className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                    >
+                      <X size={20} className="text-slate-600" />
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {citasPendientes.map((cita) => (
+                      <div
+                        key={cita.cita_id}
+                        className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-semibold text-slate-800">
+                              Cita #{cita.cita_id}
+                            </h3>
+                            <p className="text-slate-600 text-sm mt-1">
+                              Fecha: {new Date(cita.fecha_hora).toLocaleString()}
+                            </p>
+                            <p className="text-slate-500 text-xs mt-2">
+                              Estado: {cita.estado_id === 1 ? 'Programada' : 'Confirmada'}
+                            </p>
+                            {cita.notas && (
+                              <p className="text-slate-600 text-sm mt-2">{cita.notas}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
     </div>

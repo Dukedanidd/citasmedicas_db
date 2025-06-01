@@ -1,0 +1,3 @@
+{
+  "/api/agenda/[doctorId]/[fecha]/route": "app/api/agenda/[doctorId]/[fecha]/route.js"
+}

@@ -29,6 +29,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-ssr] (ecmascript) <export default as ChevronLeft>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/chevron-right.js [app-ssr] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
 "use client";
 ;
 ;
@@ -37,9 +38,26 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 function CalendarPage() {
     const [selectedDate, setSelectedDate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(new Date());
     const [currentMonth, setCurrentMonth] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(new Date());
+    const [showMonthPicker, setShowMonthPicker] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showYearPicker, setShowYearPicker] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [doctorName, setDoctorName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [appointments, setAppointments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [doctorId, setDoctorId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [showAllAppointments, setShowAllAppointments] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showNewAppointmentModal, setShowNewAppointmentModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showEditAppointmentModal, setShowEditAppointmentModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [editingAppointment, setEditingAppointment] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [newAppointment, setNewAppointment] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        paciente_id: "",
+        fecha_hora: "",
+        notas: "",
+        estado_id: 1
+    });
+    const [patients, setPatients] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [loadingPatients, setLoadingPatients] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [formError, setFormError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const fetchDoctorData = async ()=>{
             try {
@@ -53,73 +71,88 @@ function CalendarPage() {
                 }
                 const data = await response.json();
                 setDoctorName(`${data.primer_nombre} ${data.segundo_nombre || ''} ${data.apellido_paterno} ${data.apellido_materno || ''}`);
+                setDoctorId(data.doctor_id);
+                return data.doctor_id;
             } catch (err) {
                 console.error('Error al cargar datos del doctor:', err);
+                setError(err.message);
+                return null;
+            }
+        };
+        const fetchAppointments = async (id)=>{
+            if (!id) return;
+            try {
+                const response = await fetch(`/api/citas?doctorId=${id}`);
+                if (!response.ok) {
+                    throw new Error('Error al cargar las citas');
+                }
+                const data = await response.json();
+                setAppointments(data);
+            } catch (err) {
+                console.error('Error al cargar citas:', err);
                 setError(err.message);
             } finally{
                 setLoading(false);
             }
         };
-        fetchDoctorData();
+        const initializeData = async ()=>{
+            const id = await fetchDoctorData();
+            if (id) {
+                await fetchAppointments(id);
+            }
+        };
+        initializeData();
     }, []);
-    const appointments = [
-        {
-            id: 1,
-            time: "09:00",
-            patient: "Ana García",
-            type: "Consulta General",
-            duration: "30 min",
-            status: "confirmada"
-        },
-        {
-            id: 2,
-            time: "09:30",
-            patient: "Carlos López",
-            type: "Control Diabetes",
-            duration: "45 min",
-            status: "pendiente"
-        },
-        {
-            id: 3,
-            time: "10:15",
-            patient: "María Rodríguez",
-            type: "Seguimiento Asma",
-            duration: "30 min",
-            status: "confirmada"
-        },
-        {
-            id: 4,
-            time: "11:00",
-            patient: "José Martínez",
-            type: "Terapia Física",
-            duration: "60 min",
-            status: "confirmada"
-        },
-        {
-            id: 5,
-            time: "14:00",
-            patient: "Laura Sánchez",
-            type: "Consulta Neurología",
-            duration: "45 min",
-            status: "pendiente"
-        },
-        {
-            id: 6,
-            time: "15:00",
-            patient: "Pedro Gómez",
-            type: "Chequeo General",
-            duration: "30 min",
-            status: "confirmada"
-        },
-        {
-            id: 7,
-            time: "16:00",
-            patient: "Carmen Ruiz",
-            type: "Control Anemia",
-            duration: "30 min",
-            status: "cancelada"
+    // Función para obtener las citas del día seleccionado
+    const getAppointmentsForSelectedDate = ()=>{
+        return appointments.filter((appointment)=>{
+            const appointmentDate = new Date(appointment.fecha_hora);
+            return appointmentDate.getDate() === selectedDate.getDate() && appointmentDate.getMonth() === selectedDate.getMonth() && appointmentDate.getFullYear() === selectedDate.getFullYear();
+        });
+    };
+    // Función para obtener el estado de la cita en español
+    const getAppointmentStatus = (estadoId)=>{
+        switch(estadoId){
+            case 1:
+                return {
+                    text: "Programada",
+                    color: "yellow"
+                };
+            case 2:
+                return {
+                    text: "Confirmada",
+                    color: "green"
+                };
+            case 3:
+                return {
+                    text: "Cancelada",
+                    color: "red"
+                };
+            case 4:
+                return {
+                    text: "Completada",
+                    color: "blue"
+                };
+            case 5:
+                return {
+                    text: "No asistió",
+                    color: "red"
+                };
+            default:
+                return {
+                    text: "Desconocido",
+                    color: "gray"
+                };
         }
-    ];
+    };
+    // Función para formatear la hora de la cita
+    const formatAppointmentTime = (fechaHora)=>{
+        const date = new Date(fechaHora);
+        return date.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
     const getDaysInMonth = (date)=>{
         const year = date.getFullYear();
         const month = date.getMonth();
@@ -158,6 +191,29 @@ function CalendarPage() {
         newMonth.setMonth(currentMonth.getMonth() + direction);
         setCurrentMonth(newMonth);
     };
+    const navigateYear = (direction)=>{
+        const newMonth = new Date(currentMonth);
+        newMonth.setFullYear(currentMonth.getFullYear() + direction);
+        setCurrentMonth(newMonth);
+    };
+    const selectMonth = (monthIndex)=>{
+        const newMonth = new Date(currentMonth);
+        newMonth.setMonth(monthIndex);
+        setCurrentMonth(newMonth);
+        setShowMonthPicker(false);
+    };
+    const selectYear = (year)=>{
+        const newMonth = new Date(currentMonth);
+        newMonth.setFullYear(year);
+        setCurrentMonth(newMonth);
+        setShowYearPicker(false);
+    };
+    const getYearRange = ()=>{
+        const currentYear = new Date().getFullYear();
+        return Array.from({
+            length: 10
+        }, (_, i)=>currentYear + i);
+    };
     const isToday = (date)=>{
         const today = new Date();
         return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
@@ -188,6 +244,191 @@ function CalendarPage() {
         "Vie",
         "Sáb"
     ];
+    const handleMonthPicker = ()=>{
+        setShowMonthPicker((prev)=>!prev);
+        setShowYearPicker(false);
+    };
+    const handleYearPicker = ()=>{
+        setShowYearPicker((prev)=>!prev);
+        setShowMonthPicker(false);
+    };
+    // Días con citas en el mes actual
+    const daysWithAppointments = appointments.filter((app)=>{
+        const date = new Date(app.fecha_hora);
+        return date.getMonth() === currentMonth.getMonth() && date.getFullYear() === currentMonth.getFullYear();
+    }).map((app)=>new Date(app.fecha_hora).getDate());
+    // Add this new function to fetch patients
+    const fetchPatients = async ()=>{
+        setLoadingPatients(true);
+        try {
+            const response = await fetch(`/api/doctores/${doctorId}/pacientes`);
+            if (!response.ok) {
+                throw new Error('Error al cargar pacientes');
+            }
+            const data = await response.json();
+            setPatients(data);
+        } catch (err) {
+            console.error('Error al cargar pacientes:', err);
+            setError(err.message);
+        } finally{
+            setLoadingPatients(false);
+        }
+    };
+    // Add this new function to handle new appointment creation
+    const handleCreateAppointment = async (e)=>{
+        e.preventDefault();
+        setFormError("");
+        // Validate appointment time
+        const appointmentTime = new Date(newAppointment.fecha_hora);
+        const hours = appointmentTime.getHours();
+        const minutes = appointmentTime.getMinutes();
+        if (hours < 8 || hours === 20 && minutes > 0 || hours > 20) {
+            setFormError("Las citas deben programarse entre las 8:00 AM y las 8:00 PM");
+            return;
+        }
+        try {
+            const response = await fetch('/api/citas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...newAppointment,
+                    doctor_id: doctorId
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Error al crear la cita');
+            }
+            const data = await response.json();
+            // Find the selected patient's data
+            const selectedPatient = patients.find((p)=>p.paciente_id === parseInt(newAppointment.paciente_id));
+            // Refresh appointments list with patient name included
+            const updatedAppointments = [
+                ...appointments,
+                {
+                    ...newAppointment,
+                    cita_id: data.cita_id,
+                    doctor_id: doctorId,
+                    creado_el: new Date().toISOString(),
+                    paciente_nombre: `${selectedPatient.primer_nombre} ${selectedPatient.apellido_paterno}`
+                }
+            ];
+            setAppointments(updatedAppointments);
+            // Reset form and close modal
+            setNewAppointment({
+                paciente_id: "",
+                fecha_hora: "",
+                notas: "",
+                estado_id: 1
+            });
+            setShowNewAppointmentModal(false);
+        } catch (err) {
+            console.error('Error al crear cita:', err);
+            setFormError(err.message);
+        }
+    };
+    // Modify the useEffect to fetch patients when either modal opens
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (showNewAppointmentModal || showEditAppointmentModal) {
+            fetchPatients();
+        }
+    }, [
+        showNewAppointmentModal,
+        showEditAppointmentModal
+    ]);
+    // Add this new function to handle appointment editing
+    const handleEditAppointment = async (e)=>{
+        e.preventDefault();
+        setFormError("");
+        // Validate appointment time
+        const appointmentTime = new Date(editingAppointment.fecha_hora);
+        const hours = appointmentTime.getHours();
+        const minutes = appointmentTime.getMinutes();
+        if (hours < 8 || hours === 20 && minutes > 0 || hours > 20) {
+            setFormError("Las citas deben programarse entre las 8:00 AM y las 8:00 PM");
+            return;
+        }
+        try {
+            const response = await fetch('/api/citas', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cita_id: editingAppointment.cita_id,
+                    paciente_id: editingAppointment.paciente_id,
+                    doctor_id: doctorId,
+                    fecha_hora: editingAppointment.fecha_hora,
+                    estado_id: editingAppointment.estado_id,
+                    notas: editingAppointment.notas
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Error al actualizar la cita');
+            }
+            // Update the appointments list
+            const updatedAppointments = appointments.map((app)=>app.cita_id === editingAppointment.cita_id ? editingAppointment : app);
+            setAppointments(updatedAppointments);
+            // Close modal and reset state
+            setShowEditAppointmentModal(false);
+            setEditingAppointment(null);
+        } catch (err) {
+            console.error('Error al actualizar cita:', err);
+            setFormError(err.message);
+        }
+    };
+    // Update the handleOpenEditModal function
+    const handleOpenEditModal = (appointment)=>{
+        // Format the date for the datetime-local input using local time
+        const date = new Date(appointment.fecha_hora);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+        setEditingAppointment({
+            ...appointment,
+            fecha_hora: formattedDate
+        });
+        setShowEditAppointmentModal(true);
+        fetchPatients() // Ensure patients are loaded when opening the modal
+        ;
+    };
+    // Add this new function to handle appointment confirmation
+    const handleConfirmAppointment = async (appointment)=>{
+        try {
+            // Format the date to match the database format (YYYY-MM-DD HH:mm:ss)
+            const formattedDate = new Date(appointment.fecha_hora).toISOString().replace('T', ' ').slice(0, 19);
+            const response = await fetch('/api/citas', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cita_id: appointment.cita_id,
+                    paciente_id: appointment.paciente_id,
+                    doctor_id: doctorId,
+                    fecha_hora: formattedDate,
+                    estado_id: 2,
+                    notas: appointment.notas
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Error al confirmar la cita');
+            }
+            // Update the appointments list
+            const updatedAppointments = appointments.map((app)=>app.cita_id === appointment.cita_id ? {
+                    ...app,
+                    estado_id: 2
+                } : app);
+            setAppointments(updatedAppointments);
+        } catch (err) {
+            console.error('Error al confirmar cita:', err);
+            setError(err.message);
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100",
         children: [
@@ -214,12 +455,12 @@ function CalendarPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                        lineNumber: 170,
+                                        lineNumber: 448,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 169,
+                                    lineNumber: 447,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -229,7 +470,7 @@ function CalendarPage() {
                                             children: "Calendario de Citas"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 173,
+                                            lineNumber: 451,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -237,19 +478,19 @@ function CalendarPage() {
                                             children: loading ? 'Cargando...' : error ? 'Error al cargar datos' : doctorName
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 174,
+                                            lineNumber: 452,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 172,
+                                    lineNumber: 450,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                            lineNumber: 168,
+                            lineNumber: 446,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -263,7 +504,7 @@ function CalendarPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 179,
+                                    lineNumber: 457,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -275,38 +516,39 @@ function CalendarPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                        lineNumber: 184,
+                                        lineNumber: 462,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 180,
+                                    lineNumber: 458,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                     whileHover: {
                                         scale: 1.02
                                     },
+                                    onClick: ()=>setShowNewAppointmentModal(true),
                                     className: "flex items-center space-x-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 190,
+                                            lineNumber: 469,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Nueva Cita"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 191,
+                                            lineNumber: 470,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 186,
+                                    lineNumber: 464,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -318,29 +560,29 @@ function CalendarPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                        lineNumber: 197,
+                                        lineNumber: 476,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 193,
+                                    lineNumber: 472,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                            lineNumber: 178,
+                            lineNumber: 456,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                    lineNumber: 167,
+                    lineNumber: 445,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                lineNumber: 162,
+                lineNumber: 440,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -373,7 +615,7 @@ function CalendarPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 217,
+                                            lineNumber: 496,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -381,13 +623,13 @@ function CalendarPage() {
                                             children: "Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 218,
+                                            lineNumber: 497,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 211,
+                                    lineNumber: 490,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -404,7 +646,7 @@ function CalendarPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 227,
+                                            lineNumber: 506,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -412,13 +654,13 @@ function CalendarPage() {
                                             children: "Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 228,
+                                            lineNumber: 507,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 221,
+                                    lineNumber: 500,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -431,7 +673,7 @@ function CalendarPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 235,
+                                            lineNumber: 514,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -439,24 +681,24 @@ function CalendarPage() {
                                             children: "Calendario"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 236,
+                                            lineNumber: 515,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 231,
+                                    lineNumber: 510,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                            lineNumber: 210,
+                            lineNumber: 489,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                        lineNumber: 205,
+                        lineNumber: 484,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -478,21 +720,121 @@ function CalendarPage() {
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex items-center justify-between mb-6",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                                    className: "text-xl font-bold text-slate-800",
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex items-center space-x-4",
                                                     children: [
-                                                        monthNames[currentMonth.getMonth()],
-                                                        " ",
-                                                        currentMonth.getFullYear()
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "relative",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: handleMonthPicker,
+                                                                    className: "text-xl font-bold text-slate-800 hover:text-sky-600 transition-colors",
+                                                                    children: monthNames[currentMonth.getMonth()]
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                    lineNumber: 533,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                showMonthPicker && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "absolute top-full left-0 mt-2 min-w-[120px] bg-white rounded-lg shadow-xl border border-sky-100 p-2 z-30",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "grid grid-cols-3 gap-2",
+                                                                        children: monthNames.map((month, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                                onClick: ()=>selectMonth(index),
+                                                                                className: "px-1 py-1 text-sm text-slate-600 hover:bg-sky-50 hover:text-sky-600 rounded-md transition-colors w-full text-left",
+                                                                                children: month.slice(0, 3)
+                                                                            }, month, false, {
+                                                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                                lineNumber: 543,
+                                                                                columnNumber: 29
+                                                                            }, this))
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                        lineNumber: 541,
+                                                                        columnNumber: 25
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                    lineNumber: 540,
+                                                                    columnNumber: 23
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                            lineNumber: 532,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "relative",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: handleYearPicker,
+                                                                    className: "text-xl font-bold text-slate-800 hover:text-sky-600 transition-colors",
+                                                                    children: currentMonth.getFullYear()
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                    lineNumber: 556,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                showYearPicker && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "absolute top-full left-0 mt-2 min-w-[100px] bg-white rounded-lg shadow-xl border border-sky-100 p-2 z-30",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "grid grid-cols-2 gap-2",
+                                                                        children: getYearRange().map((year)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                                onClick: ()=>selectYear(year),
+                                                                                className: "px-1 py-1 text-sm text-slate-600 hover:bg-sky-50 hover:text-sky-600 rounded-md transition-colors w-full text-left",
+                                                                                children: year
+                                                                            }, year, false, {
+                                                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                                lineNumber: 566,
+                                                                                columnNumber: 29
+                                                                            }, this))
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                        lineNumber: 564,
+                                                                        columnNumber: 25
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                    lineNumber: 563,
+                                                                    columnNumber: 23
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                            lineNumber: 555,
+                                                            columnNumber: 19
+                                                        }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 252,
+                                                    lineNumber: 531,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex space-x-2",
                                                     children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
+                                                            whileHover: {
+                                                                scale: 1.1
+                                                            },
+                                                            whileTap: {
+                                                                scale: 0.9
+                                                            },
+                                                            onClick: ()=>navigateYear(-1),
+                                                            className: "p-2 text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__["ChevronLeft"], {
+                                                                size: 20
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                lineNumber: 586,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                            lineNumber: 580,
+                                                            columnNumber: 19
+                                                        }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                                             whileHover: {
                                                                 scale: 1.1
@@ -506,12 +848,12 @@ function CalendarPage() {
                                                                 size: 20
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                lineNumber: 262,
+                                                                lineNumber: 594,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 256,
+                                                            lineNumber: 588,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -527,24 +869,45 @@ function CalendarPage() {
                                                                 size: 20
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                lineNumber: 270,
+                                                                lineNumber: 602,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 264,
+                                                            lineNumber: 596,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
+                                                            whileHover: {
+                                                                scale: 1.1
+                                                            },
+                                                            whileTap: {
+                                                                scale: 0.9
+                                                            },
+                                                            onClick: ()=>navigateYear(1),
+                                                            className: "p-2 text-slate-600 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
+                                                                size: 20
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                                lineNumber: 610,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                            lineNumber: 604,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 255,
+                                                    lineNumber: 579,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 251,
+                                            lineNumber: 530,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -554,12 +917,12 @@ function CalendarPage() {
                                                     children: day
                                                 }, day, false, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 278,
+                                                    lineNumber: 618,
                                                     columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 276,
+                                            lineNumber: 616,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -572,22 +935,22 @@ function CalendarPage() {
                                                         scale: 0.95
                                                     },
                                                     onClick: ()=>setSelectedDate(day.date),
-                                                    className: `p-3 text-sm rounded-lg transition-all duration-200 ${!day.isCurrentMonth ? "text-slate-300" : isToday(day.date) ? "bg-sky-500 text-white font-bold" : isSelected(day.date) ? "bg-sky-100 text-sky-700 font-semibold" : "text-slate-700 hover:bg-sky-50"}`,
+                                                    className: `p-3 text-sm rounded-lg transition-all duration-200 ${!day.isCurrentMonth ? "text-slate-300" : isToday(day.date) ? "bg-sky-500 text-white font-bold" : isSelected(day.date) ? "bg-sky-100 text-sky-700 font-semibold" : daysWithAppointments.includes(day.date.getDate()) ? "ring-2 ring-sky-400 bg-sky-50 text-sky-800 font-semibold" : "text-slate-700 hover:bg-sky-50"}`,
                                                     children: day.date.getDate()
                                                 }, index, false, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 287,
+                                                    lineNumber: 627,
                                                     columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 285,
+                                            lineNumber: 625,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 245,
+                                    lineNumber: 524,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -606,54 +969,115 @@ function CalendarPage() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex items-center justify-between mb-4",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "text-lg font-bold text-slate-800",
+                                                children: [
+                                                    "Citas del ",
+                                                    selectedDate.toLocaleDateString("es-ES")
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 658,
+                                                columnNumber: 17
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 657,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex items-center space-x-2 mb-1",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                    className: "text-lg font-bold text-slate-800",
-                                                    children: [
-                                                        "Citas del ",
-                                                        selectedDate.toLocaleDateString("es-ES")
-                                                    ]
-                                                }, void 0, true, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "w-3 h-3 bg-green-500 rounded-full"
+                                                }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 316,
+                                                    lineNumber: 663,
                                                     columnNumber: 17
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "flex items-center space-x-2",
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "text-sm text-slate-600",
                                                     children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "w-3 h-3 bg-green-500 rounded-full"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 320,
-                                                            columnNumber: 19
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            className: "text-sm text-slate-600",
-                                                            children: [
-                                                                appointments.length,
-                                                                " citas"
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 321,
-                                                            columnNumber: 19
-                                                        }, this)
+                                                        getAppointmentsForSelectedDate().length,
+                                                        " citas"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 319,
+                                                    lineNumber: 664,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 315,
+                                            lineNumber: 662,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "mb-2",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                className: "text-sm italic text-slate-600 underline hover:text-sky-800 transition-colors",
+                                                onClick: ()=>setShowAllAppointments(true),
+                                                children: [
+                                                    "Total de citas: ",
+                                                    appointments.length
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 667,
+                                                columnNumber: 17
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 666,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-3 max-h-96 overflow-y-auto",
-                                            children: appointments.map((appointment, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                                            children: loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-center py-4",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-slate-600",
+                                                    children: "Cargando citas..."
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 678,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 677,
+                                                columnNumber: 19
+                                            }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-center py-4",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-red-600",
+                                                    children: error
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 682,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 681,
+                                                columnNumber: 19
+                                            }, this) : getAppointmentsForSelectedDate().length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "text-center py-4",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-slate-600",
+                                                    children: "No hay citas programadas para este día"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 686,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 685,
+                                                columnNumber: 19
+                                            }, this) : getAppointmentsForSelectedDate().map((appointment, index)=>{
+                                                const status = getAppointmentStatus(appointment.estado_id);
+                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
                                                     initial: {
                                                         opacity: 0,
                                                         x: -20
@@ -665,48 +1089,48 @@ function CalendarPage() {
                                                     transition: {
                                                         delay: index * 0.1
                                                     },
-                                                    className: `p-4 rounded-xl border transition-all duration-200 ${appointment.status === "confirmada" ? "bg-green-50 border-green-200" : appointment.status === "pendiente" ? "bg-yellow-50 border-yellow-200" : "bg-red-50 border-red-200"}`,
+                                                    className: `p-4 rounded-xl border transition-all duration-200 ${status.color === "green" ? "bg-green-50 border-green-200" : status.color === "yellow" ? "bg-yellow-50 border-yellow-200" : status.color === "red" ? "bg-red-50 border-red-200" : "bg-blue-50 border-blue-200"}`,
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center justify-between mb-2",
                                                             children: [
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "font-bold text-slate-800",
-                                                                    children: appointment.time
+                                                                    children: formatAppointmentTime(appointment.fecha_hora)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                    lineNumber: 341,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 708,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: `text-xs px-2 py-1 rounded-full ${appointment.status === "confirmada" ? "bg-green-100 text-green-800" : appointment.status === "pendiente" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"}`,
-                                                                    children: appointment.status
+                                                                    className: `text-xs px-2 py-1 rounded-full ${status.color === "green" ? "bg-green-100 text-green-800" : status.color === "yellow" ? "bg-yellow-100 text-yellow-800" : status.color === "red" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`,
+                                                                    children: status.text
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                    lineNumber: 342,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 711,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 340,
-                                                            columnNumber: 21
+                                                            lineNumber: 707,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
                                                             className: "font-semibold text-slate-800 mb-1",
-                                                            children: appointment.patient
+                                                            children: appointment.paciente_nombre
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 354,
-                                                            columnNumber: 21
+                                                            lineNumber: 725,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             className: "text-sm text-slate-600 mb-1",
-                                                            children: appointment.type
+                                                            children: appointment.notas || "Sin notas"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 355,
-                                                            columnNumber: 21
+                                                            lineNumber: 728,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center justify-between",
@@ -719,93 +1143,697 @@ function CalendarPage() {
                                                                             className: "mr-1"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                            lineNumber: 358,
-                                                                            columnNumber: 25
+                                                                            lineNumber: 731,
+                                                                            columnNumber: 29
                                                                         }, this),
-                                                                        appointment.duration
+                                                                        "30 min"
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                    lineNumber: 357,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 730,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex space-x-1",
-                                                                    children: appointment.status !== "cancelada" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                                    children: appointment.estado_id !== 3 && appointment.estado_id !== 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                                                                 whileHover: {
                                                                                     scale: 1.05
                                                                                 },
+                                                                                onClick: ()=>handleOpenEditModal(appointment),
                                                                                 className: "px-2 py-1 bg-sky-100 text-sky-800 rounded text-xs hover:bg-sky-200 transition-colors",
                                                                                 children: "Editar"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                                lineNumber: 364,
-                                                                                columnNumber: 29
+                                                                                lineNumber: 737,
+                                                                                columnNumber: 33
                                                                             }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
+                                                                            appointment.estado_id === 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
                                                                                 whileHover: {
                                                                                     scale: 1.05
                                                                                 },
+                                                                                onClick: ()=>handleConfirmAppointment(appointment),
                                                                                 className: "px-2 py-1 bg-green-100 text-green-800 rounded text-xs hover:bg-green-200 transition-colors",
                                                                                 children: "Confirmar"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                                lineNumber: 370,
-                                                                                columnNumber: 29
+                                                                                lineNumber: 745,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                                    lineNumber: 361,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 734,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                            lineNumber: 356,
-                                                            columnNumber: 21
+                                                            lineNumber: 729,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
-                                                }, appointment.id, true, {
+                                                }, appointment.cita_id, true, {
                                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                                    lineNumber: 327,
-                                                    columnNumber: 19
-                                                }, this))
+                                                    lineNumber: 692,
+                                                    columnNumber: 23
+                                                }, this);
+                                            })
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                            lineNumber: 325,
+                                            lineNumber: 675,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                                    lineNumber: 309,
+                                    lineNumber: 651,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                            lineNumber: 243,
+                            lineNumber: 522,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                        lineNumber: 242,
+                        lineNumber: 521,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-                lineNumber: 203,
+                lineNumber: 482,
                 columnNumber: 7
+            }, this),
+            showAllAppointments && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 z-50 flex items-center justify-center bg-black/40",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full relative",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: "absolute top-3 right-3 text-slate-500 hover:text-red-500 text-xl",
+                            onClick: ()=>setShowAllAppointments(false),
+                            children: "×"
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 771,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            className: "text-xl font-bold text-slate-800 mb-4",
+                            children: "Todas las citas"
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 777,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "max-h-[60vh] overflow-y-auto divide-y divide-slate-100",
+                            children: [
+                                appointments.slice().sort((a, b)=>new Date(a.fecha_hora) - new Date(b.fecha_hora)).map((appointment)=>{
+                                    const status = getAppointmentStatus(appointment.estado_id);
+                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "font-semibold text-slate-800 mr-2",
+                                                        children: formatAppointmentTime(appointment.fecha_hora)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 787,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-slate-600",
+                                                        children: new Date(appointment.fecha_hora).toLocaleDateString('es-ES')
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 790,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "ml-2 text-sky-700 font-medium",
+                                                        children: appointment.paciente_nombre
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 791,
+                                                        columnNumber: 25
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 786,
+                                                columnNumber: 23
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex items-center gap-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: `text-xs px-2 py-1 rounded-full ${status.color === "green" ? "bg-green-100 text-green-800" : status.color === "yellow" ? "bg-yellow-100 text-yellow-800" : status.color === "red" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`,
+                                                        children: status.text
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 794,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-xs text-slate-500",
+                                                        children: appointment.notas || "Sin notas"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 805,
+                                                        columnNumber: 25
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                lineNumber: 793,
+                                                columnNumber: 23
+                                            }, this)
+                                        ]
+                                    }, appointment.cita_id, true, {
+                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                        lineNumber: 785,
+                                        columnNumber: 21
+                                    }, this);
+                                }),
+                                appointments.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center text-slate-500 py-8",
+                                    children: "No hay citas registradas"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 811,
+                                    columnNumber: 17
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 778,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                    lineNumber: 770,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                lineNumber: 769,
+                columnNumber: 9
+            }, this),
+            showNewAppointmentModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 z-50 flex items-center justify-center bg-black/40",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full relative",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: "absolute top-3 right-3 text-slate-500 hover:text-red-500",
+                            onClick: ()=>setShowNewAppointmentModal(false),
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                size: 24
+                            }, void 0, false, {
+                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                lineNumber: 826,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 822,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            className: "text-xl font-bold text-slate-800 mb-4",
+                            children: "Nueva Cita"
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 829,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                            onSubmit: handleCreateAppointment,
+                            className: "space-y-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Paciente"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 833,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            value: newAppointment.paciente_id,
+                                            onChange: (e)=>setNewAppointment({
+                                                    ...newAppointment,
+                                                    paciente_id: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            required: true,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "",
+                                                    children: "Seleccionar paciente"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 842,
+                                                    columnNumber: 19
+                                                }, this),
+                                                loadingPatients ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    disabled: true,
+                                                    children: "Cargando pacientes..."
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 844,
+                                                    columnNumber: 21
+                                                }, this) : patients.map((patient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        value: patient.paciente_id,
+                                                        children: [
+                                                            patient.primer_nombre,
+                                                            " ",
+                                                            patient.apellido_paterno
+                                                        ]
+                                                    }, patient.paciente_id, true, {
+                                                        fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                        lineNumber: 847,
+                                                        columnNumber: 23
+                                                    }, this))
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 836,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 832,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Fecha y Hora"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 856,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "datetime-local",
+                                            value: newAppointment.fecha_hora,
+                                            onChange: (e)=>setNewAppointment({
+                                                    ...newAppointment,
+                                                    fecha_hora: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            required: true
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 859,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-xs text-slate-500 mt-1",
+                                            children: "Horario disponible: 8:00 AM - 8:00 PM"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 866,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 855,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Notas"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 872,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                            value: newAppointment.notas,
+                                            onChange: (e)=>setNewAppointment({
+                                                    ...newAppointment,
+                                                    notas: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            rows: "3",
+                                            placeholder: "Agregar notas sobre la cita..."
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 875,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 871,
+                                    columnNumber: 15
+                                }, this),
+                                formError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-red-500 text-sm",
+                                    children: formError
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 885,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex justify-end space-x-3",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>setShowNewAppointmentModal(false),
+                                            className: "px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors",
+                                            children: "Cancelar"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 889,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "submit",
+                                            className: "px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors",
+                                            children: "Crear Cita"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 896,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 888,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 831,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                    lineNumber: 821,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                lineNumber: 820,
+                columnNumber: 9
+            }, this),
+            showEditAppointmentModal && editingAppointment && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 z-50 flex items-center justify-center bg-black/40",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full relative",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: "absolute top-3 right-3 text-slate-500 hover:text-red-500",
+                            onClick: ()=>{
+                                setShowEditAppointmentModal(false);
+                                setEditingAppointment(null);
+                            },
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                size: 24
+                            }, void 0, false, {
+                                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                lineNumber: 919,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 912,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            className: "text-xl font-bold text-slate-800 mb-4",
+                            children: "Editar Cita"
+                        }, void 0, false, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 922,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                            onSubmit: handleEditAppointment,
+                            className: "space-y-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Paciente"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 926,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            value: editingAppointment.paciente_id,
+                                            onChange: (e)=>setEditingAppointment({
+                                                    ...editingAppointment,
+                                                    paciente_id: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            required: true,
+                                            children: patients.map((patient)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: patient.paciente_id,
+                                                    children: [
+                                                        patient.primer_nombre,
+                                                        " ",
+                                                        patient.apellido_paterno
+                                                    ]
+                                                }, patient.paciente_id, true, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 936,
+                                                    columnNumber: 21
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 929,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 925,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Fecha y Hora"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 944,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "datetime-local",
+                                            value: editingAppointment.fecha_hora,
+                                            onChange: (e)=>setEditingAppointment({
+                                                    ...editingAppointment,
+                                                    fecha_hora: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            required: true
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 947,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-xs text-slate-500 mt-1",
+                                            children: "Horario disponible: 8:00 AM - 8:00 PM"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 954,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 943,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Estado"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 960,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            value: editingAppointment.estado_id,
+                                            onChange: (e)=>setEditingAppointment({
+                                                    ...editingAppointment,
+                                                    estado_id: parseInt(e.target.value)
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            required: true,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: 1,
+                                                    children: "Programada"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 969,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: 2,
+                                                    children: "Confirmada"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 970,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: 3,
+                                                    children: "Cancelada"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 971,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: 4,
+                                                    children: "Completada"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 972,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: 5,
+                                                    children: "No asistió"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                                    lineNumber: 973,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 963,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 959,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm font-medium text-slate-700 mb-1",
+                                            children: "Notas"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 978,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                            value: editingAppointment.notas,
+                                            onChange: (e)=>setEditingAppointment({
+                                                    ...editingAppointment,
+                                                    notas: e.target.value
+                                                }),
+                                            className: "w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800",
+                                            rows: "3",
+                                            placeholder: "Agregar notas sobre la cita..."
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 981,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 977,
+                                    columnNumber: 15
+                                }, this),
+                                formError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-red-500 text-sm",
+                                    children: formError
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 991,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex justify-end space-x-3",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: ()=>{
+                                                setShowEditAppointmentModal(false);
+                                                setEditingAppointment(null);
+                                            },
+                                            className: "px-4 py-2 text-slate-600 hover:text-slate-800 transition-colors",
+                                            children: "Cancelar"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 995,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "submit",
+                                            className: "px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors",
+                                            children: "Guardar Cambios"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                            lineNumber: 1005,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                                    lineNumber: 994,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                            lineNumber: 924,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                    lineNumber: 911,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
+                lineNumber: 910,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/doctor/appointments/page.jsx",
-        lineNumber: 160,
+        lineNumber: 438,
         columnNumber: 5
     }, this);
 }

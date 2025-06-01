@@ -69,22 +69,22 @@ export default function DoctorForm({ onSubmit, onClose, initialData }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <div>
+      <div>
           <label htmlFor="primer_nombre" className="block text-sm font-medium text-gray-700">
             Primer Nombre
-          </label>
-          <input
-            type="text"
+        </label>
+        <input
+          type="text"
             id="primer_nombre"
             name="primer_nombre"
             value={formData.primer_nombre}
-            onChange={handleChange}
+          onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-            required
-          />
-        </div>
+          required
+        />
+      </div>
 
-        <div>
+      <div>
           <label htmlFor="segundo_nombre" className="block text-sm font-medium text-gray-700">
             Segundo Nombre
           </label>
@@ -101,16 +101,16 @@ export default function DoctorForm({ onSubmit, onClose, initialData }) {
         <div>
           <label htmlFor="apellido_paterno" className="block text-sm font-medium text-gray-700">
             Apellido Paterno
-          </label>
-          <input
-            type="text"
+        </label>
+        <input
+          type="text"
             id="apellido_paterno"
             name="apellido_paterno"
             value={formData.apellido_paterno}
-            onChange={handleChange}
+          onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-            required
-          />
+          required
+        />
         </div>
 
         <div>

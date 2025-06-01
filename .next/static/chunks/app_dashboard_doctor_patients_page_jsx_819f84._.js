@@ -20,6 +20,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-client] (ecmascript) <export default as Calendar>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/search.js [app-client] (ecmascript) <export default as Search>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-client] (ecmascript) <export default as User>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/eye.js [app-client] (ecmascript) <export default as Eye>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__EyeOff$3e$__ = __turbopack_import__("[project]/node_modules/lucide-react/dist/esm/icons/eye-off.js [app-client] (ecmascript) <export default as EyeOff>");
 ;
 var _s = __turbopack_refresh__.signature();
 "use client";
@@ -32,6 +36,30 @@ function PatientsPage() {
     const [doctorName, setDoctorName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [patients, setPatients] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [showNewPatientModal, setShowNewPatientModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [newPatient, setNewPatient] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        primer_nombre: "",
+        segundo_nombre: "",
+        apellido_paterno: "",
+        apellido_materno: "",
+        email: "",
+        fecha_nacimiento: "",
+        sexo: "M",
+        password: ""
+    });
+    const [isSubmitting, setIsSubmitting] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [submitError, setSubmitError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [showPassword, setShowPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showNewAppointmentModal, setShowNewAppointmentModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [selectedPatient, setSelectedPatient] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [newAppointment, setNewAppointment] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        fecha_hora: "",
+        notas: "",
+        estado_id: 1 // 1 = Programada
+    });
+    const [isSubmittingAppointment, setIsSubmittingAppointment] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [appointmentError, setAppointmentError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "PatientsPage.useEffect": ()=>{
             const fetchDoctorData = {
@@ -47,84 +75,203 @@ function PatientsPage() {
                         }
                         const data = await response.json();
                         setDoctorName(`${data.primer_nombre} ${data.segundo_nombre || ''} ${data.apellido_paterno} ${data.apellido_materno || ''}`);
+                        return data.doctor_id // Retornamos el ID del doctor para usarlo en la siguiente llamada
+                        ;
                     } catch (err) {
                         console.error('Error al cargar datos del doctor:', err);
+                        setError(err.message);
+                        return null;
+                    }
+                }
+            }["PatientsPage.useEffect.fetchDoctorData"];
+            const fetchPatients = {
+                "PatientsPage.useEffect.fetchPatients": async (doctorId)=>{
+                    if (!doctorId) return;
+                    try {
+                        const response = await fetch(`/api/doctores/${doctorId}/pacientes`);
+                        if (!response.ok) {
+                            throw new Error('Error al cargar los pacientes');
+                        }
+                        const pacientesData = await response.json();
+                        setPatients(pacientesData);
+                    } catch (err) {
+                        console.error('Error al cargar datos de pacientes:', err);
                         setError(err.message);
                     } finally{
                         setLoading(false);
                     }
                 }
-            }["PatientsPage.useEffect.fetchDoctorData"];
-            fetchDoctorData();
+            }["PatientsPage.useEffect.fetchPatients"];
+            const initializeData = {
+                "PatientsPage.useEffect.initializeData": async ()=>{
+                    const doctorId = await fetchDoctorData();
+                    if (doctorId) {
+                        await fetchPatients(doctorId);
+                    }
+                }
+            }["PatientsPage.useEffect.initializeData"];
+            initializeData();
         }
     }["PatientsPage.useEffect"], []);
-    const patients = [
-        {
-            id: 1,
-            name: "Ana García",
-            age: 45,
-            condition: "Hipertensión",
-            lastVisit: "2024-01-15",
-            status: "Estable"
-        },
-        {
-            id: 2,
-            name: "Carlos López",
-            age: 32,
-            condition: "Diabetes Tipo 2",
-            lastVisit: "2024-01-14",
-            status: "Control"
-        },
-        {
-            id: 3,
-            name: "María Rodríguez",
-            age: 28,
-            condition: "Asma",
-            lastVisit: "2024-01-13",
-            status: "Mejoría"
-        },
-        {
-            id: 4,
-            name: "José Martínez",
-            age: 55,
-            condition: "Artritis",
-            lastVisit: "2024-01-12",
-            status: "Tratamiento"
-        },
-        {
-            id: 5,
-            name: "Laura Sánchez",
-            age: 38,
-            condition: "Migraña",
-            lastVisit: "2024-01-11",
-            status: "Seguimiento"
-        },
-        {
-            id: 6,
-            name: "Pedro Gómez",
-            age: 42,
-            condition: "Hipertensión",
-            lastVisit: "2024-01-10",
-            status: "Estable"
-        },
-        {
-            id: 7,
-            name: "Carmen Ruiz",
-            age: 29,
-            condition: "Anemia",
-            lastVisit: "2024-01-09",
-            status: "Mejoría"
-        },
-        {
-            id: 8,
-            name: "Roberto Silva",
-            age: 48,
-            condition: "Colesterol Alto",
-            lastVisit: "2024-01-08",
-            status: "Control"
+    const normalizeText = (text)=>{
+        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    };
+    const filteredPatients = patients.filter((patient)=>{
+        const fullName = `${patient.primer_nombre} ${patient.segundo_nombre || ''} ${patient.apellido_paterno} ${patient.apellido_materno || ''}`;
+        return normalizeText(fullName).includes(normalizeText(searchTerm));
+    });
+    const handleNewPatientSubmit = async (e)=>{
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitError(null);
+        try {
+            const userId = sessionStorage.getItem('user_id');
+            if (!userId) {
+                throw new Error('No se encontró información de sesión');
+            }
+            // Primero obtenemos el doctor_id
+            const doctorResponse = await fetch(`/api/doctores/${userId}`);
+            if (!doctorResponse.ok) {
+                throw new Error('Error al obtener datos del doctor');
+            }
+            const doctorData = await doctorResponse.json();
+            // Generamos una contraseña aleatoria si no se proporcionó una
+            const password = newPatient.password || Math.random().toString(36).slice(-8);
+            // Creamos el nuevo paciente
+            const response = await fetch('/api/pacientes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...newPatient,
+                    password,
+                    doctor_id: doctorData.doctor_id
+                })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error al crear el paciente');
+            }
+            // Actualizamos la lista de pacientes
+            const updatedPatientsResponse = await fetch(`/api/doctores/${doctorData.doctor_id}/pacientes`);
+            if (updatedPatientsResponse.ok) {
+                const updatedPatients = await updatedPatientsResponse.json();
+                setPatients(updatedPatients);
+            }
+            // Limpiamos el formulario y cerramos el modal
+            setNewPatient({
+                primer_nombre: "",
+                segundo_nombre: "",
+                apellido_paterno: "",
+                apellido_materno: "",
+                email: "",
+                fecha_nacimiento: "",
+                sexo: "M",
+                password: ""
+            });
+            setShowNewPatientModal(false);
+            // Mostramos la contraseña generada si no se proporcionó una
+            if (!newPatient.password) {
+                alert(`Paciente creado exitosamente. Contraseña generada: ${password}`);
+            }
+        } catch (err) {
+            console.error('Error al crear paciente:', err);
+            setSubmitError(err.message);
+        } finally{
+            setIsSubmitting(false);
         }
-    ];
-    const filteredPatients = patients.filter((patient)=>patient.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    };
+    const handleNewAppointment = (patient)=>{
+        setSelectedPatient(patient);
+        setNewAppointment({
+            fecha_hora: "",
+            notas: "",
+            estado_id: 1
+        });
+        setShowNewAppointmentModal(true);
+    };
+    const handleAppointmentSubmit = async (e)=>{
+        e.preventDefault();
+        setIsSubmittingAppointment(true);
+        setAppointmentError(null);
+        try {
+            const userId = sessionStorage.getItem('user_id');
+            if (!userId) {
+                throw new Error('No se encontró información de sesión');
+            }
+            // Obtenemos el doctor_id
+            const doctorResponse = await fetch(`/api/doctores/${userId}`);
+            if (!doctorResponse.ok) {
+                throw new Error('Error al obtener datos del doctor');
+            }
+            const doctorData = await doctorResponse.json();
+            // Verificamos la disponibilidad del doctor
+            const fechaHora = new Date(newAppointment.fecha_hora);
+            const fecha = fechaHora.toISOString().split('T')[0];
+            const hora = fechaHora.toTimeString().split(' ')[0];
+            // Verificamos en la agenda
+            const agendaResponse = await fetch(`/api/agenda/${doctorData.doctor_id}/${fecha}`);
+            if (!agendaResponse.ok) {
+                throw new Error('Error al verificar disponibilidad');
+            }
+            const agendaData = await agendaResponse.json();
+            if (!agendaData || !agendaData.disponible) {
+                throw new Error('El doctor no tiene horario disponible en esta fecha');
+            }
+            // Verificamos que la hora esté dentro del horario de trabajo
+            const horaInicio = new Date(`${fecha}T${agendaData.hora_inicio}`);
+            const horaFin = new Date(`${fecha}T${agendaData.hora_fin}`);
+            if (fechaHora < horaInicio || fechaHora > horaFin) {
+                throw new Error(`El horario de atención es de ${agendaData.hora_inicio} a ${agendaData.hora_fin}`);
+            }
+            // Verificamos citas existentes
+            const citasResponse = await fetch(`/api/citas/doctor/${doctorData.doctor_id}/${fecha}`);
+            if (!citasResponse.ok) {
+                throw new Error('Error al verificar citas existentes');
+            }
+            const citasData = await citasResponse.json();
+            // Verificamos si hay una cita en el mismo horario
+            const citaExistente = citasData.citas.find((cita)=>{
+                const citaHora = new Date(cita.fecha_hora);
+                return citaHora.getTime() === fechaHora.getTime();
+            });
+            if (citaExistente) {
+                throw new Error('Ya existe una cita programada en este horario');
+            }
+            // Creamos la nueva cita
+            const response = await fetch('/api/citas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...newAppointment,
+                    paciente_id: selectedPatient.paciente_id,
+                    doctor_id: doctorData.doctor_id
+                })
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error al crear la cita');
+            }
+            // Limpiamos el formulario y cerramos el modal
+            setNewAppointment({
+                fecha_hora: "",
+                notas: "",
+                estado_id: 1
+            });
+            setShowNewAppointmentModal(false);
+            setSelectedPatient(null);
+            // Mostramos mensaje de éxito
+            alert('Cita creada exitosamente');
+        } catch (err) {
+            console.error('Error al crear cita:', err);
+            setAppointmentError(err.message);
+        } finally{
+            setIsSubmittingAppointment(false);
+        }
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100",
         children: [
@@ -151,12 +298,12 @@ function PatientsPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 63,
+                                        lineNumber: 285,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 62,
+                                    lineNumber: 284,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -166,7 +313,7 @@ function PatientsPage() {
                                             children: "Gestión de Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 66,
+                                            lineNumber: 288,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -174,19 +321,19 @@ function PatientsPage() {
                                             children: loading ? 'Cargando...' : error ? 'Error al cargar datos' : doctorName
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 67,
+                                            lineNumber: 289,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 65,
+                                    lineNumber: 287,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 61,
+                            lineNumber: 283,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -201,38 +348,39 @@ function PatientsPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 76,
+                                        lineNumber: 298,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 72,
+                                    lineNumber: 294,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
                                     whileHover: {
                                         scale: 1.02
                                     },
+                                    onClick: ()=>setShowNewPatientModal(true),
                                     className: "flex items-center space-x-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 82,
+                                            lineNumber: 305,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Nuevo Paciente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 83,
+                                            lineNumber: 306,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 78,
+                                    lineNumber: 300,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -244,29 +392,29 @@ function PatientsPage() {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 89,
+                                        lineNumber: 312,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 85,
+                                    lineNumber: 308,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 71,
+                            lineNumber: 293,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                    lineNumber: 60,
+                    lineNumber: 282,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 55,
+                lineNumber: 277,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -299,7 +447,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 109,
+                                            lineNumber: 332,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -307,13 +455,13 @@ function PatientsPage() {
                                             children: "Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 110,
+                                            lineNumber: 333,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 103,
+                                    lineNumber: 326,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -326,7 +474,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 117,
+                                            lineNumber: 340,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -334,13 +482,13 @@ function PatientsPage() {
                                             children: "Pacientes"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 118,
+                                            lineNumber: 341,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 113,
+                                    lineNumber: 336,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -357,7 +505,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 127,
+                                            lineNumber: 350,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -365,24 +513,24 @@ function PatientsPage() {
                                             children: "Calendario"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 128,
+                                            lineNumber: 351,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 121,
+                                    lineNumber: 344,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                            lineNumber: 102,
+                            lineNumber: 325,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 97,
+                        lineNumber: 320,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -406,7 +554,7 @@ function PatientsPage() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 138,
+                                            lineNumber: 361,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -414,21 +562,21 @@ function PatientsPage() {
                                             placeholder: "Buscar pacientes...",
                                             value: searchTerm,
                                             onChange: (e)=>setSearchTerm(e.target.value),
-                                            className: "w-full pl-10 pr-4 py-3 bg-white/80 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300"
+                                            className: "w-full pl-10 pr-4 py-3 bg-white/80 border border-sky-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all duration-300 text-slate-800 placeholder:text-slate-400"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 139,
+                                            lineNumber: 362,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                    lineNumber: 137,
+                                    lineNumber: 360,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 136,
+                                lineNumber: 359,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -455,7 +603,7 @@ function PatientsPage() {
                                                     children: patients.length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 158,
+                                                    lineNumber: 381,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -463,18 +611,18 @@ function PatientsPage() {
                                                     children: "Total Pacientes"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 159,
+                                                    lineNumber: 382,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 157,
+                                            lineNumber: 380,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 156,
+                                        lineNumber: 379,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -484,10 +632,10 @@ function PatientsPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-2xl font-bold text-green-600",
-                                                    children: patients.filter((p)=>p.status === "Estable").length
+                                                    children: patients.filter((p)=>p.estado === "Estable").length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 164,
+                                                    lineNumber: 387,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -495,18 +643,18 @@ function PatientsPage() {
                                                     children: "Estables"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 390,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 163,
+                                            lineNumber: 386,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 162,
+                                        lineNumber: 385,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -516,10 +664,10 @@ function PatientsPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-2xl font-bold text-yellow-600",
-                                                    children: patients.filter((p)=>p.status === "Control").length
+                                                    children: patients.filter((p)=>p.estado === "Control").length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 172,
+                                                    lineNumber: 395,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -527,18 +675,18 @@ function PatientsPage() {
                                                     children: "En Control"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 175,
+                                                    lineNumber: 398,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 171,
+                                            lineNumber: 394,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 170,
+                                        lineNumber: 393,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -548,10 +696,10 @@ function PatientsPage() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-2xl font-bold text-blue-600",
-                                                    children: patients.filter((p)=>p.status === "Mejoría").length
+                                                    children: patients.filter((p)=>p.estado === "Mejoría").length
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 180,
+                                                    lineNumber: 403,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -559,24 +707,24 @@ function PatientsPage() {
                                                     children: "En Mejoría"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 406,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                            lineNumber: 179,
+                                            lineNumber: 402,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 178,
+                                        lineNumber: 401,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 150,
+                                lineNumber: 373,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -590,7 +738,49 @@ function PatientsPage() {
                                     delay: 0.2
                                 },
                                 className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
-                                children: filteredPatients.map((patient, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                                children: loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "col-span-full text-center py-8",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-slate-600",
+                                        children: "Cargando pacientes..."
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 420,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                    lineNumber: 419,
+                                    columnNumber: 15
+                                }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "col-span-full text-center py-8",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-red-600",
+                                        children: error
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 424,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                    lineNumber: 423,
+                                    columnNumber: 15
+                                }, this) : filteredPatients.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "col-span-full text-center py-8",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-slate-600",
+                                        children: "No se encontraron pacientes"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 428,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                    lineNumber: 427,
+                                    columnNumber: 15
+                                }, this) : filteredPatients.map((patient, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                                         initial: {
                                             opacity: 0,
                                             y: 20
@@ -617,45 +807,42 @@ function PatientsPage() {
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                            lineNumber: 206,
+                                                            lineNumber: 442,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 205,
+                                                        lineNumber: 441,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                                 className: "font-semibold text-slate-800",
-                                                                children: patient.name
+                                                                children: `${patient.primer_nombre} ${patient.segundo_nombre || ''} ${patient.apellido_paterno} ${patient.apellido_materno || ''}`
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 209,
-                                                                columnNumber: 21
+                                                                lineNumber: 445,
+                                                                columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-sm text-slate-600",
-                                                                children: [
-                                                                    patient.age,
-                                                                    " años"
-                                                                ]
-                                                            }, void 0, true, {
+                                                                children: patient.email
+                                                            }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 210,
-                                                                columnNumber: 21
+                                                                lineNumber: 448,
+                                                                columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 208,
+                                                        lineNumber: 444,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 204,
+                                                lineNumber: 440,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -666,24 +853,24 @@ function PatientsPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-sm text-slate-600",
-                                                                children: "Condición:"
+                                                                children: "Fecha de Nacimiento:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 216,
-                                                                columnNumber: 21
+                                                                lineNumber: 454,
+                                                                columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-sm font-medium text-slate-800",
-                                                                children: patient.condition
+                                                                children: new Date(patient.fecha_nacimiento).toLocaleDateString()
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 217,
-                                                                columnNumber: 21
+                                                                lineNumber: 455,
+                                                                columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 215,
+                                                        lineNumber: 453,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -691,55 +878,30 @@ function PatientsPage() {
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-sm text-slate-600",
-                                                                children: "Última visita:"
+                                                                children: "Sexo:"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 220,
-                                                                columnNumber: 21
+                                                                lineNumber: 460,
+                                                                columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 className: "text-sm text-slate-800",
-                                                                children: patient.lastVisit
+                                                                children: patient.sexo
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 221,
-                                                                columnNumber: 21
+                                                                lineNumber: 461,
+                                                                columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 219,
-                                                        columnNumber: 19
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex justify-between",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "text-sm text-slate-600",
-                                                                children: "Estado:"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 224,
-                                                                columnNumber: 21
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: `text-sm font-medium px-2 py-1 rounded-full ${patient.status === "Estable" ? "bg-green-100 text-green-800" : patient.status === "Control" ? "bg-yellow-100 text-yellow-800" : patient.status === "Mejoría" ? "bg-blue-100 text-blue-800" : "bg-orange-100 text-orange-800"}`,
-                                                                children: patient.status
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                                lineNumber: 225,
-                                                                columnNumber: 21
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 223,
+                                                        lineNumber: 459,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 214,
+                                                lineNumber: 452,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -753,57 +915,705 @@ function PatientsPage() {
                                                         children: "Ver Historial"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 242,
+                                                        lineNumber: 466,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
                                                         whileHover: {
                                                             scale: 1.05
                                                         },
+                                                        onClick: ()=>handleNewAppointment(patient),
                                                         className: "flex-1 px-3 py-2 bg-green-100 text-green-800 rounded-lg text-sm hover:bg-green-200 transition-colors",
                                                         children: "Nueva Cita"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                        lineNumber: 248,
+                                                        lineNumber: 472,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                                lineNumber: 241,
+                                                lineNumber: 465,
                                                 columnNumber: 17
                                             }, this)
                                         ]
-                                    }, patient.id, true, {
+                                    }, patient.paciente_id, true, {
                                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                        lineNumber: 196,
+                                        lineNumber: 432,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                                lineNumber: 189,
+                                lineNumber: 412,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                        lineNumber: 134,
+                        lineNumber: 357,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-                lineNumber: 95,
+                lineNumber: 318,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
+                children: showNewPatientModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                    initial: {
+                        opacity: 0
+                    },
+                    animate: {
+                        opacity: 1
+                    },
+                    exit: {
+                        opacity: 0
+                    },
+                    className: "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50",
+                    onClick: ()=>setShowNewPatientModal(false),
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                        initial: {
+                            scale: 0.9,
+                            opacity: 0
+                        },
+                        animate: {
+                            scale: 1,
+                            opacity: 1
+                        },
+                        exit: {
+                            scale: 0.9,
+                            opacity: 0
+                        },
+                        className: "bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto",
+                        onClick: (e)=>e.stopPropagation(),
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-between items-center mb-6",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                        className: "text-xl font-bold text-slate-800",
+                                        children: "Nuevo Paciente"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 505,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>setShowNewPatientModal(false),
+                                        className: "p-2 hover:bg-slate-100 rounded-full transition-colors",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                            size: 20,
+                                            className: "text-slate-600"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                            lineNumber: 510,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 506,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                lineNumber: 504,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                                onSubmit: handleNewPatientSubmit,
+                                className: "space-y-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Primer Nombre *"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 517,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        required: true,
+                                                        value: newPatient.primer_nombre,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                primer_nombre: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 520,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 516,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Segundo Nombre"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 529,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        value: newPatient.segundo_nombre,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                segundo_nombre: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 532,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 528,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Apellido Paterno *"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 540,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        required: true,
+                                                        value: newPatient.apellido_paterno,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                apellido_paterno: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 543,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 539,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Apellido Materno"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 552,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        value: newPatient.apellido_materno,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                apellido_materno: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 555,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 551,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Email *"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 563,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "email",
+                                                        required: true,
+                                                        value: newPatient.email,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                email: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 566,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 562,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Fecha de Nacimiento *"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 575,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "date",
+                                                        required: true,
+                                                        value: newPatient.fecha_nacimiento,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                fecha_nacimiento: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 578,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 574,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Sexo *"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 587,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                        required: true,
+                                                        value: newPatient.sexo,
+                                                        onChange: (e)=>setNewPatient({
+                                                                ...newPatient,
+                                                                sexo: e.target.value
+                                                            }),
+                                                        className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "M",
+                                                                children: "Masculino"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                lineNumber: 596,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "F",
+                                                                children: "Femenino"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                lineNumber: 597,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "O",
+                                                                children: "Otro"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                lineNumber: 598,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 590,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 586,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                        className: "block text-sm font-medium text-slate-700 mb-1",
+                                                        children: "Contraseña (opcional)"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 602,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "relative",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: showPassword ? "text" : "password",
+                                                                value: newPatient.password,
+                                                                onChange: (e)=>setNewPatient({
+                                                                        ...newPatient,
+                                                                        password: e.target.value
+                                                                    }),
+                                                                placeholder: "Dejar en blanco para generar una aleatoria",
+                                                                className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800 pr-10"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                lineNumber: 606,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                type: "button",
+                                                                onClick: ()=>setShowPassword(!showPassword),
+                                                                className: "absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors",
+                                                                children: showPassword ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__EyeOff$3e$__["EyeOff"], {
+                                                                    size: 18
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                    lineNumber: 618,
+                                                                    columnNumber: 41
+                                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
+                                                                    size: 18
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                    lineNumber: 618,
+                                                                    columnNumber: 64
+                                                                }, this)
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                                lineNumber: 613,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 605,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-xs text-slate-500 mt-1",
+                                                        children: "Si no se proporciona una contraseña, se generará una aleatoria"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                        lineNumber: 621,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 601,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 515,
+                                        columnNumber: 17
+                                    }, this),
+                                    submitError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "text-red-600 text-sm mt-2",
+                                        children: submitError
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 628,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-end space-x-3 mt-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                onClick: ()=>setShowNewPatientModal(false),
+                                                className: "px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors",
+                                                children: "Cancelar"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 634,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "submit",
+                                                disabled: isSubmitting,
+                                                className: "px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                                                children: isSubmitting ? 'Guardando...' : 'Guardar Paciente'
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 641,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 633,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                lineNumber: 514,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                        lineNumber: 497,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                    lineNumber: 490,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                lineNumber: 488,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
+                children: showNewAppointmentModal && selectedPatient && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                    initial: {
+                        opacity: 0
+                    },
+                    animate: {
+                        opacity: 1
+                    },
+                    exit: {
+                        opacity: 0
+                    },
+                    className: "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50",
+                    onClick: ()=>setShowNewAppointmentModal(false),
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+                        initial: {
+                            scale: 0.9,
+                            opacity: 0
+                        },
+                        animate: {
+                            scale: 1,
+                            opacity: 1
+                        },
+                        exit: {
+                            scale: 0.9,
+                            opacity: 0
+                        },
+                        className: "bg-white rounded-2xl p-6 w-full max-w-2xl",
+                        onClick: (e)=>e.stopPropagation(),
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex justify-between items-center mb-6",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                className: "text-xl font-bold text-slate-800",
+                                                children: "Nueva Cita"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 674,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-sm text-slate-600 mt-1",
+                                                children: [
+                                                    "Paciente: ",
+                                                    selectedPatient.primer_nombre,
+                                                    " ",
+                                                    selectedPatient.segundo_nombre || '',
+                                                    " ",
+                                                    selectedPatient.apellido_paterno,
+                                                    " ",
+                                                    selectedPatient.apellido_materno || ''
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 675,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 673,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>setShowNewAppointmentModal(false),
+                                        className: "p-2 hover:bg-slate-100 rounded-full transition-colors",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                            size: 20,
+                                            className: "text-slate-600"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                            lineNumber: 683,
+                                            columnNumber: 19
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 679,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                lineNumber: 672,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                                onSubmit: handleAppointmentSubmit,
+                                className: "space-y-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-slate-700 mb-1",
+                                                children: "Fecha y Hora *"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 689,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "datetime-local",
+                                                required: true,
+                                                value: newAppointment.fecha_hora,
+                                                onChange: (e)=>setNewAppointment({
+                                                        ...newAppointment,
+                                                        fecha_hora: e.target.value
+                                                    }),
+                                                min: new Date().toISOString().slice(0, 16),
+                                                className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 692,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 688,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-slate-700 mb-1",
+                                                children: "Notas"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 703,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                                value: newAppointment.notas,
+                                                onChange: (e)=>setNewAppointment({
+                                                        ...newAppointment,
+                                                        notas: e.target.value
+                                                    }),
+                                                placeholder: "Agregar notas o detalles de la cita...",
+                                                rows: 3,
+                                                className: "w-full px-3 py-2 bg-white border border-sky-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent text-slate-800 resize-none"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 706,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 702,
+                                        columnNumber: 17
+                                    }, this),
+                                    appointmentError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "text-red-600 text-sm",
+                                        children: appointmentError
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 716,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-end space-x-3 mt-6",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "button",
+                                                onClick: ()=>setShowNewAppointmentModal(false),
+                                                className: "px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors",
+                                                children: "Cancelar"
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 722,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                type: "submit",
+                                                disabled: isSubmittingAppointment,
+                                                className: "px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+                                                children: isSubmittingAppointment ? 'Creando...' : 'Crear Cita'
+                                            }, void 0, false, {
+                                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                                lineNumber: 729,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                        lineNumber: 721,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                                lineNumber: 687,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                        lineNumber: 665,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                    lineNumber: 658,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
+                lineNumber: 656,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/doctor/patients/page.jsx",
-        lineNumber: 53,
+        lineNumber: 275,
         columnNumber: 5
     }, this);
 }
-_s(PatientsPage, "5QbypsvLDnMt7JMb4TxpjfDTGHY=");
+_s(PatientsPage, "ZKEEIE7FJkW/ZSW39e0yJcpDjTs=");
 _c = PatientsPage;
 var _c;
 __turbopack_refresh__.register(_c, "PatientsPage");
