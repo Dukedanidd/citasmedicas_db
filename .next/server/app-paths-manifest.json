@@ -1,5 +1,5 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/page": "app/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/dashboard/doctor/page": "app/dashboard/doctor/page.js",
   "/api/doctores/[id]/route": "app/api/doctores/[id]/route.js",
@@ -8,8 +8,15 @@
   "/api/citas/route": "app/api/citas/route.js",
   "/dashboard/doctor/patients/page": "app/dashboard/doctor/patients/page.js",
   "/dashboard/doctor/appointments/page": "app/dashboard/doctor/appointments/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/dashboard/patient/page": "app/dashboard/patient/page.js",
   "/api/pacientes/route": "app/api/pacientes/route.js",
+  "/dashboard/patient/records/page": "app/dashboard/patient/records/page.js",
+  "/dashboard/patient/calendar/page": "app/dashboard/patient/calendar/page.js",
   "/api/expedientes/route": "app/api/expedientes/route.js",
   "/api/historial/route": "app/api/historial/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js",
+  "/api/doctores/route": "app/api/doctores/route.js",
+  "/api/auth/check/route": "app/api/auth/check/route.js"
 }

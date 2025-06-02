@@ -380,7 +380,7 @@ function PatientRecords() {
                                     },
                                     className: "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-sky-50 transition-all duration-300",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
@@ -389,7 +389,7 @@ function PatientRecords() {
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "font-medium",
-                                            children: "Calendario"
+                                            children: "Dashboard"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
                                             lineNumber: 228,
@@ -399,6 +399,37 @@ function PatientRecords() {
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
                                     lineNumber: 221,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
+                                    href: "/dashboard/patient/calendar",
+                                    whileHover: {
+                                        scale: 1.02
+                                    },
+                                    whileTap: {
+                                        scale: 0.98
+                                    },
+                                    className: "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-sky-50 transition-all duration-300",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
+                                            size: 20
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/patient/records/page.jsx",
+                                            lineNumber: 237,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "font-medium",
+                                            children: "Calendario"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/dashboard/patient/records/page.jsx",
+                                            lineNumber: 238,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/dashboard/patient/records/page.jsx",
+                                    lineNumber: 231,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -415,7 +446,7 @@ function PatientRecords() {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                            lineNumber: 237,
+                                            lineNumber: 247,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -423,13 +454,13 @@ function PatientRecords() {
                                             children: "Expediente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                            lineNumber: 238,
+                                            lineNumber: 248,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                    lineNumber: 231,
+                                    lineNumber: 241,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -465,7 +496,7 @@ function PatientRecords() {
                                                 children: "Información General"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 249,
+                                                lineNumber: 259,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -477,7 +508,7 @@ function PatientRecords() {
                                                 children: "Historial Médico"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 260,
+                                                lineNumber: 270,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -489,18 +520,18 @@ function PatientRecords() {
                                                 children: "Medicamentos"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 271,
+                                                lineNumber: 281,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                        lineNumber: 248,
+                                        lineNumber: 258,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                    lineNumber: 247,
+                                    lineNumber: 257,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -520,7 +551,7 @@ function PatientRecords() {
                                                                 children: "Datos Personales"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 294,
+                                                                lineNumber: 304,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -534,7 +565,7 @@ function PatientRecords() {
                                                                                 children: "Nombre:"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 297,
+                                                                                lineNumber: 307,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             " ",
@@ -542,7 +573,7 @@ function PatientRecords() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 296,
+                                                                        lineNumber: 306,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -553,7 +584,7 @@ function PatientRecords() {
                                                                                 children: "Edad:"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 300,
+                                                                                lineNumber: 310,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             " ",
@@ -562,7 +593,7 @@ function PatientRecords() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 299,
+                                                                        lineNumber: 309,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -573,7 +604,7 @@ function PatientRecords() {
                                                                                 children: "Género:"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 303,
+                                                                                lineNumber: 313,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             " ",
@@ -581,7 +612,7 @@ function PatientRecords() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 302,
+                                                                        lineNumber: 312,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -592,7 +623,7 @@ function PatientRecords() {
                                                                                 children: "Email:"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 306,
+                                                                                lineNumber: 316,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             " ",
@@ -600,7 +631,7 @@ function PatientRecords() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 305,
+                                                                        lineNumber: 315,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -611,7 +642,7 @@ function PatientRecords() {
                                                                                 children: "Fecha de Nacimiento:"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 309,
+                                                                                lineNumber: 319,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             " ",
@@ -619,19 +650,19 @@ function PatientRecords() {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 308,
+                                                                        lineNumber: 318,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 295,
+                                                                lineNumber: 305,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                        lineNumber: 293,
+                                                        lineNumber: 303,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -642,7 +673,7 @@ function PatientRecords() {
                                                                 children: "Información Médica"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 315,
+                                                                lineNumber: 325,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -655,7 +686,7 @@ function PatientRecords() {
                                                                             children: "Doctor Asignado:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                            lineNumber: 318,
+                                                                            lineNumber: 328,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         ' ',
@@ -663,29 +694,29 @@ function PatientRecords() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                    lineNumber: 317,
+                                                                    lineNumber: 327,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 316,
+                                                                lineNumber: 326,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                        lineNumber: 314,
+                                                        lineNumber: 324,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 292,
+                                                lineNumber: 302,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                            lineNumber: 291,
+                                            lineNumber: 301,
                                             columnNumber: 17
                                         }, this),
                                         activeTab === "historial" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -710,7 +741,7 @@ function PatientRecords() {
                                                                         children: registro.doctor
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 339,
+                                                                        lineNumber: 349,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -718,18 +749,18 @@ function PatientRecords() {
                                                                         children: registro.fecha
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 340,
+                                                                        lineNumber: 350,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 338,
+                                                                lineNumber: 348,
                                                                 columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                            lineNumber: 337,
+                                                            lineNumber: 347,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -743,7 +774,7 @@ function PatientRecords() {
                                                                             children: "Diagnóstico:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                            lineNumber: 345,
+                                                                            lineNumber: 355,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         " ",
@@ -751,7 +782,7 @@ function PatientRecords() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                    lineNumber: 344,
+                                                                    lineNumber: 354,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -762,7 +793,7 @@ function PatientRecords() {
                                                                             children: "Tratamiento:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                            lineNumber: 348,
+                                                                            lineNumber: 358,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         " ",
@@ -770,31 +801,31 @@ function PatientRecords() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                    lineNumber: 347,
+                                                                    lineNumber: 357,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                            lineNumber: 343,
+                                                            lineNumber: 353,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                    lineNumber: 331,
+                                                    lineNumber: 341,
                                                     columnNumber: 23
                                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "text-center text-slate-600 py-8",
                                                 children: "No hay registros en el historial médico"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 354,
+                                                lineNumber: 364,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                            lineNumber: 328,
+                                            lineNumber: 338,
                                             columnNumber: 17
                                         }, this),
                                         activeTab === "medicamentos" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -819,7 +850,7 @@ function PatientRecords() {
                                                                         children: medicamento.nombre
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 373,
+                                                                        lineNumber: 383,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -833,7 +864,7 @@ function PatientRecords() {
                                                                                         children: "Dosis:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                        lineNumber: 376,
+                                                                                        lineNumber: 386,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     " ",
@@ -841,7 +872,7 @@ function PatientRecords() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 375,
+                                                                                lineNumber: 385,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -852,7 +883,7 @@ function PatientRecords() {
                                                                                         children: "Frecuencia:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                        lineNumber: 379,
+                                                                                        lineNumber: 389,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     " ",
@@ -860,7 +891,7 @@ function PatientRecords() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 378,
+                                                                                lineNumber: 388,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -871,7 +902,7 @@ function PatientRecords() {
                                                                                         children: "Inicio:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                        lineNumber: 382,
+                                                                                        lineNumber: 392,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     " ",
@@ -879,19 +910,19 @@ function PatientRecords() {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                                lineNumber: 381,
+                                                                                lineNumber: 391,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                        lineNumber: 374,
+                                                                        lineNumber: 384,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 372,
+                                                                lineNumber: 382,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -901,52 +932,52 @@ function PatientRecords() {
                                                                     size: 24
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                    lineNumber: 387,
+                                                                    lineNumber: 397,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                                lineNumber: 386,
+                                                                lineNumber: 396,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                        lineNumber: 371,
+                                                        lineNumber: 381,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, index, false, {
                                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                    lineNumber: 365,
+                                                    lineNumber: 375,
                                                     columnNumber: 23
                                                 }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "text-center text-slate-600 py-8",
                                                 children: "No hay medicamentos registrados"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                                lineNumber: 393,
+                                                lineNumber: 403,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                            lineNumber: 362,
+                                            lineNumber: 372,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                                    lineNumber: 286,
+                                    lineNumber: 296,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                            lineNumber: 245,
+                            lineNumber: 255,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/dashboard/patient/records/page.jsx",
-                        lineNumber: 244,
+                        lineNumber: 254,
                         columnNumber: 9
                     }, this)
                 ]

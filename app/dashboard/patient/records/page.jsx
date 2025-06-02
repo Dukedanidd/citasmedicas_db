@@ -13,8 +13,10 @@ import {
   Pill,
   AlertCircle,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function PatientRecords() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("general")
   const [patientData, setPatientData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -69,6 +71,11 @@ export default function PatientRecords() {
     }
   }
 
+  const handleLogout = () => {
+    sessionStorage.clear()
+    router.push('/login')
+  }
+
   useEffect(() => {
     fetchPatientData()
   }, [])
@@ -93,6 +100,37 @@ export default function PatientRecords() {
       
       const data = await response.json()
       
+      // Si el paciente tiene un doctor asignado, obtener su información
+      let doctorInfo = null
+      if (data.doctor_id) {
+        const doctorResponse = await fetch(`/api/doctores/${data.doctor_id}`)
+        if (doctorResponse.ok) {
+          doctorInfo = await doctorResponse.json()
+        }
+      }
+
+      // Obtener el expediente del paciente
+      const expedienteResponse = await fetch(`/api/expedientes?pacienteId=${patientId}`)
+      if (!expedienteResponse.ok) {
+        throw new Error('Error al cargar el expediente del paciente')
+      }
+      const expedienteData = await expedienteResponse.json()
+      
+      // Verificar que tenemos un expediente válido
+      if (!expedienteData || !expedienteData[0] || !expedienteData[0].expediente_id) {
+        throw new Error('No se encontró el expediente del paciente')
+      }
+
+      // Obtener el historial médico
+      const historialResponse = await fetch(`/api/historial?expedienteId=${expedienteData[0].expediente_id}`)
+      if (!historialResponse.ok) {
+        throw new Error('Error al cargar el historial médico')
+      }
+      const historialData = await historialResponse.json()
+      
+      console.log('Expediente ID:', expedienteData[0].expediente_id)
+      console.log('Historial Data:', historialData)
+      
       // Formatear los datos para la interfaz
       const formattedData = {
         general: {
@@ -101,12 +139,14 @@ export default function PatientRecords() {
           genero: data.sexo || 'No especificado',
           email: data.email || 'No disponible',
           fechaNacimiento: data.fecha_nacimiento ? formatDate(data.fecha_nacimiento) : 'No disponible',
-          doctorEspecialidad: data.doctor_especialidad || 'No asignado'
+          doctorNombre: doctorInfo ? `Dr. ${doctorInfo.primer_nombre} ${doctorInfo.apellido_paterno}` : 'No asignado',
+          doctorEspecialidad: doctorInfo?.especialidad || 'No especificada'
         },
-        // Por ahora, datos de ejemplo para historial y medicamentos
-        // TODO: Implementar endpoints específicos para estas secciones
-        historial: [],
-        medicamentos: []
+        historial: historialData.map(registro => ({
+          fecha: formatDate(registro.fecha_registro),
+          descripcion: registro.descripcion
+        })),
+        notas: expedienteData[0]?.notas_generales || ''
       }
       
       setPatientData(formattedData)
@@ -202,6 +242,7 @@ export default function PatientRecords() {
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
+              onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 transition-colors"
             >
               <LogOut size={20} />
@@ -220,6 +261,16 @@ export default function PatientRecords() {
           <nav className="space-y-4">
             <motion.a
               href="/dashboard/patient"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-sky-50 transition-all duration-300"
+            >
+              <User size={20} />
+              <span className="font-medium">Dashboard</span>
+            </motion.a>
+
+            <motion.a
+              href="/dashboard/patient/calendar"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-sky-50 transition-all duration-300"
@@ -270,14 +321,14 @@ export default function PatientRecords() {
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => setActiveTab("medicamentos")}
+                  onClick={() => setActiveTab("notas")}
                   className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg ${
-                    activeTab === "medicamentos"
+                    activeTab === "notas"
                       ? "bg-sky-500 text-white"
                       : "text-slate-600 hover:bg-sky-50"
                   }`}
                 >
-                  Medicamentos
+                  Notas Generales
                 </motion.button>
               </div>
             </div>
@@ -316,6 +367,10 @@ export default function PatientRecords() {
                       <div className="space-y-2">
                         <p className="text-slate-600">
                           <span className="font-medium">Doctor Asignado:</span>{' '}
+                          {patientData.general.doctorNombre}
+                        </p>
+                        <p className="text-slate-600">
+                          <span className="font-medium">Especialidad:</span>{' '}
                           {patientData.general.doctorEspecialidad}
                         </p>
                       </div>
@@ -336,16 +391,12 @@ export default function PatientRecords() {
                       >
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="text-slate-800 font-medium">{registro.doctor}</p>
                             <p className="text-slate-600 text-sm">{registro.fecha}</p>
                           </div>
                         </div>
                         <div className="space-y-2">
                           <p className="text-slate-700">
-                            <span className="font-medium">Diagnóstico:</span> {registro.diagnostico}
-                          </p>
-                          <p className="text-slate-700">
-                            <span className="font-medium">Tratamiento:</span> {registro.tratamiento}
+                            {registro.descripcion}
                           </p>
                         </div>
                       </motion.div>
@@ -358,40 +409,20 @@ export default function PatientRecords() {
                 </div>
               )}
 
-              {activeTab === "medicamentos" && (
+              {activeTab === "notas" && (
                 <div className="space-y-4">
-                  {patientData.medicamentos.length > 0 ? (
-                    patientData.medicamentos.map((medicamento, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-sky-50 border border-sky-200 rounded-xl p-4"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <h3 className="text-lg font-semibold text-slate-800">{medicamento.nombre}</h3>
-                            <div className="mt-2 space-y-1">
-                              <p className="text-slate-600">
-                                <span className="font-medium">Dosis:</span> {medicamento.dosis}
-                              </p>
-                              <p className="text-slate-600">
-                                <span className="font-medium">Frecuencia:</span> {medicamento.frecuencia}
-                              </p>
-                              <p className="text-slate-600">
-                                <span className="font-medium">Inicio:</span> {medicamento.inicio}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="p-2 bg-sky-100 rounded-lg">
-                            <Pill className="text-sky-600" size={24} />
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))
+                  {patientData.notas ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-sky-50 border border-sky-200 rounded-xl p-4"
+                    >
+                      <h3 className="text-lg font-semibold text-slate-800 mb-2">Notas Generales</h3>
+                      <p className="text-slate-700">{patientData.notas}</p>
+                    </motion.div>
                   ) : (
                     <div className="text-center text-slate-600 py-8">
-                      No hay medicamentos registrados
+                      No hay notas generales registradas
                     </div>
                   )}
                 </div>

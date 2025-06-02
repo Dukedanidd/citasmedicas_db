@@ -15,11 +15,18 @@ import {
   AlertCircle,
 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function PatientDashboardOverview() {
+  const router = useRouter()
   const [patient, setPatient] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const handleLogout = () => {
+    sessionStorage.clear()
+    router.push('/login')
+  }
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -112,7 +119,10 @@ export default function PatientDashboardOverview() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-800">MediCare Pro</h1>
-              <p className="text-sm text-slate-600">Paciente</p>
+              <p className="text-sm text-slate-600">
+                {loading ? 'Cargando...' : error ? 'Error al cargar datos' : 
+                  `${patient?.primer_nombre} ${patient?.segundo_nombre || ''} ${patient?.apellido_paterno} ${patient?.apellido_materno || ''}`}
+              </p>
             </div>
           </div>
 
@@ -125,6 +135,7 @@ export default function PatientDashboardOverview() {
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
+              onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 transition-colors"
             >
               <LogOut size={20} />
@@ -141,6 +152,16 @@ export default function PatientDashboardOverview() {
           className="w-64 bg-white/60 backdrop-blur-lg border-r border-sky-200 min-h-screen p-6"
         >
           <nav className="space-y-4">
+            <motion.a
+              href="/dashboard/patient"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-sky-50 transition-all duration-300"
+            >
+              <User size={20} />
+              <span className="font-medium">Dashboard</span>
+            </motion.a>
+
             <motion.a
               href="/dashboard/patient/calendar"
               whileHover={{ scale: 1.02 }}
@@ -172,7 +193,7 @@ export default function PatientDashboardOverview() {
               className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 border border-sky-100 shadow-lg"
             >
               <h2 className="text-2xl font-bold text-slate-800 mb-4">
-                Bienvenido, {patient?.primer_nombre} {patient?.apellido_paterno}
+                ¡Bienvenid{patient?.genero === 'M' ? 'o' : 'a'}, {patient?.primer_nombre} {patient?.apellido_paterno}!
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
