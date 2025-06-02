@@ -1,8 +1,10 @@
 # Script para configurar la base de datos de la clínica
 # Requiere PowerShell 5.1 o superior
 
-# Solicitar la IP del servidor
-$serverIP = Read-Host "Ingresa la IP del servidor de base de datos"
+param (
+    [Parameter(Mandatory=$true)]
+    [string]$serverIP
+)
 
 # Verificar que se ingresó una IP
 if (-not $serverIP) {
