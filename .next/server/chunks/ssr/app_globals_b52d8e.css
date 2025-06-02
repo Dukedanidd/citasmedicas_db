@@ -381,6 +381,10 @@ img, video {
   top: 100%;
 }
 
+.top-0 {
+  top: 0;
+}
+
 .z-0 {
   z-index: 0;
 }
@@ -465,6 +469,10 @@ img, video {
 
 .mt-6 {
   margin-top: 1.5rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
 }
 
 .block {
@@ -553,6 +561,10 @@ img, video {
 
 .min-h-screen {
   min-height: 100vh;
+}
+
+.min-h-\[600px\] {
+  min-height: 600px;
 }
 
 .w-10 {

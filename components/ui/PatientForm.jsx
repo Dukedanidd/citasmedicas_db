@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
-export default function PatientForm({ onClose, onSubmit, initialData }) {
+export default function PatientForm({ onClose, onSubmit, initialData, doctores = [] }) {
   const [formData, setFormData] = useState({
     primer_nombre: "",
     segundo_nombre: "",
@@ -11,7 +11,8 @@ export default function PatientForm({ onClose, onSubmit, initialData }) {
     email: "",
     fecha_nacimiento: "",
     sexo: "",
-    doctor_id: ""
+    doctor_id: "",
+    password: ""
   })
 
   // Cargar datos iniciales si estamos editando
@@ -25,7 +26,8 @@ export default function PatientForm({ onClose, onSubmit, initialData }) {
         email: initialData.email || "",
         fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento).toISOString().split('T')[0] : "",
         sexo: initialData.sexo || "",
-        doctor_id: initialData.doctor_id || ""
+        doctor_id: initialData.doctor_id || "",
+        password: "" // No mostramos la contraseña al editar
       })
     }
   }, [initialData])
@@ -47,108 +49,115 @@ export default function PatientForm({ onClose, onSubmit, initialData }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="primer_nombre" className="block text-sm font-medium text-gray-700">
-            Primer Nombre
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Primer Nombre <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            id="primer_nombre"
             name="primer_nombre"
             value={formData.primer_nombre}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
             required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
-
         <div>
-          <label htmlFor="segundo_nombre" className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Segundo Nombre
           </label>
           <input
             type="text"
-            id="segundo_nombre"
             name="segundo_nombre"
-            value={formData.segundo_nombre}
+            value={formData.segundo_nombre || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
-
-      <div>
-          <label htmlFor="apellido_paterno" className="block text-sm font-medium text-gray-700">
-            Apellido Paterno
-        </label>
-        <input
-          type="text"
-            id="apellido_paterno"
-            name="apellido_paterno"
-            value={formData.apellido_paterno}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-          required
-        />
       </div>
 
-      <div>
-          <label htmlFor="apellido_materno" className="block text-sm font-medium text-gray-700">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Apellido Paterno <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            name="apellido_paterno"
+            value={formData.apellido_paterno}
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Apellido Materno
           </label>
           <input
             type="text"
-            id="apellido_materno"
             name="apellido_materno"
-            value={formData.apellido_materno}
+            value={formData.apellido_materno || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Email <span className="text-red-500">*</span>
         </label>
         <input
           type="email"
-          id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Contraseña {!initialData && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required={!initialData}
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+          placeholder={initialData ? "Dejar en blanco para mantener la actual" : "Ingrese la contraseña"}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="fecha_nacimiento" className="block text-sm font-medium text-gray-700">
-            Fecha de Nacimiento
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Fecha de Nacimiento <span className="text-red-500">*</span>
           </label>
           <input
             type="date"
-            id="fecha_nacimiento"
             name="fecha_nacimiento"
             value={formData.fecha_nacimiento}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
             required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
-
         <div>
-          <label htmlFor="sexo" className="block text-sm font-medium text-gray-700">
-            Sexo
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Sexo <span className="text-red-500">*</span>
           </label>
           <select
-            id="sexo"
             name="sexo"
             value={formData.sexo}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
             required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           >
-            <option value="">Seleccionar sexo</option>
+            <option value="">Seleccionar...</option>
             <option value="M">Masculino</option>
             <option value="F">Femenino</option>
           </select>
@@ -156,39 +165,39 @@ export default function PatientForm({ onClose, onSubmit, initialData }) {
       </div>
 
       <div>
-        <label htmlFor="doctor_id" className="block text-sm font-medium text-gray-700">
-          Doctor Asignado
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Doctor Asignado <span className="text-red-500">*</span>
         </label>
         <select
-          id="doctor_id"
           name="doctor_id"
-          value={formData.doctor_id}
+          value={formData.doctor_id || ''}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
         >
-          <option value="">Seleccionar doctor</option>
-          <option value="1">Dr. Juan Pérez - Cardiología</option>
-          <option value="2">Dra. María García - Pediatría</option>
-          <option value="3">Dr. Carlos López - Dermatología</option>
+          <option value="">Seleccionar doctor...</option>
+          {doctores.map((doctor) => (
+            <option key={doctor.doctor_id} value={doctor.doctor_id}>
+              Dr. {doctor.primer_nombre} {doctor.apellido_paterno}
+            </option>
+          ))}
         </select>
       </div>
 
-      <div className="flex justify-end space-x-3 mt-6">
+      <div className="flex justify-end space-x-3 pt-4">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800"
         >
           Cancelar
         </button>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
+        <button
           type="submit"
-          className="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-md hover:bg-sky-600"
+          className="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-lg hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-400"
         >
-          {initialData ? "Actualizar" : "Guardar"}
-        </motion.button>
+          {initialData ? 'Actualizar' : 'Crear'} Paciente
+        </button>
       </div>
     </form>
   )

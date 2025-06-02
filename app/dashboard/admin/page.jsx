@@ -36,6 +36,9 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null)
 
   const [pacientes, setPacientes] = useState([])
+  const [filteredPacientes, setFilteredPacientes] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [doctorSearchTerm, setDoctorSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const itemsPerPage = 5
@@ -72,22 +75,36 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [doctoresRes, pacientesRes] = await Promise.all([
-          fetch('/api/doctores'),
-          fetch('/api/pacientes')
+        const [pacientesRes, doctoresRes] = await Promise.all([
+          fetch('/api/pacientes'),
+          fetch('/api/doctores')
         ])
 
-        if (!doctoresRes.ok || !pacientesRes.ok) {
+        if (!pacientesRes.ok || !doctoresRes.ok) {
           throw new Error('Error al cargar los datos')
         }
 
-        const [doctoresData, pacientesData] = await Promise.all([
-          doctoresRes.json(),
-          pacientesRes.json()
+        const [pacientesData, doctoresData] = await Promise.all([
+          pacientesRes.json(),
+          doctoresRes.json()
         ])
 
+        // Mapear los doctores a un objeto para fácil acceso
+        const doctoresMap = doctoresData.reduce((acc, doctor) => {
+          acc[doctor.doctor_id] = doctor
+          return acc
+        }, {})
+
+        // Añadir la información del doctor a cada paciente
+        const pacientesConDoctores = pacientesData.map(paciente => ({
+          ...paciente,
+          doctor: paciente.doctor_id ? doctoresMap[paciente.doctor_id] : null
+        }))
+
+        setPacientes(pacientesConDoctores)
+        setFilteredPacientes(pacientesConDoctores)
+        setTotalPages(Math.ceil(pacientesConDoctores.length / itemsPerPage))
         setDoctores(doctoresData)
-        setPacientes(pacientesData)
       } catch (error) {
         setError(error.message)
       } finally {
@@ -98,10 +115,24 @@ export default function AdminDashboard() {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const filtered = pacientes.filter(paciente => {
+      const fullName = `${paciente.primer_nombre} ${paciente.segundo_nombre || ''} ${paciente.apellido_paterno} ${paciente.apellido_materno || ''}`.toLowerCase()
+      const email = paciente.email.toLowerCase()
+      const searchLower = searchTerm.toLowerCase()
+      
+      return fullName.includes(searchLower) || email.includes(searchLower)
+    })
+    
+    setFilteredPacientes(filtered)
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage))
+    setCurrentPage(1) // Reset to first page when searching
+  }, [searchTerm, pacientes])
+
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
-    return pacientes.slice(startIndex, endIndex)
+    return filteredPacientes.slice(startIndex, endIndex)
   }
 
   const handleLogout = () => {
@@ -306,16 +337,11 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     placeholder="Buscar doctores..."
-                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+                    value={doctorSearchTerm}
+                    onChange={(e) => setDoctorSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
                   />
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center px-4 py-2 border border-slate-200 rounded-lg text-slate-600"
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filtrar
-                </motion.button>
               </div>
 
               <div className="overflow-x-auto">
@@ -426,16 +452,11 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     placeholder="Buscar pacientes..."
-                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
                   />
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center px-4 py-2 border border-slate-200 rounded-lg text-slate-600"
-                >
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filtrar
-                </motion.button>
               </div>
 
               <div className="overflow-x-auto">
@@ -455,10 +476,7 @@ export default function AdminDashboard() {
                         Sexo
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Doctor
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Especialidad
+                        Doctor Asignado
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Acciones
@@ -490,10 +508,9 @@ export default function AdminDashboard() {
                           {paciente.sexo}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.doctor ? `${paciente.doctor.primer_nombre} ${paciente.doctor.apellido_paterno}` : 'No asignado'}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {paciente.doctor ? paciente.doctor.especialidad : 'No asignado'}
+                          {paciente.doctor_id && paciente.doctor ? 
+                            `Dr. ${paciente.doctor.primer_nombre} ${paciente.doctor.apellido_paterno}` : 
+                            'No asignado'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
@@ -552,14 +569,14 @@ export default function AdminDashboard() {
                     <p className="text-sm text-gray-700">
                       Mostrando{' '}
                       <span className="font-medium">
-                        {(currentPage - 1) * itemsPerPage + 1}
+                        {filteredPacientes.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1}
                       </span>{' '}
                       a{' '}
                       <span className="font-medium">
-                        {Math.min(currentPage * itemsPerPage, pacientes.length)}
+                        {Math.min(currentPage * itemsPerPage, filteredPacientes.length)}
                       </span>{' '}
                       de{' '}
-                      <span className="font-medium">{pacientes.length}</span>{' '}
+                      <span className="font-medium">{filteredPacientes.length}</span>{' '}
                       resultados
                     </p>
                   </div>
@@ -624,7 +641,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100">
       {/* Navbar */}
-      <nav className="bg-white shadow-md">
+      <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -687,7 +704,7 @@ export default function AdminDashboard() {
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <motion.div
@@ -697,7 +714,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Doctores</p>
-                <h3 className="text-2xl font-bold text-slate-800">24</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{doctores.length}</h3>
               </div>
               <div className="h-12 w-12 bg-sky-100 rounded-lg flex items-center justify-center">
                 <Stethoscope className="h-6 w-6 text-sky-500" />
@@ -712,7 +729,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Pacientes</p>
-                <h3 className="text-2xl font-bold text-slate-800">1,234</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{pacientes.length}</h3>
               </div>
               <div className="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center">
                 <Users className="h-6 w-6 text-indigo-500" />
@@ -791,7 +808,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tab Content */}
-        {renderTabContent()}
+        <div className="min-h-[600px]"> {/* Altura mínima para evitar saltos */}
+          {renderTabContent()}
+        </div>
       </div>
 
       {/* Modales */}
@@ -816,6 +835,7 @@ export default function AdminDashboard() {
           onClose={handleClosePatientModal} 
           onSubmit={handlePatientSubmit}
           initialData={editingPatient}
+          doctores={doctores}
         />
       </Modal>
     </div>

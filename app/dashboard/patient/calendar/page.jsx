@@ -612,14 +612,14 @@ export default function PatientCalendar() {
                               </div>
                               {appointment.estado_id === 1 && (
                                 <div className="flex space-x-2">
-                                  <motion.button
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
                                     onClick={() => handleDeleteClick(appointment)}
-                                    className="p-2 text-red-600 hover:text-red-800 transition-colors"
-                                  >
-                                    <X size={16} />
-                                  </motion.button>
+                                className="p-2 text-red-600 hover:text-red-800 transition-colors"
+                              >
+                                <X size={16} />
+                              </motion.button>
                                 </div>
                               )}
                             </div>
