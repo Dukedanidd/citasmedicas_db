@@ -1670,12 +1670,7 @@ function BitacoraForm({ onClose }) {
                 "BitacoraForm.useEffect.fetchBitacora": async ()=>{
                     try {
                         setIsLoading(true);
-                        const userId = sessionStorage.getItem('user_id');
-                        const response = await fetch('/api/bitacora', {
-                            headers: {
-                                'user-id': userId
-                            }
-                        });
+                        const response = await fetch('/api/bitacora');
                         if (!response.ok) {
                             throw new Error('Error al cargar la bitácora');
                         }
@@ -1714,7 +1709,7 @@ function BitacoraForm({ onClose }) {
                             className: "absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400"
                         }, void 0, false, {
                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                            lineNumber: 62,
+                            lineNumber: 57,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1725,18 +1720,18 @@ function BitacoraForm({ onClose }) {
                             className: "w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
                         }, void 0, false, {
                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                            lineNumber: 63,
+                            lineNumber: 58,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                    lineNumber: 61,
+                    lineNumber: 56,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                lineNumber: 60,
+                lineNumber: 55,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1753,7 +1748,7 @@ function BitacoraForm({ onClose }) {
                                         children: "Fecha y Hora"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                        lineNumber: 77,
+                                        lineNumber: 72,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1761,7 +1756,7 @@ function BitacoraForm({ onClose }) {
                                         children: "Usuario"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                        lineNumber: 80,
+                                        lineNumber: 75,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1769,7 +1764,7 @@ function BitacoraForm({ onClose }) {
                                         children: "Tabla"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                        lineNumber: 83,
+                                        lineNumber: 78,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1777,7 +1772,7 @@ function BitacoraForm({ onClose }) {
                                         children: "Operación"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                        lineNumber: 86,
+                                        lineNumber: 81,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1785,18 +1780,18 @@ function BitacoraForm({ onClose }) {
                                         children: "Detalles"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                        lineNumber: 89,
+                                        lineNumber: 84,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 76,
+                                lineNumber: 71,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                            lineNumber: 75,
+                            lineNumber: 70,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -1808,12 +1803,12 @@ function BitacoraForm({ onClose }) {
                                     children: "Cargando bitácora..."
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 97,
+                                    lineNumber: 92,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 96,
+                                lineNumber: 91,
                                 columnNumber: 15
                             }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1822,12 +1817,12 @@ function BitacoraForm({ onClose }) {
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 103,
+                                    lineNumber: 98,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 102,
+                                lineNumber: 97,
                                 columnNumber: 15
                             }, this) : filteredBitacora.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1836,12 +1831,12 @@ function BitacoraForm({ onClose }) {
                                     children: "No hay registros en la bitácora"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 109,
+                                    lineNumber: 104,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 108,
+                                lineNumber: 103,
                                 columnNumber: 15
                             }, this) : getCurrentPageData().map((entry)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                     className: "hover:bg-gray-50",
@@ -1851,7 +1846,7 @@ function BitacoraForm({ onClose }) {
                                             children: new Date(entry.fecha_hora).toLocaleString()
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 116,
+                                            lineNumber: 111,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1859,7 +1854,7 @@ function BitacoraForm({ onClose }) {
                                             children: entry.email || 'N/A'
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 119,
+                                            lineNumber: 114,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1867,7 +1862,7 @@ function BitacoraForm({ onClose }) {
                                             children: entry.tabla_afectada
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 122,
+                                            lineNumber: 117,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1877,12 +1872,12 @@ function BitacoraForm({ onClose }) {
                                                 children: entry.tipo === 'ingreso' ? 'INSERT' : entry.tipo === 'actualizacion' ? 'UPDATE' : entry.tipo === 'delete' ? 'DELETE' : entry.tipo
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                                lineNumber: 126,
+                                                lineNumber: 121,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 125,
+                                            lineNumber: 120,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1890,29 +1885,29 @@ function BitacoraForm({ onClose }) {
                                             children: entry.detalle || 'Sin detalles'
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 138,
+                                            lineNumber: 133,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, entry.log_id, true, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 115,
+                                    lineNumber: 110,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                            lineNumber: 94,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                    lineNumber: 74,
+                    lineNumber: 69,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                lineNumber: 73,
+                lineNumber: 68,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1931,7 +1926,7 @@ function BitacoraForm({ onClose }) {
                                 children: "Anterior"
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 151,
+                                lineNumber: 146,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -1944,13 +1939,13 @@ function BitacoraForm({ onClose }) {
                                 children: "Siguiente"
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 163,
+                                lineNumber: 158,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                        lineNumber: 150,
+                        lineNumber: 145,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1967,7 +1962,7 @@ function BitacoraForm({ onClose }) {
                                             children: filteredBitacora.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 180,
+                                            lineNumber: 175,
                                             columnNumber: 15
                                         }, this),
                                         ' ',
@@ -1978,7 +1973,7 @@ function BitacoraForm({ onClose }) {
                                             children: Math.min(currentPage * itemsPerPage, filteredBitacora.length)
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 184,
+                                            lineNumber: 179,
                                             columnNumber: 15
                                         }, this),
                                         ' ',
@@ -1989,7 +1984,7 @@ function BitacoraForm({ onClose }) {
                                             children: filteredBitacora.length
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 188,
+                                            lineNumber: 183,
                                             columnNumber: 15
                                         }, this),
                                         ' ',
@@ -1997,12 +1992,12 @@ function BitacoraForm({ onClose }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 178,
+                                    lineNumber: 173,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 177,
+                                lineNumber: 172,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2020,7 +2015,7 @@ function BitacoraForm({ onClose }) {
                                             children: "Anterior"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 194,
+                                            lineNumber: 189,
                                             columnNumber: 15
                                         }, this),
                                         (()=>{
@@ -2042,7 +2037,7 @@ function BitacoraForm({ onClose }) {
                                                     children: i
                                                 }, i, false, {
                                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                                    lineNumber: 219,
+                                                    lineNumber: 214,
                                                     columnNumber: 21
                                                 }, this));
                                             }
@@ -2058,30 +2053,30 @@ function BitacoraForm({ onClose }) {
                                             children: "Siguiente"
                                         }, void 0, false, {
                                             fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                            lineNumber: 235,
+                                            lineNumber: 230,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                    lineNumber: 193,
+                                    lineNumber: 188,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                                lineNumber: 192,
+                                lineNumber: 187,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ui/BitacoraForm.jsx",
-                        lineNumber: 176,
+                        lineNumber: 171,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                lineNumber: 149,
+                lineNumber: 144,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2093,18 +2088,18 @@ function BitacoraForm({ onClose }) {
                     children: "Cerrar"
                 }, void 0, false, {
                     fileName: "[project]/components/ui/BitacoraForm.jsx",
-                    lineNumber: 253,
+                    lineNumber: 248,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/ui/BitacoraForm.jsx",
-                lineNumber: 252,
+                lineNumber: 247,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/ui/BitacoraForm.jsx",
-        lineNumber: 59,
+        lineNumber: 54,
         columnNumber: 5
     }, this);
 }

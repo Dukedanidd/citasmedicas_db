@@ -283,40 +283,40 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 ;
 ;
 async function POST(request) {
-    console.log('[LOGIN] Iniciando proceso de login...');
+    console.log("[LOGIN] Iniciando proceso de login...");
     try {
         const body = await request.json();
         const { email, password } = body;
-        console.log('[LOGIN] Datos recibidos:', {
+        console.log("[LOGIN] Datos recibidos:", {
             email,
-            password: '***'
+            password: "***"
         });
         if (!email || !password) {
-            console.log('[LOGIN] Faltan credenciales');
+            console.log("[LOGIN] Faltan credenciales");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Correo y contraseña son requeridos'
+                error: "Correo y contraseña son requeridos"
             }, {
                 status: 400
             });
         }
-        console.log('[LOGIN] Autenticando usuario...');
+        console.log("[LOGIN] Autenticando usuario...");
         const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$libs$2f$auth$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["authenticateUser"])(email, password);
-        console.log('[LOGIN] Resultado de autenticación:', result);
+        console.log("[LOGIN] Resultado de autenticación:", result);
         if (result.error) {
-            console.log('[LOGIN] Error de autenticación:', result.error);
+            console.log("[LOGIN] Error de autenticación:", result.error);
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 error: result.error
             }, {
                 status: 401
             });
         }
-        console.log('[LOGIN] Usuario autenticado exitosamente');
+        console.log("[LOGIN] Usuario autenticado exitosamente");
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(result);
     } catch (error) {
-        console.error('[LOGIN] Error en el proceso de login:', error);
-        console.error('[LOGIN] Stack trace:', error.stack);
+        console.error("[LOGIN] Error en el proceso de login:", error);
+        console.error("[LOGIN] Stack trace:", error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error en el servidor'
+            error: "Error en el servidor"
         }, {
             status: 500
         });

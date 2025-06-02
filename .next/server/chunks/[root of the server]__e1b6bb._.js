@@ -161,28 +161,28 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$pr
 ;
 // Configuración de la base de datos
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'clinica_db'
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "clinica_db"
 };
 async function GET(request) {
-    console.log('[GET /api/pacientes] Iniciando petición...');
+    console.log("[GET /api/pacientes] Iniciando petición...");
     let conn;
     try {
         const { searchParams } = new URL(request.url);
-        const pacienteId = searchParams.get('pacienteId');
-        console.log('[GET /api/pacientes] ID del paciente:', pacienteId);
-        console.log('[GET /api/pacientes] Conectando a la base de datos...');
+        const pacienteId = searchParams.get("pacienteId");
+        console.log("[GET /api/pacientes] ID del paciente:", pacienteId);
+        console.log("[GET /api/pacientes] Conectando a la base de datos...");
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
-        console.log('[GET /api/pacientes] Conexión exitosa');
+        console.log("[GET /api/pacientes] Conexión exitosa");
         // Asignar current_user_id para los triggers usando el ID del paciente
-        await conn.execute('SET @current_user_id = ?', [
+        await conn.execute("SET @current_user_id = ?", [
             pacienteId || null
         ]);
-        console.log('[GET /api/pacientes] current_user_id asignado:', pacienteId);
+        console.log("[GET /api/pacientes] current_user_id asignado:", pacienteId);
         if (pacienteId) {
-            console.log('[GET /api/pacientes] Obteniendo paciente específico...');
+            console.log("[GET /api/pacientes] Obteniendo paciente específico...");
             const [rows] = await conn.execute(`
         SELECT 
           p.*,
@@ -199,18 +199,18 @@ async function GET(request) {
       `, [
                 pacienteId
             ]);
-            console.log('[GET /api/pacientes] Resultados:', rows);
+            console.log("[GET /api/pacientes] Resultados:", rows);
             if (!rows[0]) {
-                console.log('[GET /api/pacientes] Paciente no encontrado');
+                console.log("[GET /api/pacientes] Paciente no encontrado");
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    error: 'Paciente no encontrado'
+                    error: "Paciente no encontrado"
                 }, {
                     status: 404
                 });
             }
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows[0]);
         }
-        console.log('[GET /api/pacientes] Obteniendo todos los pacientes...');
+        console.log("[GET /api/pacientes] Obteniendo todos los pacientes...");
         const [rows] = await conn.execute(`
       SELECT 
         p.*,
@@ -224,95 +224,98 @@ async function GET(request) {
       JOIN usuarios u ON p.paciente_id = u.user_id
       LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
     `);
-        console.log('[GET /api/pacientes] Resultados:', rows);
+        console.log("[GET /api/pacientes] Resultados:", rows);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows);
     } catch (error) {
-        console.error('[GET /api/pacientes] Error:', error);
-        console.error('[GET /api/pacientes] Stack trace:', error.stack);
+        console.error("[GET /api/pacientes] Error:", error);
+        console.error("[GET /api/pacientes] Stack trace:", error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al obtener pacientes'
+            error: "Error al obtener pacientes"
         }, {
             status: 500
         });
     } finally{
         if (conn) {
             await conn.end();
-            console.log('[GET /api/pacientes] Conexión cerrada');
+            console.log("[GET /api/pacientes] Conexión cerrada");
         }
     }
 }
 async function POST(request) {
-    console.log('[POST /api/pacientes] Iniciando petición...');
+    console.log("[POST /api/pacientes] Iniciando petición...");
     let conn;
     try {
         const data = await request.json();
-        console.log('[POST /api/pacientes] Datos recibidos:', {
+        console.log("[POST /api/pacientes] Datos recibidos:", {
             ...data,
-            password: '***'
+            password: "***"
         });
         const { primer_nombre, segundo_nombre, apellido_paterno, apellido_materno, email, password, fecha_nacimiento, sexo, doctor_id } = data;
         if (!primer_nombre || !apellido_paterno || !email || !password || !fecha_nacimiento || !sexo || !doctor_id) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Faltan campos requeridos'
+                error: "Faltan campos requeridos"
             }, {
                 status: 400
             });
         }
-        console.log('[POST /api/pacientes] Conectando a la base de datos...');
+        console.log("[POST /api/pacientes] Conectando a la base de datos...");
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
-        console.log('[POST /api/pacientes] Conexión exitosa');
+        console.log("[POST /api/pacientes] Conexión exitosa");
         // Iniciar transacción
         await conn.beginTransaction();
-        console.log('[POST /api/pacientes] Transacción iniciada');
+        console.log("[POST /api/pacientes] Transacción iniciada");
         // Asignar current_user_id para los triggers
-        await conn.execute('SET @current_user_id = 1');
-        console.log('[POST /api/pacientes] current_user_id asignado');
+        const userId = request.headers.get("x-user-id");
+        await conn.execute("SET @current_user_id = ?", [
+            userId
+        ]);
+        console.log("[POST /api/pacientes] current_user_id asignado");
         // Obtener el role_id para pacientes
-        console.log('[POST /api/pacientes] Obteniendo role_id para pacientes...');
-        const [roles] = await conn.execute('SELECT role_id FROM roles WHERE nombre = ?', [
-            'paciente'
+        console.log("[POST /api/pacientes] Obteniendo role_id para pacientes...");
+        const [roles] = await conn.execute("SELECT role_id FROM roles WHERE nombre = ?", [
+            "paciente"
         ]);
         if (!roles[0]) {
             await conn.rollback();
-            console.log('[POST /api/pacientes] No se encontró el rol de paciente');
+            console.log("[POST /api/pacientes] No se encontró el rol de paciente");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'No se encontró el rol de paciente en la base de datos'
+                error: "No se encontró el rol de paciente en la base de datos"
             }, {
                 status: 500
             });
         }
         const role_id = roles[0].role_id;
-        console.log('[POST /api/pacientes] Role_id obtenido:', role_id);
+        console.log("[POST /api/pacientes] Role_id obtenido:", role_id);
         // Verificar si el email ya existe
-        console.log('[POST /api/pacientes] Verificando email...');
-        const [existingUser] = await conn.execute('SELECT user_id FROM usuarios WHERE email = ?', [
+        console.log("[POST /api/pacientes] Verificando email...");
+        const [existingUser] = await conn.execute("SELECT user_id FROM usuarios WHERE email = ?", [
             email
         ]);
         if (existingUser[0]) {
             await conn.rollback();
-            console.log('[POST /api/pacientes] Email ya existe');
+            console.log("[POST /api/pacientes] Email ya existe");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'El email ya está registrado'
+                error: "El email ya está registrado"
             }, {
                 status: 400
             });
         }
         // Verificar si el doctor existe
-        console.log('[POST /api/pacientes] Verificando doctor...');
-        const [doctor] = await conn.execute('SELECT doctor_id FROM medicos WHERE doctor_id = ?', [
+        console.log("[POST /api/pacientes] Verificando doctor...");
+        const [doctor] = await conn.execute("SELECT doctor_id FROM medicos WHERE doctor_id = ?", [
             doctor_id
         ]);
         if (!doctor[0]) {
             await conn.rollback();
-            console.log('[POST /api/pacientes] Doctor no encontrado');
+            console.log("[POST /api/pacientes] Doctor no encontrado");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'El doctor especificado no existe'
+                error: "El doctor especificado no existe"
             }, {
                 status: 400
             });
         }
         // Insertar usuario
-        console.log('[POST /api/pacientes] Creando usuario...');
+        console.log("[POST /api/pacientes] Creando usuario...");
         const [userResult] = await conn.execute(`
       INSERT INTO usuarios (
         primer_nombre, segundo_nombre, apellido_paterno, apellido_materno,
@@ -328,9 +331,9 @@ async function POST(request) {
             role_id
         ]);
         const paciente_id = userResult.insertId;
-        console.log('[POST /api/pacientes] Usuario creado con ID:', paciente_id);
+        console.log("[POST /api/pacientes] Usuario creado con ID:", paciente_id);
         // Insertar paciente
-        console.log('[POST /api/pacientes] Creando paciente...');
+        console.log("[POST /api/pacientes] Creando paciente...");
         await conn.execute(`
       INSERT INTO pacientes (paciente_id, fecha_nacimiento, sexo, doctor_id)
       VALUES (?, ?, ?, ?)
@@ -341,87 +344,90 @@ async function POST(request) {
             doctor_id
         ]);
         await conn.commit();
-        console.log('[POST /api/pacientes] Transacción completada');
+        console.log("[POST /api/pacientes] Transacción completada");
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: 'Paciente creado exitosamente',
+            message: "Paciente creado exitosamente",
             paciente_id
         }, {
             status: 201
         });
     } catch (error) {
-        console.error('[POST /api/pacientes] Error:', error);
-        console.error('[POST /api/pacientes] Stack trace:', error.stack);
+        console.error("[POST /api/pacientes] Error:", error);
+        console.error("[POST /api/pacientes] Stack trace:", error.stack);
         if (conn) {
             await conn.rollback();
-            console.log('[POST /api/pacientes] Transacción revertida');
+            console.log("[POST /api/pacientes] Transacción revertida");
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al crear paciente'
+            error: "Error al crear paciente"
         }, {
             status: 500
         });
     } finally{
         if (conn) {
             await conn.end();
-            console.log('[POST /api/pacientes] Conexión cerrada');
+            console.log("[POST /api/pacientes] Conexión cerrada");
         }
     }
 }
 async function PUT(request) {
-    console.log('[PUT /api/pacientes] Iniciando petición...');
+    console.log("[PUT /api/pacientes] Iniciando petición...");
     let conn;
     try {
         const data = await request.json();
-        console.log('[PUT /api/pacientes] Datos recibidos:', data);
+        console.log("[PUT /api/pacientes] Datos recibidos:", data);
         const { paciente_id, primer_nombre, segundo_nombre, apellido_paterno, apellido_materno, email, fecha_nacimiento, sexo, doctor_id } = data;
         if (!paciente_id) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'ID de paciente requerido'
+                error: "ID de paciente requerido"
             }, {
                 status: 400
             });
         }
-        console.log('[PUT /api/pacientes] Conectando a la base de datos...');
+        console.log("[PUT /api/pacientes] Conectando a la base de datos...");
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
-        console.log('[PUT /api/pacientes] Conexión exitosa');
+        console.log("[PUT /api/pacientes] Conexión exitosa");
         // Iniciar transacción
         await conn.beginTransaction();
-        console.log('[PUT /api/pacientes] Transacción iniciada');
+        console.log("[PUT /api/pacientes] Transacción iniciada");
         // Asignar current_user_id para los triggers
-        await conn.execute('SET @current_user_id = 1');
-        console.log('[PUT /api/pacientes] current_user_id asignado');
+        const userId = request.headers.get("x-user-id");
+        await conn.execute("SET @current_user_id = ?", [
+            userId
+        ]);
+        console.log("[PUT /api/pacientes] current_user_id asignado");
         // Verificar si el paciente existe
-        console.log('[PUT /api/pacientes] Verificando paciente...');
-        const [paciente] = await conn.execute('SELECT paciente_id FROM pacientes WHERE paciente_id = ?', [
+        console.log("[PUT /api/pacientes] Verificando paciente...");
+        const [paciente] = await conn.execute("SELECT paciente_id FROM pacientes WHERE paciente_id = ?", [
             paciente_id
         ]);
         if (!paciente[0]) {
             await conn.rollback();
-            console.log('[PUT /api/pacientes] Paciente no encontrado');
+            console.log("[PUT /api/pacientes] Paciente no encontrado");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Paciente no encontrado'
+                error: "Paciente no encontrado"
             }, {
                 status: 404
             });
         }
         // Verificar si el doctor existe si se está actualizando
         if (doctor_id) {
-            console.log('[PUT /api/pacientes] Verificando doctor...');
-            const [doctor] = await conn.execute('SELECT doctor_id FROM medicos WHERE doctor_id = ?', [
+            console.log("[PUT /api/pacientes] Verificando doctor...");
+            const [doctor] = await conn.execute("SELECT doctor_id FROM medicos WHERE doctor_id = ?", [
                 doctor_id
             ]);
             if (!doctor[0]) {
                 await conn.rollback();
-                console.log('[PUT /api/pacientes] Doctor no encontrado');
+                console.log("[PUT /api/pacientes] Doctor no encontrado");
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    error: 'El doctor especificado no existe'
+                    error: "El doctor especificado no existe"
                 }, {
                     status: 400
                 });
             }
         }
         // Actualizar usuario
-        console.log('[PUT /api/pacientes] Actualizando usuario...');
+        console.log("[PUT /api/pacientes] Actualizando usuario...");
         await conn.execute(`
       UPDATE usuarios
       SET primer_nombre = ?,
@@ -439,7 +445,7 @@ async function PUT(request) {
             paciente_id
         ]);
         // Actualizar paciente
-        console.log('[PUT /api/pacientes] Actualizando paciente...');
+        console.log("[PUT /api/pacientes] Actualizando paciente...");
         await conn.execute(`
       UPDATE pacientes
       SET fecha_nacimiento = ?,
@@ -453,118 +459,121 @@ async function PUT(request) {
             paciente_id
         ]);
         await conn.commit();
-        console.log('[PUT /api/pacientes] Transacción completada');
+        console.log("[PUT /api/pacientes] Transacción completada");
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: 'Paciente actualizado exitosamente'
+            message: "Paciente actualizado exitosamente"
         });
     } catch (error) {
-        console.error('[PUT /api/pacientes] Error:', error);
-        console.error('[PUT /api/pacientes] Stack trace:', error.stack);
+        console.error("[PUT /api/pacientes] Error:", error);
+        console.error("[PUT /api/pacientes] Stack trace:", error.stack);
         if (conn) {
             await conn.rollback();
-            console.log('[PUT /api/pacientes] Transacción revertida');
+            console.log("[PUT /api/pacientes] Transacción revertida");
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al actualizar paciente'
+            error: "Error al actualizar paciente"
         }, {
             status: 500
         });
     } finally{
         if (conn) {
             await conn.end();
-            console.log('[PUT /api/pacientes] Conexión cerrada');
+            console.log("[PUT /api/pacientes] Conexión cerrada");
         }
     }
 }
 async function DELETE(request) {
-    console.log('[DELETE /api/pacientes] Iniciando petición...');
+    console.log("[DELETE /api/pacientes] Iniciando petición...");
     let conn;
     try {
         const { searchParams } = new URL(request.url);
-        const pacienteId = searchParams.get('pacienteId');
-        console.log('[DELETE /api/pacientes] ID del paciente:', pacienteId);
+        const pacienteId = searchParams.get("pacienteId");
+        console.log("[DELETE /api/pacientes] ID del paciente:", pacienteId);
         if (!pacienteId) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Se requiere el ID del paciente'
+                error: "Se requiere el ID del paciente"
             }, {
                 status: 400
             });
         }
-        console.log('[DELETE /api/pacientes] Conectando a la base de datos...');
+        console.log("[DELETE /api/pacientes] Conectando a la base de datos...");
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
-        console.log('[DELETE /api/pacientes] Conexión exitosa');
+        console.log("[DELETE /api/pacientes] Conexión exitosa");
         // Asignar current_user_id para los triggers
-        await conn.execute('SET @current_user_id = 1');
-        console.log('[DELETE /api/pacientes] current_user_id asignado');
+        const userId = request.headers.get("x-user-id");
+        await conn.execute("SET @current_user_id = ?", [
+            userId
+        ]);
+        console.log("[DELETE /api/pacientes] current_user_id asignado");
         // Iniciar transacción
         await conn.beginTransaction();
-        console.log('[DELETE /api/pacientes] Transacción iniciada');
+        console.log("[DELETE /api/pacientes] Transacción iniciada");
         // Verificar si el paciente existe
-        const [paciente] = await conn.execute('SELECT paciente_id FROM pacientes WHERE paciente_id = ?', [
+        const [paciente] = await conn.execute("SELECT paciente_id FROM pacientes WHERE paciente_id = ?", [
             pacienteId
         ]);
         if (!paciente[0]) {
             await conn.rollback();
-            console.log('[DELETE /api/pacientes] Paciente no encontrado');
+            console.log("[DELETE /api/pacientes] Paciente no encontrado");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                error: 'Paciente no encontrado'
+                error: "Paciente no encontrado"
             }, {
                 status: 404
             });
         }
         // Eliminar registros relacionados en orden
-        console.log('[DELETE /api/pacientes] Eliminando registros relacionados...');
+        console.log("[DELETE /api/pacientes] Eliminando registros relacionados...");
         // 1. Eliminar alergias
-        await conn.execute('DELETE FROM alergias WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [
+        await conn.execute("DELETE FROM alergias WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Alergias eliminadas');
+        console.log("[DELETE /api/pacientes] Alergias eliminadas");
         // 2. Eliminar historial médico
-        await conn.execute('DELETE FROM historial_medico WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)', [
+        await conn.execute("DELETE FROM historial_medico WHERE expediente_id IN (SELECT expediente_id FROM expedientes WHERE paciente_id = ?)", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Historial médico eliminado');
+        console.log("[DELETE /api/pacientes] Historial médico eliminado");
         // 3. Eliminar expedientes
-        await conn.execute('DELETE FROM expedientes WHERE paciente_id = ?', [
+        await conn.execute("DELETE FROM expedientes WHERE paciente_id = ?", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Expedientes eliminados');
+        console.log("[DELETE /api/pacientes] Expedientes eliminados");
         // 4. Eliminar citas
-        await conn.execute('DELETE FROM citas WHERE paciente_id = ?', [
+        await conn.execute("DELETE FROM citas WHERE paciente_id = ?", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Citas eliminadas');
+        console.log("[DELETE /api/pacientes] Citas eliminadas");
         // 5. Eliminar el paciente
-        await conn.execute('DELETE FROM pacientes WHERE paciente_id = ?', [
+        await conn.execute("DELETE FROM pacientes WHERE paciente_id = ?", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Paciente eliminado');
+        console.log("[DELETE /api/pacientes] Paciente eliminado");
         // 6. Eliminar el usuario asociado
-        await conn.execute('DELETE FROM usuarios WHERE user_id = ?', [
+        await conn.execute("DELETE FROM usuarios WHERE user_id = ?", [
             pacienteId
         ]);
-        console.log('[DELETE /api/pacientes] Usuario eliminado');
+        console.log("[DELETE /api/pacientes] Usuario eliminado");
         await conn.commit();
-        console.log('[DELETE /api/pacientes] Transacción completada');
+        console.log("[DELETE /api/pacientes] Transacción completada");
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: 'Paciente eliminado exitosamente'
+            message: "Paciente eliminado exitosamente"
         });
     } catch (error) {
         if (conn) {
             await conn.rollback();
-            console.log('[DELETE /api/pacientes] Transacción revertida');
+            console.log("[DELETE /api/pacientes] Transacción revertida");
         }
-        console.error('[DELETE /api/pacientes] Error:', error);
-        console.error('[DELETE /api/pacientes] Stack trace:', error.stack);
+        console.error("[DELETE /api/pacientes] Error:", error);
+        console.error("[DELETE /api/pacientes] Stack trace:", error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al eliminar el paciente'
+            error: "Error al eliminar el paciente"
         }, {
             status: 500
         });
     } finally{
         if (conn) {
             await conn.end();
-            console.log('[DELETE /api/pacientes] Conexión cerrada');
+            console.log("[DELETE /api/pacientes] Conexión cerrada");
         }
     }
 }

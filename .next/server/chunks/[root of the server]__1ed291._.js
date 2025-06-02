@@ -158,27 +158,27 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$pr
 ;
 // Configuración de la base de datos
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'clinica_db'
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "clinica_db"
 };
 async function GET(request) {
-    console.log('[GET /api/auth/check] Iniciando verificación de autenticación...');
+    console.log("[GET /api/auth/check] Iniciando verificación de autenticación...");
     try {
-        const userId = request.headers.get('user-id');
-        console.log('[GET /api/auth/check] ID del usuario:', userId);
+        const userId = request.headers.get("user-id");
+        console.log("[GET /api/auth/check] ID del usuario:", userId);
         if (!userId) {
-            console.log('[GET /api/auth/check] No se proporcionó ID de usuario');
+            console.log("[GET /api/auth/check] No se proporcionó ID de usuario");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 authenticated: false
             }, {
                 status: 401
             });
         }
-        console.log('[GET /api/auth/check] Conectando a la base de datos...');
+        console.log("[GET /api/auth/check] Conectando a la base de datos...");
         const conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
-        console.log('[GET /api/auth/check] Conexión exitosa');
+        console.log("[GET /api/auth/check] Conexión exitosa");
         // Obtener información del usuario y su rol
         const [rows] = await conn.execute(`SELECT u.user_id, u.email, r.nombre as rol
        FROM usuarios u
@@ -187,25 +187,25 @@ async function GET(request) {
             userId
         ]);
         await conn.end();
-        console.log('[GET /api/auth/check] Conexión cerrada');
+        console.log("[GET /api/auth/check] Conexión cerrada");
         if (!rows[0]) {
-            console.log('[GET /api/auth/check] Usuario no encontrado');
+            console.log("[GET /api/auth/check] Usuario no encontrado");
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 authenticated: false
             }, {
                 status: 401
             });
         }
-        console.log('[GET /api/auth/check] Usuario autenticado:', rows[0]);
+        console.log("[GET /api/auth/check] Usuario autenticado:", rows[0]);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             authenticated: true,
             user: rows[0]
         });
     } catch (error) {
-        console.error('[GET /api/auth/check] Error:', error);
-        console.error('[GET /api/auth/check] Stack trace:', error.stack);
+        console.error("[GET /api/auth/check] Error:", error);
+        console.error("[GET /api/auth/check] Stack trace:", error.stack);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            error: 'Error al verificar autenticación'
+            error: "Error al verificar autenticación"
         }, {
             status: 500
         });
