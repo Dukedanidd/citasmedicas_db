@@ -81,20 +81,20 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <div>
+      <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
             Primer Nombre <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
+        </label>
+        <input
+          type="text"
             name="primer_nombre"
             value={formData.primer_nombre}
-            onChange={handleChange}
-            required
+          onChange={handleChange}
+          required
             className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
-          />
-        </div>
-        <div>
+        />
+      </div>
+      <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
             Segundo Nombre
           </label>
@@ -106,21 +106,21 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
             className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
-      </div>
+        </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
             Apellido Paterno <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
+        </label>
+        <input
+          type="text"
             name="apellido_paterno"
             value={formData.apellido_paterno}
-            onChange={handleChange}
-            required
+          onChange={handleChange}
+          required
             className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
-          />
+        />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -150,10 +150,10 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
         />
       </div>
 
-      <div>
+        <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">
           Contraseña {!initialData && <span className="text-red-500">*</span>}
-        </label>
+          </label>
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
@@ -208,19 +208,19 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
         <label className="block text-sm font-medium text-slate-700 mb-1">
           Consultorio
         </label>
-        <select
-          name="consultorio_id"
+          <select
+            name="consultorio_id"
           value={formData.consultorio_id || ""}
-          onChange={handleChange}
+            onChange={handleChange}
           className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
-        >
+          >
           <option value="">Sin consultorio asignado</option>
-          {consultorios.map(consultorio => (
-            <option key={consultorio.consultorio_id} value={consultorio.consultorio_id}>
-              {consultorio.nombre}
-            </option>
-          ))}
-        </select>
+            {consultorios.map(consultorio => (
+              <option key={consultorio.consultorio_id} value={consultorio.consultorio_id}>
+                {consultorio.nombre}
+              </option>
+            ))}
+          </select>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4">

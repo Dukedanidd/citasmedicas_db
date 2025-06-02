@@ -6,6 +6,7 @@ import Modal from "../../../components/ui/Modal"
 import DoctorForm from "../../../components/ui/DoctorForm"
 import PatientForm from "../../../components/ui/PatientForm"
 import CitaForm from "../../../components/ui/CitaForm"
+import BitacoraForm from "../../../components/ui/BitacoraForm"
 import { useRouter } from "next/navigation"
 import {
   Users,
@@ -22,6 +23,7 @@ import {
   Edit,
   Filter,
   Clock,
+  History,
 } from "lucide-react"
 
 export default function AdminDashboard() {
@@ -63,6 +65,8 @@ export default function AdminDashboard() {
     citasHoy: 0,
     citasProgramadas: 0
   })
+
+  const [isBitacoraModalOpen, setIsBitacoraModalOpen] = useState(false)
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -1176,6 +1180,13 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center space-x-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                onClick={() => setIsBitacoraModalOpen(true)}
+                className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
+              >
+                <History size={20} />
+              </motion.button>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="relative"
@@ -1359,6 +1370,16 @@ export default function AdminDashboard() {
           initialData={selectedCita}
           doctores={doctores}
           pacientes={pacientes}
+        />
+      </Modal>
+
+      <Modal 
+        isOpen={isBitacoraModalOpen} 
+        onClose={() => setIsBitacoraModalOpen(false)}
+        title="Bitácora del Sistema"
+      >
+        <BitacoraForm 
+          onClose={() => setIsBitacoraModalOpen(false)}
         />
       </Modal>
     </div>

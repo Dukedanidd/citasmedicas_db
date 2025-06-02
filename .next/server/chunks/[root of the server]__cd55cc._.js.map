@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file:///home/senorbuen0/ISC/sem6/bd/proyecto/citasmedicas_db/app/api/bitacora/route.ts"],"sourcesContent":["import { NextResponse } from 'next/server'\nimport { query } from '@/lib/db'\n\nexport async function GET() {\n  try {\n    const result = await query(`\n      SELECT \n        b.bitacora_id,\n        b.tabla,\n        b.operacion,\n        b.fecha_hora,\n        b.usuario_id,\n        b.detalles,\n        u.email as usuario_email\n      FROM bitacora b\n      LEFT JOIN usuarios u ON b.usuario_id = u.usuario_id\n      ORDER BY b.fecha_hora DESC\n    `)\n\n    return NextResponse.json(result)\n  } catch (error) {\n    console.error('Error al obtener bitácora:', error)\n    return NextResponse.json(\n      { error: 'Error al obtener bitácora' },\n      { status: 500 }\n    )\n  }\n} "],"names":[],"mappings":";;;AAAA;;;;;;;;AAGO,eAAe;IACpB,IAAI;QACF,MAAM,SAAS,MAAM,MAAM,CAAC;;;;;;;;;;;;IAY5B,CAAC;QAED,OAAO,gIAAA,CAAA,eAAY,CAAC,IAAI,CAAC;IAC3B,EAAE,OAAO,OAAO;QACd,QAAQ,KAAK,CAAC,8BAA8B;QAC5C,OAAO,gIAAA,CAAA,eAAY,CAAC,IAAI,CACtB;YAAE,OAAO;QAA4B,GACrC;YAAE,QAAQ;QAAI;IAElB;AACF"}},
+    {"offset": {"line": 91, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

@@ -26,31 +26,44 @@ __turbopack_esm__({
     "middleware": (()=>middleware)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$api$2f$server$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_import__("[project]/node_modules/next/dist/esm/api/server.js [middleware] (ecmascript) <module evaluation>");
+(()=>{
+    const e = new Error("Cannot find module '@vercel/postgres'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
+(()=>{
+    const e = new Error("Cannot find module 'next-auth'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
+(()=>{
+    const e = new Error("Cannot find module './app/api/auth/[...nextauth]/route'");
+    e.code = 'MODULE_NOT_FOUND';
+    throw e;
+})();
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/esm/server/web/spec-extension/response.js [middleware] (ecmascript)");
 ;
-function middleware(request) {
-    const path = request.nextUrl.pathname;
-    // Definir las rutas públicas
-    const isPublicPath = path === '/login' || path === '/register';
-    // Si es una ruta pública y el usuario está autenticado, redirigir al dashboard
-    if (isPublicPath) {
-        // Aquí podrías verificar si hay una sesión activa y redirigir al dashboard correspondiente
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
-    }
-    // Si es una ruta protegida y el usuario no está autenticado, redirigir al login
-    if (path.startsWith('/dashboard')) {
-        // Aquí deberías verificar si el usuario está autenticado y tiene el rol correcto
-        // Por ahora, permitiremos el acceso
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
+;
+;
+;
+async function middleware(request) {
+    // Solo interceptar peticiones a la API
+    if (request.nextUrl.pathname.startsWith('/api')) {
+        try {
+            // Obtener la sesión del servidor
+            const session = await getServerSession(authOptions);
+            if (session?.user?.id) {
+                // Configurar el current_user_id en la base de datos
+                await sql`SET @current_user_id = ${session.user.id}`;
+            }
+        } catch (error) {
+            console.error('Error setting current_user_id:', error);
+        }
     }
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$spec$2d$extension$2f$response$2e$js__$5b$middleware$5d$__$28$ecmascript$29$__["NextResponse"].next();
 }
 const config = {
-    matcher: [
-        '/login',
-        '/register',
-        '/dashboard/:path*'
-    ]
+    matcher: '/api/:path*'
 };
 }}),
 }]);

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/middleware.js"],"sourcesContent":["import { NextResponse } from 'next/server'\n\nexport function middleware(request) {\n  // Solo aplicar a rutas de API\n  if (!request.nextUrl.pathname.startsWith('/api')) {\n    return NextResponse.next()\n  }\n\n  const userId = request.headers.get('x-user-id')\n  \n  if (!userId) {\n    return NextResponse.json(\n      { error: 'User ID is required' },\n      { status: 400 }\n    )\n  }\n\n  // Agregar userId a los headers para que esté disponible en los handlers\n  const requestHeaders = new Headers(request.headers)\n  requestHeaders.set('x-user-id', userId)\n\n  return NextResponse.next({\n    request: {\n      headers: requestHeaders,\n    },\n  })\n}\n\nexport const config = {\n  matcher: '/api/:path*',\n} "],"names":[],"mappings":";;;;AAAA;AAAA;;AAEO,SAAS,WAAW,OAAO;IAChC,8BAA8B;IAC9B,IAAI,CAAC,QAAQ,OAAO,CAAC,QAAQ,CAAC,UAAU,CAAC,SAAS;QAChD,OAAO,qLAAA,CAAA,eAAY,CAAC,IAAI;IAC1B;IAEA,MAAM,SAAS,QAAQ,OAAO,CAAC,GAAG,CAAC;IAEnC,IAAI,CAAC,QAAQ;QACX,OAAO,qLAAA,CAAA,eAAY,CAAC,IAAI,CACtB;YAAE,OAAO;QAAsB,GAC/B;YAAE,QAAQ;QAAI;IAElB;IAEA,wEAAwE;IACxE,MAAM,iBAAiB,IAAI,QAAQ,QAAQ,OAAO;IAClD,eAAe,GAAG,CAAC,aAAa;IAEhC,OAAO,qLAAA,CAAA,eAAY,CAAC,IAAI,CAAC;QACvB,SAAS;YACP,SAAS;QACX;IACF;AACF;AAEO,MAAM,SAAS;IACpB,SAAS;AACX"}},
+    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

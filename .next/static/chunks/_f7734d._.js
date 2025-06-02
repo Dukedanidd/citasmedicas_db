@@ -228,13 +228,13 @@ function DoctorForm({ onClose, onSubmit, initialData }) {
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/DoctorForm.jsx",
                                 lineNumber: 88,
-                                columnNumber: 11
+                                columnNumber: 9
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ui/DoctorForm.jsx",
                         lineNumber: 84,
-                        columnNumber: 9
+                        columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         children: [
@@ -261,7 +261,7 @@ function DoctorForm({ onClose, onSubmit, initialData }) {
                     }, void 0, true, {
                         fileName: "[project]/components/ui/DoctorForm.jsx",
                         lineNumber: 97,
-                        columnNumber: 9
+                        columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
@@ -302,7 +302,7 @@ function DoctorForm({ onClose, onSubmit, initialData }) {
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/DoctorForm.jsx",
                                 lineNumber: 116,
-                                columnNumber: 11
+                                columnNumber: 9
                             }, this)
                         ]
                     }, void 0, true, {
@@ -457,7 +457,7 @@ function DoctorForm({ onClose, onSubmit, initialData }) {
             }, void 0, true, {
                 fileName: "[project]/components/ui/DoctorForm.jsx",
                 lineNumber: 153,
-                columnNumber: 7
+                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 children: [
@@ -632,13 +632,13 @@ function DoctorForm({ onClose, onSubmit, initialData }) {
                                 }, consultorio.consultorio_id, false, {
                                     fileName: "[project]/components/ui/DoctorForm.jsx",
                                     lineNumber: 219,
-                                    columnNumber: 13
+                                    columnNumber: 15
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ui/DoctorForm.jsx",
                         lineNumber: 211,
-                        columnNumber: 9
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
@@ -862,13 +862,13 @@ function PatientForm({ onClose, onSubmit, initialData, doctores = [] }) {
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/PatientForm.jsx",
                                 lineNumber: 83,
-                                columnNumber: 11
+                                columnNumber: 9
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ui/PatientForm.jsx",
                         lineNumber: 79,
-                        columnNumber: 9
+                        columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         children: [
@@ -895,7 +895,7 @@ function PatientForm({ onClose, onSubmit, initialData, doctores = [] }) {
                     }, void 0, true, {
                         fileName: "[project]/components/ui/PatientForm.jsx",
                         lineNumber: 92,
-                        columnNumber: 9
+                        columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
