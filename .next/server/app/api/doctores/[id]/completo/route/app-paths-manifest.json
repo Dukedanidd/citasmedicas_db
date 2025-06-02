@@ -1,0 +1,3 @@
+{
+  "/api/doctores/[id]/completo/route": "app/api/doctores/[id]/completo/route.js"
+}

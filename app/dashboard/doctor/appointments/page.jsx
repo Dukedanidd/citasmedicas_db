@@ -467,12 +467,6 @@ export default function CalendarPage() {
           <div className="flex items-center space-x-4">
             <span className="text-sm text-slate-600">Hoy: {new Date().toLocaleDateString("es-ES")}</span>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
-            >
-              <Bell size={20} />
-            </motion.button>
-            <motion.button
               whileHover={{ scale: 1.02 }}
               onClick={() => setShowNewAppointmentModal(true)}
               className="flex items-center space-x-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"

@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Modal from "../../../components/ui/Modal"
 import DoctorForm from "../../../components/ui/DoctorForm"
 import PatientForm from "../../../components/ui/PatientForm"
+import CitaForm from "../../../components/ui/CitaForm"
 import { useRouter } from "next/navigation"
 import {
   Users,
@@ -20,6 +21,7 @@ import {
   Trash2,
   Edit,
   Filter,
+  Clock,
 } from "lucide-react"
 
 export default function AdminDashboard() {
@@ -32,8 +34,11 @@ export default function AdminDashboard() {
   const [editingPatient, setEditingPatient] = useState(null)
   
   const [doctores, setDoctores] = useState([])
+  const [filteredDoctores, setFilteredDoctores] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [doctorCurrentPage, setDoctorCurrentPage] = useState(1)
+  const [doctorTotalPages, setDoctorTotalPages] = useState(1)
 
   const [pacientes, setPacientes] = useState([])
   const [filteredPacientes, setFilteredPacientes] = useState([])
@@ -42,6 +47,22 @@ export default function AdminDashboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const itemsPerPage = 5
+
+  const [citas, setCitas] = useState([])
+  const [filteredCitas, setFilteredCitas] = useState([])
+  const [citaSearchTerm, setCitaSearchTerm] = useState('')
+  const [citaCurrentPage, setCitaCurrentPage] = useState(1)
+  const [citaTotalPages, setCitaTotalPages] = useState(1)
+  const [isCitaModalOpen, setIsCitaModalOpen] = useState(false)
+  const [selectedCita, setSelectedCita] = useState(null)
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
+
+  const [stats, setStats] = useState({
+    totalDoctores: 0,
+    totalPacientes: 0,
+    citasHoy: 0,
+    citasProgramadas: 0
+  })
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -75,19 +96,32 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [pacientesRes, doctoresRes] = await Promise.all([
-          fetch('/api/pacientes'),
-          fetch('/api/doctores')
-        ])
-
-        if (!pacientesRes.ok || !doctoresRes.ok) {
-          throw new Error('Error al cargar los datos')
+        setIsLoading(true)
+        const userId = sessionStorage.getItem('user_id')
+        if (!userId) {
+          throw new Error('No se encontró información de sesión')
         }
 
-        const [pacientesData, doctoresData] = await Promise.all([
-          pacientesRes.json(),
-          doctoresRes.json()
-        ])
+        // Fetch doctores
+        const doctoresRes = await fetch('/api/doctores')
+        if (!doctoresRes.ok) {
+          throw new Error('Error al cargar doctores')
+        }
+        const doctoresData = await doctoresRes.json()
+
+        // Fetch pacientes
+        const pacientesRes = await fetch('/api/pacientes')
+        if (!pacientesRes.ok) {
+          throw new Error('Error al cargar pacientes')
+        }
+        const pacientesData = await pacientesRes.json()
+
+        // Fetch citas
+        const citasRes = await fetch('/api/citas')
+        if (!citasRes.ok) {
+          throw new Error('Error al cargar citas')
+        }
+        const citasData = await citasRes.json()
 
         // Mapear los doctores a un objeto para fácil acceso
         const doctoresMap = doctoresData.reduce((acc, doctor) => {
@@ -101,11 +135,49 @@ export default function AdminDashboard() {
           doctor: paciente.doctor_id ? doctoresMap[paciente.doctor_id] : null
         }))
 
+        // Añadir información del doctor y paciente a cada cita
+        const citasConInfo = citasData.map(cita => ({
+          ...cita,
+          doctor: doctoresMap[cita.doctor_id],
+          paciente: pacientesConDoctores.find(p => p.paciente_id === cita.paciente_id)
+        }))
+
+        // Calcular citas de hoy
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        
+        const citasHoy = citasConInfo.filter(cita => {
+          const citaDate = new Date(cita.fecha_hora)
+          return citaDate >= today && citaDate < tomorrow
+        }).length
+
+        // Calcular citas programadas (estado_id = 1)
+        const citasProgramadas = citasConInfo.filter(cita => cita.estado_id === 1).length
+
+        setDoctores(doctoresData)
+        setFilteredDoctores(doctoresData)
+        setDoctorTotalPages(Math.ceil(doctoresData.length / itemsPerPage))
+
         setPacientes(pacientesConDoctores)
         setFilteredPacientes(pacientesConDoctores)
         setTotalPages(Math.ceil(pacientesConDoctores.length / itemsPerPage))
-        setDoctores(doctoresData)
+
+        setCitas(citasConInfo)
+        setFilteredCitas(citasConInfo)
+        setCitaTotalPages(Math.ceil(citasConInfo.length / itemsPerPage))
+
+        // Actualizar estadísticas
+        setStats({
+          totalDoctores: doctoresData.length,
+          totalPacientes: pacientesData.length,
+          citasHoy: citasHoy,
+          citasProgramadas: citasProgramadas
+        })
+
       } catch (error) {
+        console.error('Error al cargar datos:', error)
         setError(error.message)
       } finally {
         setIsLoading(false)
@@ -133,6 +205,26 @@ export default function AdminDashboard() {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
     return filteredPacientes.slice(startIndex, endIndex)
+  }
+
+  useEffect(() => {
+    const filtered = doctores.filter(doctor => {
+      const fullName = `${doctor.primer_nombre} ${doctor.segundo_nombre || ''} ${doctor.apellido_paterno} ${doctor.apellido_materno || ''}`.toLowerCase()
+      const especialidad = doctor.especialidad?.toLowerCase() || ''
+      const searchLower = doctorSearchTerm.toLowerCase()
+      
+      return fullName.includes(searchLower) || especialidad.includes(searchLower)
+    })
+    
+    setFilteredDoctores(filtered)
+    setDoctorTotalPages(Math.ceil(filtered.length / itemsPerPage))
+    setDoctorCurrentPage(1) // Reset to first page when searching
+  }, [doctorSearchTerm, doctores])
+
+  const getCurrentPageDoctors = () => {
+    const startIndex = (doctorCurrentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredDoctores.slice(startIndex, endIndex)
   }
 
   const handleLogout = () => {
@@ -313,6 +405,106 @@ export default function AdminDashboard() {
     setSelectedDoctor(null)
   }
 
+  useEffect(() => {
+    const filtered = citas.filter(cita => {
+      const pacienteNombre = `${cita.paciente?.primer_nombre || ''} ${cita.paciente?.apellido_paterno || ''}`.toLowerCase()
+      const doctorNombre = `${cita.doctor?.primer_nombre || ''} ${cita.doctor?.apellido_paterno || ''}`.toLowerCase()
+      const searchLower = citaSearchTerm.toLowerCase()
+      
+      return pacienteNombre.includes(searchLower) || 
+             doctorNombre.includes(searchLower) ||
+             cita.notas?.toLowerCase().includes(searchLower)
+    })
+    
+    setFilteredCitas(filtered)
+    setCitaTotalPages(Math.ceil(filtered.length / itemsPerPage))
+    setCitaCurrentPage(1)
+  }, [citaSearchTerm, citas])
+
+  const getCurrentPageCitas = () => {
+    const startIndex = (citaCurrentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredCitas.slice(startIndex, endIndex)
+  }
+
+  const handleAddCita = async (citaData) => {
+    try {
+      const response = await fetch('/api/citas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(citaData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al crear la cita')
+      }
+
+      const newCita = await response.json()
+      // Actualizar la lista de citas
+      const updatedCitas = [...citas, newCita]
+      setCitas(updatedCitas)
+      setCitaTotalPages(Math.ceil(updatedCitas.length / itemsPerPage))
+      setIsCitaModalOpen(false)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const handleEditCita = async (citaData) => {
+    try {
+      const response = await fetch('/api/citas', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(citaData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar la cita')
+      }
+
+      // Actualizar la lista de citas
+      setCitas(citas.map(c => c.cita_id === citaData.cita_id ? citaData : c))
+      setIsCitaModalOpen(false)
+      setSelectedCita(null)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const handleDeleteCita = async (citaId) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/citas?citaId=${citaId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar la cita')
+      }
+
+      setCitas(citas.filter(c => c.cita_id !== citaId))
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const openCitaModal = (cita = null) => {
+    setSelectedCita(cita)
+    setIsCitaModalOpen(true)
+  }
+
+  const closeCitaModal = () => {
+    setIsCitaModalOpen(false)
+    setSelectedCita(null)
+  }
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "doctors":
@@ -375,14 +567,14 @@ export default function AdminDashboard() {
                           {error}
                         </td>
                       </tr>
-                    ) : doctores.length === 0 ? (
+                    ) : filteredDoctores.length === 0 ? (
                       <tr>
                         <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
                           No hay doctores registrados
                         </td>
                       </tr>
                     ) : (
-                      doctores.map((doctor) => (
+                      getCurrentPageDoctors().map((doctor) => (
                         <tr key={doctor.doctor_id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -400,7 +592,8 @@ export default function AdminDashboard() {
                             {doctor.especialidad}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {doctor.consultorio?.nombre || 'No asignado'}
+                            {console.log('Doctor data:', doctor)}
+                            {doctor.consultorio || 'No asignado'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <div className="flex space-x-3">
@@ -425,6 +618,95 @@ export default function AdminDashboard() {
                     )}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Pagination Controls for Doctors */}
+              <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                <div className="flex justify-between flex-1 sm:hidden">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setDoctorCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={doctorCurrentPage === 1}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      doctorCurrentPage === 1
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Anterior
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setDoctorCurrentPage(prev => Math.min(prev + 1, doctorTotalPages))}
+                    disabled={doctorCurrentPage === doctorTotalPages}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      doctorCurrentPage === doctorTotalPages
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Siguiente
+                  </motion.button>
+                </div>
+                <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Mostrando{' '}
+                      <span className="font-medium">
+                        {filteredDoctores.length === 0 ? 0 : (doctorCurrentPage - 1) * itemsPerPage + 1}
+                      </span>{' '}
+                      a{' '}
+                      <span className="font-medium">
+                        {Math.min(doctorCurrentPage * itemsPerPage, filteredDoctores.length)}
+                      </span>{' '}
+                      de{' '}
+                      <span className="font-medium">{filteredDoctores.length}</span>{' '}
+                      resultados
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setDoctorCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={doctorCurrentPage === 1}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
+                          doctorCurrentPage === 1
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Anterior
+                      </motion.button>
+                      {[...Array(doctorTotalPages)].map((_, index) => (
+                        <motion.button
+                          key={index + 1}
+                          whileHover={{ scale: 1.05 }}
+                          onClick={() => setDoctorCurrentPage(index + 1)}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            doctorCurrentPage === index + 1
+                              ? 'z-10 bg-sky-50 border-sky-500 text-sky-600'
+                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          {index + 1}
+                        </motion.button>
+                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setDoctorCurrentPage(prev => Math.min(prev + 1, doctorTotalPages))}
+                        disabled={doctorCurrentPage === doctorTotalPages}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
+                          doctorCurrentPage === doctorTotalPages
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Siguiente
+                      </motion.button>
+                    </nav>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -630,9 +912,246 @@ export default function AdminDashboard() {
 
       case "appointments":
         return (
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-xl font-bold text-slate-800 mb-4">Gestión de Citas</h2>
-            {/* Aquí irá el contenido de gestión de citas */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-slate-800">Gestión de Citas</h2>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
+                  onClick={() => openCitaModal()}
+                >
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Agregar Cita
+                </motion.button>
+              </div>
+              
+              <div className="flex space-x-4 mb-6">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Buscar citas..."
+                    value={citaSearchTerm}
+                    onChange={(e) => setCitaSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+                  />
+                </div>
+                <div className="w-48">
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+                  />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Paciente
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Doctor
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Fecha y Hora
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Estado
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Notas
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                          Cargando citas...
+                        </td>
+                      </tr>
+                    ) : error ? (
+                      <tr>
+                        <td colSpan="6" className="px-6 py-4 text-center text-sm text-red-500">
+                          {error}
+                        </td>
+                      </tr>
+                    ) : filteredCitas.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                          No hay citas registradas
+                        </td>
+                      </tr>
+                    ) : (
+                      getCurrentPageCitas().map((cita) => (
+                        <tr key={cita.cita_id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
+                                <Users className="h-5 w-5 text-sky-500" />
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {cita.paciente ? `${cita.paciente.primer_nombre} ${cita.paciente.apellido_paterno}` : 'Paciente no encontrado'}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center">
+                                <Stethoscope className="h-5 w-5 text-sky-500" />
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {cita.doctor ? `Dr. ${cita.doctor.primer_nombre} ${cita.doctor.apellido_paterno}` : 'Doctor no encontrado'}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {new Date(cita.fecha_hora).toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              cita.estado_id === 1 ? 'bg-yellow-100 text-yellow-800' :
+                              cita.estado_id === 2 ? 'bg-green-100 text-green-800' :
+                              cita.estado_id === 3 ? 'bg-red-100 text-red-800' :
+                              cita.estado_id === 4 ? 'bg-blue-100 text-blue-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {cita.estado_id === 1 ? 'Programada' :
+                               cita.estado_id === 2 ? 'Confirmada' :
+                               cita.estado_id === 3 ? 'Cancelada' :
+                               cita.estado_id === 4 ? 'Completada' :
+                               'No asistió'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {cita.notas || 'Sin notas'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex space-x-2">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                className="text-sky-600 hover:text-sky-900"
+                                onClick={() => openCitaModal(cita)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                className="text-red-600 hover:text-red-900"
+                                onClick={() => handleDeleteCita(cita.cita_id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </motion.button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls for Citas */}
+              <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
+                <div className="flex justify-between flex-1 sm:hidden">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setCitaCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={citaCurrentPage === 1}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      citaCurrentPage === 1
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Anterior
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    onClick={() => setCitaCurrentPage(prev => Math.min(prev + 1, citaTotalPages))}
+                    disabled={citaCurrentPage === citaTotalPages}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md ${
+                      citaCurrentPage === citaTotalPages
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Siguiente
+                  </motion.button>
+                </div>
+                <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Mostrando{' '}
+                      <span className="font-medium">
+                        {filteredCitas.length === 0 ? 0 : (citaCurrentPage - 1) * itemsPerPage + 1}
+                      </span>{' '}
+                      a{' '}
+                      <span className="font-medium">
+                        {Math.min(citaCurrentPage * itemsPerPage, filteredCitas.length)}
+                      </span>{' '}
+                      de{' '}
+                      <span className="font-medium">{filteredCitas.length}</span>{' '}
+                      resultados
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setCitaCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={citaCurrentPage === 1}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
+                          citaCurrentPage === 1
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Anterior
+                      </motion.button>
+                      {[...Array(citaTotalPages)].map((_, index) => (
+                        <motion.button
+                          key={index + 1}
+                          whileHover={{ scale: 1.05 }}
+                          onClick={() => setCitaCurrentPage(index + 1)}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            citaCurrentPage === index + 1
+                              ? 'z-10 bg-sky-50 border-sky-500 text-sky-600'
+                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          {index + 1}
+                        </motion.button>
+                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => setCitaCurrentPage(prev => Math.min(prev + 1, citaTotalPages))}
+                        disabled={citaCurrentPage === citaTotalPages}
+                        className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
+                          citaCurrentPage === citaTotalPages
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        Siguiente
+                      </motion.button>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )
     }
@@ -657,16 +1176,6 @@ export default function AdminDashboard() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="relative"
-              >
-                <Bell className="h-6 w-6 text-slate-600 cursor-pointer" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
-                  3
-                </span>
-              </motion.div>
-
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="relative"
@@ -714,7 +1223,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Doctores</p>
-                <h3 className="text-2xl font-bold text-slate-800">{doctores.length}</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{stats.totalDoctores}</h3>
               </div>
               <div className="h-12 w-12 bg-sky-100 rounded-lg flex items-center justify-center">
                 <Stethoscope className="h-6 w-6 text-sky-500" />
@@ -729,7 +1238,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Total Pacientes</p>
-                <h3 className="text-2xl font-bold text-slate-800">{pacientes.length}</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{stats.totalPacientes}</h3>
               </div>
               <div className="h-12 w-12 bg-indigo-100 rounded-lg flex items-center justify-center">
                 <Users className="h-6 w-6 text-indigo-500" />
@@ -744,7 +1253,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-slate-600">Citas Hoy</p>
-                <h3 className="text-2xl font-bold text-slate-800">42</h3>
+                <h3 className="text-2xl font-bold text-slate-800">{stats.citasHoy}</h3>
               </div>
               <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <Calendar className="h-6 w-6 text-green-500" />
@@ -758,11 +1267,11 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600">Reportes Pendientes</p>
-                <h3 className="text-2xl font-bold text-slate-800">15</h3>
+                <p className="text-sm text-slate-600">Citas Programadas</p>
+                <h3 className="text-2xl font-bold text-slate-800">{stats.citasProgramadas}</h3>
               </div>
               <div className="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <FileText className="h-6 w-6 text-yellow-500" />
+                <Clock className="h-6 w-6 text-yellow-500" />
               </div>
             </div>
           </motion.div>
@@ -809,7 +1318,7 @@ export default function AdminDashboard() {
 
         {/* Tab Content */}
         <div className="min-h-[600px]"> {/* Altura mínima para evitar saltos */}
-          {renderTabContent()}
+        {renderTabContent()}
         </div>
       </div>
 
@@ -836,6 +1345,20 @@ export default function AdminDashboard() {
           onSubmit={handlePatientSubmit}
           initialData={editingPatient}
           doctores={doctores}
+        />
+      </Modal>
+
+      <Modal 
+        isOpen={isCitaModalOpen} 
+        onClose={closeCitaModal}
+        title={selectedCita ? "Editar Cita" : "Agregar Nueva Cita"}
+      >
+        <CitaForm 
+          onClose={closeCitaModal} 
+          onSubmit={selectedCita ? handleEditCita : handleAddCita}
+          initialData={selectedCita}
+          doctores={doctores}
+          pacientes={pacientes}
         />
       </Modal>
     </div>

@@ -1,221 +1,242 @@
+"use client"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { Eye, EyeOff } from "lucide-react"
 
-export default function DoctorForm({ onSubmit, onClose, initialData }) {
+export default function DoctorForm({ onClose, onSubmit, initialData }) {
   const [formData, setFormData] = useState({
-    doctor_id: "",
     primer_nombre: "",
     segundo_nombre: "",
     apellido_paterno: "",
     apellido_materno: "",
     email: "",
-    password: "",
     especialidad: "",
-    consultorio_id: ""
+    password: "",
+    consultorio_id: null
   })
-
+  const [showPassword, setShowPassword] = useState(false)
   const [consultorios, setConsultorios] = useState([])
-  const [isLoadingConsultorios, setIsLoadingConsultorios] = useState(true)
 
+  // Cargar consultorios
   useEffect(() => {
-    // Cargar datos iniciales si estamos editando
-    if (initialData) {
-      setFormData({
-        doctor_id: initialData.doctor_id,
-        primer_nombre: initialData.primer_nombre || "",
-        segundo_nombre: initialData.segundo_nombre || "",
-        apellido_paterno: initialData.apellido_paterno || "",
-        apellido_materno: initialData.apellido_materno || "",
-        email: initialData.email || "",
-        password: "",
-        especialidad: initialData.especialidad || "",
-        consultorio_id: initialData.consultorio_id || ""
-      })
-    }
-
-    // Cargar consultorios
     const fetchConsultorios = async () => {
       try {
-        setIsLoadingConsultorios(true)
         const response = await fetch('/api/consultorios')
-        if (!response.ok) {
-          throw new Error('Error al obtener consultorios')
-        }
+        if (!response.ok) throw new Error('Error al cargar consultorios')
         const data = await response.json()
         setConsultorios(data)
       } catch (error) {
-        console.error('Error al obtener consultorios:', error)
-      } finally {
-        setIsLoadingConsultorios(false)
+        console.error('Error:', error)
       }
     }
-
     fetchConsultorios()
+  }, [])
+
+  // Cargar datos iniciales si estamos editando
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      if (initialData?.doctor_id) {
+        try {
+          const response = await fetch(`/api/doctores/${initialData.doctor_id}/completo`)
+          if (!response.ok) throw new Error('Error al cargar datos del doctor')
+          const data = await response.json()
+          console.log('Datos completos del doctor:', data)
+          setFormData({
+            doctor_id: data.doctor_id,
+            primer_nombre: data.primer_nombre || "",
+            segundo_nombre: data.segundo_nombre || "",
+            apellido_paterno: data.apellido_paterno || "",
+            apellido_materno: data.apellido_materno || "",
+            email: data.email || "",
+            especialidad: data.especialidad || "",
+            password: "", // No mostramos la contraseña al editar
+            consultorio_id: data.consultorio_id || null
+          })
+        } catch (error) {
+          console.error('Error al cargar datos del doctor:', error)
+        }
+      }
+    }
+    fetchDoctorData()
   }, [initialData])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    // Asegurarnos de que consultorio_id sea null si está vacío
+    const submitData = {
+      ...formData,
+      consultorio_id: formData.consultorio_id === "" ? null : formData.consultorio_id
+    }
+    onSubmit(submitData)
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value === "" ? null : value
     }))
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-      <div>
-          <label htmlFor="primer_nombre" className="block text-sm font-medium text-gray-700">
-            Primer Nombre
-        </label>
-        <input
-          type="text"
-            id="primer_nombre"
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Primer Nombre <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
             name="primer_nombre"
             value={formData.primer_nombre}
-          onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-          required
-        />
-      </div>
-
-      <div>
-          <label htmlFor="segundo_nombre" className="block text-sm font-medium text-gray-700">
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Segundo Nombre
           </label>
           <input
             type="text"
-            id="segundo_nombre"
             name="segundo_nombre"
-            value={formData.segundo_nombre}
+            value={formData.segundo_nombre || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
+      </div>
 
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="apellido_paterno" className="block text-sm font-medium text-gray-700">
-            Apellido Paterno
-        </label>
-        <input
-          type="text"
-            id="apellido_paterno"
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Apellido Paterno <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
             name="apellido_paterno"
             value={formData.apellido_paterno}
-          onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-          required
-        />
+            onChange={handleChange}
+            required
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+          />
         </div>
-
         <div>
-          <label htmlFor="apellido_materno" className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Apellido Materno
           </label>
           <input
             type="text"
-            id="apellido_materno"
             name="apellido_materno"
-            value={formData.apellido_materno}
+            value={formData.apellido_materno || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Email <span className="text-red-500">*</span>
         </label>
         <input
           type="email"
-          id="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
         />
       </div>
 
-      {!initialData && (
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Contraseña
-          </label>
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Contraseña {!initialData && <span className="text-red-500">*</span>}
+        </label>
+        <div className="relative">
           <input
-            type="password"
-            id="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
             required={!initialData}
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800 pr-10"
+            placeholder={initialData ? "Dejar en blanco para mantener la actual" : "Ingrese la contraseña"}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors"
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
         </div>
-      )}
+        <p className="text-xs text-slate-500 mt-1">
+          {initialData ? "Dejar en blanco para mantener la contraseña actual" : "La contraseña es requerida para crear un nuevo doctor"}
+        </p>
+      </div>
 
       <div>
-        <label htmlFor="especialidad" className="block text-sm font-medium text-gray-700">
-          Especialidad
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Especialidad <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
-          id="especialidad"
+        <select
           name="especialidad"
           value={formData.especialidad}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
           required
-        />
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+        >
+          <option value="">Seleccionar especialidad...</option>
+          <option value="Cardiología">Cardiología</option>
+          <option value="Dermatología">Dermatología</option>
+          <option value="Endocrinología">Endocrinología</option>
+          <option value="Gastroenterología">Gastroenterología</option>
+          <option value="Ginecología">Ginecología</option>
+          <option value="Neurología">Neurología</option>
+          <option value="Oftalmología">Oftalmología</option>
+          <option value="Ortopedia">Ortopedia</option>
+          <option value="Otorrinolaringología">Otorrinolaringología</option>
+          <option value="Pediatría">Pediatría</option>
+          <option value="Psiquiatría">Psiquiatría</option>
+          <option value="Urología">Urología</option>
+        </select>
       </div>
 
       <div>
-        <label htmlFor="consultorio_id" className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           Consultorio
         </label>
-        {isLoadingConsultorios ? (
-          <div className="mt-1 text-sm text-gray-500">Cargando consultorios...</div>
-        ) : (
-          <select
-            id="consultorio_id"
-            name="consultorio_id"
-            value={formData.consultorio_id}
-            onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
-            required={!initialData}
-          >
-            <option value="">Seleccionar consultorio</option>
-            {consultorios.map(consultorio => (
-              <option key={consultorio.consultorio_id} value={consultorio.consultorio_id}>
-                {consultorio.nombre}
-              </option>
-            ))}
-          </select>
-        )}
+        <select
+          name="consultorio_id"
+          value={formData.consultorio_id || ""}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-800"
+        >
+          <option value="">Sin consultorio asignado</option>
+          {consultorios.map(consultorio => (
+            <option key={consultorio.consultorio_id} value={consultorio.consultorio_id}>
+              {consultorio.nombre}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
+        <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800"
         >
           Cancelar
-        </motion.button>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
+        </button>
+        <button
           type="submit"
-          className="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-md hover:bg-sky-600"
+          className="px-4 py-2 text-sm font-medium text-white bg-sky-500 rounded-lg hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-400"
         >
-          {initialData ? 'Actualizar' : 'Guardar'}
-        </motion.button>
+          {initialData ? 'Actualizar' : 'Crear'} Doctor
+        </button>
       </div>
     </form>
   )

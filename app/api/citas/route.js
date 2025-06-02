@@ -20,13 +20,6 @@ export async function GET(request) {
     const doctorId = searchParams.get('doctorId');
     console.log('[GET /api/citas] Parámetros:', { citaId, pacienteId, doctorId });
 
-    if (!citaId && !pacienteId && !doctorId) {
-      return NextResponse.json(
-        { error: 'Se requiere citaId, pacienteId o doctorId' },
-        { status: 400 }
-      );
-    }
-
     console.log('[GET /api/citas] Conectando a la base de datos...');
     conn = await mysql.createConnection(dbConfig);
     console.log('[GET /api/citas] Conexión exitosa');

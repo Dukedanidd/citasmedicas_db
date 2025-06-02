@@ -344,12 +344,6 @@ export default function PatientsPage() {
 
           <div className="flex items-center space-x-4">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
-            >
-              <Bell size={20} />
-            </motion.button>
-            <motion.button
               whileHover={{ scale: 1.02 }}
               onClick={() => setShowNewPatientModal(true)}
               className="flex items-center space-x-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"

@@ -236,12 +236,6 @@ export default function PatientRecords() {
           <div className="flex items-center space-x-4">
             <motion.button
               whileHover={{ scale: 1.05 }}
-              className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
-            >
-              <Bell size={20} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
               onClick={handleLogout}
               className="p-2 text-slate-600 hover:text-red-600 transition-colors"
             >

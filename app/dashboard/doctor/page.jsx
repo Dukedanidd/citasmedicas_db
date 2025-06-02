@@ -261,12 +261,6 @@ export default function DashboardPage() {
               whileHover={{ scale: 1.05 }}
               className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
             >
-              <Bell size={20} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              className="p-2 text-slate-600 hover:text-sky-600 transition-colors"
-            >
               <Search size={20} />
             </motion.button>
             <motion.button
