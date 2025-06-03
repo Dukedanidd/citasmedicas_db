@@ -37,7 +37,7 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
     const fetchDoctorData = async () => {
       if (initialData?.doctor_id) {
         try {
-          const response = await fetch(`/api/doctores/${initialData.doctor_id}/completo`)
+          const response = await fetch(`/api/doctores/${initialData.doctor_id}`)
           if (!response.ok) throw new Error('Error al cargar datos del doctor')
           const data = await response.json()
           console.log('Datos completos del doctor:', data)
@@ -68,13 +68,27 @@ export default function DoctorForm({ onClose, onSubmit, initialData }) {
       consultorio_id: formData.consultorio_id === "" ? null : formData.consultorio_id
     }
     onSubmit(submitData)
+    
+    // Limpiar el formulario después de enviar
+    if (!initialData) {
+      setFormData({
+        primer_nombre: "",
+        segundo_nombre: "",
+        apellido_paterno: "",
+        apellido_materno: "",
+        email: "",
+        especialidad: "",
+        password: "",
+        consultorio_id: null
+      })
+    }
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value === "" ? null : value
+      [name]: value
     }))
   }
 

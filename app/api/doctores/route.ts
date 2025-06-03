@@ -136,20 +136,28 @@ export async function POST(request: Request) {
     const doctor_id = userResult.insertId;
     console.log('[POST /api/doctores] Usuario creado con ID:', doctor_id);
 
-    // Insertar médico
-    console.log('[POST /api/doctores] Creando médico...');
+    // Actualizar el médico creado por el trigger con la especialidad y consultorio
+    console.log('[POST /api/doctores] Actualizando datos del médico...');
     await conn.execute(`
-      INSERT INTO medicos (doctor_id, especialidad, consultorio_id)
-      VALUES (?, ?, ?)
-    `, [doctor_id, especialidad, consultorio_id]);
+      UPDATE medicos 
+      SET especialidad = ?, consultorio_id = ?
+      WHERE doctor_id = ?
+    `, [especialidad, consultorio_id, doctor_id]);
 
     await conn.commit();
     console.log('[POST /api/doctores] Transacción completada');
 
-    return NextResponse.json({
-      message: 'Doctor creado exitosamente',
-      doctor_id
-    }, { status: 201 });
+    // Obtener los datos completos del doctor recién creado
+    const [newDoctorData] = await conn.execute(`
+      SELECT u.user_id AS doctor_id, u.primer_nombre, u.apellido_paterno,
+             u.email, m.especialidad, c.nombre AS consultorio
+      FROM medicos m
+      JOIN usuarios u ON m.doctor_id = u.user_id
+      JOIN consultorios c ON m.consultorio_id = c.consultorio_id
+      WHERE u.user_id = ?
+    `, [doctor_id]);
+
+    return NextResponse.json(newDoctorData[0], { status: 201 });
   } catch (error) {
     console.error('[POST /api/doctores] Error:', error);
     console.error('[POST /api/doctores] Stack trace:', error.stack);

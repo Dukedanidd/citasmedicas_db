@@ -177,7 +177,7 @@ async function GET(request) {
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
         console.log("[GET /api/pacientes] Conexión exitosa");
         // Asignar current_user_id para los triggers usando el ID del paciente
-        await conn.execute("SET @current_user_id = ?", [
+        await conn.execute("SET @current_user_id = 1", [
             pacienteId || null
         ]);
         console.log("[GET /api/pacientes] current_user_id asignado:", pacienteId);
@@ -266,7 +266,7 @@ async function POST(request) {
         console.log("[POST /api/pacientes] Transacción iniciada");
         // Asignar current_user_id para los triggers
         const userId = request.headers.get("x-user-id");
-        await conn.execute("SET @current_user_id = ?", [
+        await conn.execute("SET @current_user_id = 1", [
             userId
         ]);
         console.log("[POST /api/pacientes] current_user_id asignado");
@@ -345,10 +345,24 @@ async function POST(request) {
         ]);
         await conn.commit();
         console.log("[POST /api/pacientes] Transacción completada");
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: "Paciente creado exitosamente",
+        // Obtener los datos completos del paciente recién creado
+        const [newPatientData] = await conn.execute(`
+      SELECT 
+        p.*,
+        u.primer_nombre,
+        u.segundo_nombre,
+        u.apellido_paterno,
+        u.apellido_materno,
+        u.email,
+        m.especialidad as doctor_especialidad
+      FROM pacientes p
+      JOIN usuarios u ON p.paciente_id = u.user_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
+      WHERE p.paciente_id = ?
+    `, [
             paciente_id
-        }, {
+        ]);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(newPatientData[0], {
             status: 201
         });
     } catch (error) {
@@ -391,10 +405,8 @@ async function PUT(request) {
         await conn.beginTransaction();
         console.log("[PUT /api/pacientes] Transacción iniciada");
         // Asignar current_user_id para los triggers
-        const userId = request.headers.get("x-user-id");
-        await conn.execute("SET @current_user_id = ?", [
-            userId
-        ]);
+        //const userId = request.headers.get("x-user-id");
+        await conn.execute("SET @current_user_id = 1");
         console.log("[PUT /api/pacientes] current_user_id asignado");
         // Verificar si el paciente existe
         console.log("[PUT /api/pacientes] Verificando paciente...");
@@ -460,9 +472,24 @@ async function PUT(request) {
         ]);
         await conn.commit();
         console.log("[PUT /api/pacientes] Transacción completada");
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: "Paciente actualizado exitosamente"
-        });
+        // Obtener los datos completos del paciente actualizado
+        const [updatedPatientData] = await conn.execute(`
+      SELECT 
+        p.*,
+        u.primer_nombre,
+        u.segundo_nombre,
+        u.apellido_paterno,
+        u.apellido_materno,
+        u.email,
+        m.especialidad as doctor_especialidad
+      FROM pacientes p
+      JOIN usuarios u ON p.paciente_id = u.user_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
+      WHERE p.paciente_id = ?
+    `, [
+            paciente_id
+        ]);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(updatedPatientData[0]);
     } catch (error) {
         console.error("[PUT /api/pacientes] Error:", error);
         console.error("[PUT /api/pacientes] Stack trace:", error.stack);
@@ -500,10 +527,8 @@ async function DELETE(request) {
         conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
         console.log("[DELETE /api/pacientes] Conexión exitosa");
         // Asignar current_user_id para los triggers
-        const userId = request.headers.get("x-user-id");
-        await conn.execute("SET @current_user_id = ?", [
-            userId
-        ]);
+        //const userId = request.headers.get("x-user-id");
+        await conn.execute("SET @current_user_id = 1");
         console.log("[DELETE /api/pacientes] current_user_id asignado");
         // Iniciar transacción
         await conn.beginTransaction();

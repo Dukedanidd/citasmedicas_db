@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import Modal from "../../../components/ui/Modal"
 import DoctorForm from "../../../components/ui/DoctorForm"
 import PatientForm from "../../../components/ui/PatientForm"
@@ -67,6 +67,10 @@ export default function AdminDashboard() {
   })
 
   const [isBitacoraModalOpen, setIsBitacoraModalOpen] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [confirmAction, setConfirmAction] = useState(null)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -235,6 +239,79 @@ export default function AdminDashboard() {
     router.push("/")
   }
 
+  const handleConfirmDeleteDoctor = (doctorId) => {
+    setConfirmAction({ type: 'deleteDoctor', id: doctorId });
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteDoctor = async (doctorId) => {
+    try {
+      const response = await fetch(`/api/doctores/${doctorId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el doctor');
+      }
+
+      // Actualizar el estado local eliminando el doctor
+      setDoctores(prev => prev.filter(d => d.doctor_id !== doctorId));
+      setFilteredDoctores(prev => prev.filter(d => d.doctor_id !== doctorId));
+      setDoctorTotalPages(prev => Math.ceil((prev * itemsPerPage - 1) / itemsPerPage));
+      
+      setShowConfirmModal(false);
+      setSuccessMessage('Doctor eliminado exitosamente');
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+    } catch (error) {
+      console.error('Error al eliminar doctor:', error);
+      setError(error.message);
+    }
+  }
+
+  const handleConfirmDeletePatient = (pacienteId) => {
+    setConfirmAction({ type: 'deletePatient', id: pacienteId });
+    setShowConfirmModal(true);
+  };
+
+  const handleDeletePatient = async (pacienteId) => {
+    try {
+      const response = await fetch(`/api/pacientes?pacienteId=${pacienteId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el paciente');
+      }
+
+      // Actualizar el estado local eliminando el paciente
+      setPacientes(prev => prev.filter(p => p.paciente_id !== pacienteId));
+      setFilteredPacientes(prev => prev.filter(p => p.paciente_id !== pacienteId));
+      
+      // Calcular el nuevo número total de páginas
+      const newTotalPages = Math.ceil((filteredPacientes.length - 1) / itemsPerPage);
+      setTotalPages(newTotalPages);
+      
+      // Si la página actual es mayor que el nuevo total de páginas, ajustar a la última página
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages || 1);
+      }
+      
+      setShowConfirmModal(false);
+      setSuccessMessage('Paciente eliminado exitosamente');
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+    } catch (error) {
+      console.error('Error al eliminar paciente:', error);
+      setError(error.message);
+    }
+  };
+
+  const handleDeleteCita = async (citaId) => {
+    setConfirmAction({ type: 'deleteCita', id: citaId })
+    setShowConfirmModal(true)
+  }
+
   const handleAddDoctor = async (doctorData) => {
     try {
       const response = await fetch('/api/doctores', {
@@ -251,7 +328,12 @@ export default function AdminDashboard() {
 
       const newDoctor = await response.json()
       setDoctores(prev => [...prev, newDoctor])
+      setFilteredDoctores(prev => [...prev, newDoctor])
+      setDoctorTotalPages(prev => Math.ceil((prev * itemsPerPage + 1) / itemsPerPage))
       setIsDoctorModalOpen(false)
+      setSuccessMessage('Doctor creado exitosamente')
+      setShowSuccessMessage(true)
+      setTimeout(() => setShowSuccessMessage(false), 3000)
     } catch (error) {
       setError(error.message)
     }
@@ -264,71 +346,37 @@ export default function AdminDashboard() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(doctorData),
+        body: JSON.stringify({
+          primer_nombre: doctorData.primer_nombre,
+          segundo_nombre: doctorData.segundo_nombre,
+          apellido_paterno: doctorData.apellido_paterno,
+          apellido_materno: doctorData.apellido_materno,
+          password: doctorData.password,
+          especialidad: doctorData.especialidad,
+          consultorio_id: doctorData.consultorio_id || null
+        }),
       })
 
       if (!response.ok) {
         throw new Error('Error al actualizar el doctor')
       }
 
-      const updatedDoctor = await response.json()
+      // Obtener los datos actualizados del doctor
+      const getResponse = await fetch(`/api/doctores/${doctorData.doctor_id}`)
+      if (!getResponse.ok) {
+        throw new Error('Error al obtener los datos actualizados del doctor')
+      }
+
+      const updatedDoctor = await getResponse.json()
       setDoctores(prev => prev.map(d => d.doctor_id === updatedDoctor.doctor_id ? updatedDoctor : d))
+      setFilteredDoctores(prev => prev.map(d => d.doctor_id === updatedDoctor.doctor_id ? updatedDoctor : d))
       setIsDoctorModalOpen(false)
-      setEditingPatient(null)
+      setSelectedDoctor(null)
+      setSuccessMessage('Doctor actualizado exitosamente')
+      setShowSuccessMessage(true)
+      setTimeout(() => setShowSuccessMessage(false), 3000)
     } catch (error) {
       setError(error.message)
-    }
-  }
-
-  const handleDeleteDoctor = async (doctorId) => {
-    if (!confirm('¿Estás seguro de que deseas eliminar este doctor?')) {
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/doctores/${doctorId}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        throw new Error('Error al eliminar el doctor')
-      }
-
-      setDoctores(prev => prev.filter(d => d.doctor_id !== doctorId))
-    } catch (error) {
-      setError(error.message)
-    }
-  }
-
-  const handleEditPatient = (paciente) => {
-    setEditingPatient(paciente)
-    setIsPatientModalOpen(true)
-  }
-
-  const handleDeletePatient = async (pacienteId) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este paciente?')) {
-      try {
-        const response = await fetch(`/api/pacientes?pacienteId=${pacienteId}`, {
-          method: 'DELETE',
-        })
-
-        if (response.ok) {
-          // Actualizar la lista de pacientes
-          setPacientes(pacientes.filter(p => p.paciente_id !== pacienteId))
-          // Recalcular el total de páginas
-          setTotalPages(Math.ceil((pacientes.length - 1) / itemsPerPage))
-          // Si la página actual queda vacía, volver a la anterior
-          if (getCurrentPageData().length === 1 && currentPage > 1) {
-            setCurrentPage(currentPage - 1)
-          }
-        } else {
-          const error = await response.json()
-          alert(error.message || 'Error al eliminar el paciente')
-        }
-      } catch (error) {
-        console.error('Error al eliminar paciente:', error)
-        alert('Error al eliminar el paciente')
-      }
     }
   }
 
@@ -344,11 +392,17 @@ export default function AdminDashboard() {
 
       if (response.ok) {
         const data = await response.json()
-        // Actualizar la lista de pacientes
-        const updatedPacientes = [...pacientes, data]
+        const updatedPacientes = [...pacientes, {
+          ...data,
+          doctor: doctores.find(d => d.doctor_id === data.doctor_id) || null
+        }]
         setPacientes(updatedPacientes)
+        setFilteredPacientes(updatedPacientes)
         setTotalPages(Math.ceil(updatedPacientes.length / itemsPerPage))
         setIsPatientModalOpen(false)
+        setSuccessMessage('Paciente creado exitosamente')
+        setShowSuccessMessage(true)
+        setTimeout(() => setShowSuccessMessage(false), 3000)
       } else {
         const error = await response.json()
         alert(error.message || 'Error al crear el paciente')
@@ -359,6 +413,11 @@ export default function AdminDashboard() {
     }
   }
 
+  const handleEditPatient = (paciente) => {
+    setEditingPatient(paciente);
+    setIsPatientModalOpen(true);
+  };
+
   const handleUpdatePatient = async (updatedPatient) => {
     try {
       const response = await fetch('/api/pacientes', {
@@ -367,40 +426,78 @@ export default function AdminDashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedPatient),
-      })
+      });
 
       if (response.ok) {
-        // Actualizar la lista de pacientes
-        setPacientes(pacientes.map(p => 
-          p.paciente_id === updatedPatient.paciente_id ? updatedPatient : p
-        ))
-        setIsPatientModalOpen(false)
-        setEditingPatient(null)
+        const data = await response.json();
+        const updatedPacientes = pacientes.map(p => 
+          p.paciente_id === data.paciente_id ? {
+            ...data,
+            doctor: doctores.find(d => d.doctor_id === data.doctor_id) || null
+          } : p
+        );
+        setPacientes(updatedPacientes);
+        setFilteredPacientes(updatedPacientes);
+        setIsPatientModalOpen(false);
+        setEditingPatient(null);
+        setSuccessMessage('Paciente actualizado exitosamente');
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 3000);
       } else {
-        const error = await response.json()
-        alert(error.message || 'Error al actualizar el paciente')
+        const error = await response.json();
+        throw new Error(error.message || 'Error al actualizar el paciente');
       }
     } catch (error) {
-      console.error('Error al actualizar paciente:', error)
-      alert('Error al actualizar el paciente')
+      console.error('Error al actualizar paciente:', error);
+      setError(error.message);
     }
-  }
+  };
 
   const handlePatientSubmit = (patientData) => {
     if (editingPatient) {
-      handleUpdatePatient({ ...editingPatient, ...patientData })
+      handleUpdatePatient({ ...editingPatient, ...patientData });
     } else {
-      handleAddPatient(patientData)
+      handleAddPatient(patientData);
     }
-  }
+  };
 
   const handleClosePatientModal = () => {
-    setIsPatientModalOpen(false)
-    setEditingPatient(null)
-  }
+    setIsPatientModalOpen(false);
+    setEditingPatient(null);
+  };
 
-  const openDoctorModal = (doctor = null) => {
-    setSelectedDoctor(doctor)
+  const openDoctorModal = async (doctor = null) => {
+    if (doctor) {
+      try {
+        // Obtener los datos completos del doctor
+        const response = await fetch(`/api/doctores/${doctor.doctor_id}`)
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos del doctor')
+        }
+        const doctorData = await response.json()
+        
+        // Asegurarse de que todos los campos necesarios estén presentes
+        const formattedDoctorData = {
+          doctor_id: doctorData.doctor_id,
+          primer_nombre: doctorData.primer_nombre || '',
+          segundo_nombre: doctorData.segundo_nombre || '',
+          apellido_paterno: doctorData.apellido_paterno || '',
+          apellido_materno: doctorData.apellido_materno || '',
+          email: doctorData.email || '',
+          especialidad: doctorData.especialidad || '',
+          consultorio: doctorData.consultorio || '',
+          consultorio_id: doctorData.consultorio_id || null,
+          password: '' // No prellenamos la contraseña por seguridad
+        }
+        setSelectedDoctor(formattedDoctorData)
+      } catch (error) {
+        console.error('Error al cargar los datos del doctor:', error)
+        setError('Error al cargar los datos del doctor')
+        return
+      }
+    } else {
+      setSelectedDoctor(null)
+    }
     setIsDoctorModalOpen(true)
   }
 
@@ -439,22 +536,45 @@ export default function AdminDashboard() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(citaData),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error('Error al crear la cita')
+        throw new Error('Error al crear la cita');
       }
 
-      const newCita = await response.json()
-      // Actualizar la lista de citas
-      const updatedCitas = [...citas, newCita]
-      setCitas(updatedCitas)
-      setCitaTotalPages(Math.ceil(updatedCitas.length / itemsPerPage))
-      setIsCitaModalOpen(false)
+      const newCita = await response.json();
+      
+      // Encontrar el doctor y paciente correspondientes
+      const doctor = doctores.find(d => d.doctor_id === newCita.doctor_id);
+      const paciente = pacientes.find(p => p.paciente_id === newCita.paciente_id);
+
+      // Crear la cita con toda la información necesaria
+      const citaCompleta = {
+        ...newCita,
+        doctor: doctor || null,
+        paciente: paciente || null
+      };
+
+      // Actualizar el estado
+      const updatedCitas = [...citas, citaCompleta];
+      setCitas(updatedCitas);
+      setFilteredCitas(updatedCitas);
+      
+      // Calcular el nuevo número total de páginas
+      const newTotalPages = Math.ceil(updatedCitas.length / itemsPerPage);
+      setCitaTotalPages(newTotalPages);
+      
+      // Ir a la última página donde aparecerá la nueva cita
+      setCitaCurrentPage(newTotalPages);
+      
+      setIsCitaModalOpen(false);
+      setSuccessMessage('Cita creada exitosamente');
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
+  };
 
   const handleEditCita = async (citaData) => {
     try {
@@ -470,30 +590,12 @@ export default function AdminDashboard() {
         throw new Error('Error al actualizar la cita')
       }
 
-      // Actualizar la lista de citas
       setCitas(citas.map(c => c.cita_id === citaData.cita_id ? citaData : c))
       setIsCitaModalOpen(false)
       setSelectedCita(null)
-    } catch (error) {
-      setError(error.message)
-    }
-  }
-
-  const handleDeleteCita = async (citaId) => {
-    if (!confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/citas?citaId=${citaId}`, {
-        method: 'DELETE',
-      })
-
-      if (!response.ok) {
-        throw new Error('Error al eliminar la cita')
-      }
-
-      setCitas(citas.filter(c => c.cita_id !== citaId))
+      setSuccessMessage('Cita actualizada exitosamente')
+      setShowSuccessMessage(true)
+      setTimeout(() => setShowSuccessMessage(false), 3000)
     } catch (error) {
       setError(error.message)
     }
@@ -508,6 +610,28 @@ export default function AdminDashboard() {
     setIsCitaModalOpen(false)
     setSelectedCita(null)
   }
+
+  const handleConfirmAction = async () => {
+    try {
+      switch (confirmAction.type) {
+        case 'deleteDoctor':
+          await handleDeleteDoctor(confirmAction.id);
+          break;
+        case 'deletePatient':
+          await handleDeletePatient(confirmAction.id);
+          break;
+        case 'deleteCita':
+          await handleDeleteCita(confirmAction.id);
+          break;
+        default:
+          break;
+      }
+      setShowConfirmModal(false);
+    } catch (error) {
+      console.error('Error al ejecutar acción:', error);
+      setError(error.message);
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -611,7 +735,7 @@ export default function AdminDashboard() {
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 className="text-red-600 hover:text-red-900"
-                                onClick={() => handleDeleteDoctor(doctor.doctor_id)}
+                                onClick={() => handleConfirmDeleteDoctor(doctor.doctor_id)}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </motion.button>
@@ -810,7 +934,7 @@ export default function AdminDashboard() {
                             <motion.button
                               whileHover={{ scale: 1.1 }}
                               className="text-red-600 hover:text-red-900"
-                              onClick={() => handleDeletePatient(paciente.paciente_id)}
+                              onClick={() => handleConfirmDeletePatient(paciente.paciente_id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </motion.button>
@@ -1382,6 +1506,62 @@ export default function AdminDashboard() {
           onClose={() => setIsBitacoraModalOpen(false)}
         />
       </Modal>
+
+      {/* Modal de Confirmación */}
+      <AnimatePresence>
+        {showConfirmModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setShowConfirmModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-xl font-bold text-slate-800 mb-4">Confirmar Acción</h2>
+              <p className="text-slate-600 mb-6">
+                {confirmAction?.type === 'deleteDoctor' && '¿Estás seguro de que deseas eliminar este doctor?'}
+                {confirmAction?.type === 'deletePatient' && '¿Estás seguro de que deseas eliminar este paciente?'}
+                {confirmAction?.type === 'deleteCita' && '¿Estás seguro de que deseas eliminar esta cita?'}
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowConfirmModal(false)}
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmAction}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Confirmar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mensaje de Éxito */}
+      <AnimatePresence>
+        {showSuccessMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"
+          >
+            {successMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

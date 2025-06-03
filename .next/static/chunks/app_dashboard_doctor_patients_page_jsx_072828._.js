@@ -6,7 +6,7 @@
   "path": "static/chunks/app_dashboard_doctor_patients_page_jsx_072828._.js",
   "chunks": [
     "static/chunks/app_dashboard_doctor_patients_page_jsx_819f84._.js",
-    "static/chunks/node_modules_f4ba2a._.js"
+    "static/chunks/node_modules_a1effc._.js"
   ],
   "source": "dynamic"
 });

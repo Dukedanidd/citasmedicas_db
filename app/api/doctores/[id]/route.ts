@@ -12,11 +12,11 @@ const dbConfig = {
 // GET /api/doctores/[id] - Obtener un doctor específico
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   console.log('[GET /api/doctores/[id]] Iniciando petición...');
   try {
-    const { id } = params;
+    const { id } = await context.params;
     console.log('[GET /api/doctores/[id]] ID del doctor:', id);
 
     console.log('[GET /api/doctores/[id]] Conectando a la base de datos...');
@@ -29,11 +29,13 @@ export async function GET(
 
     console.log('[GET /api/doctores/[id]] Ejecutando consulta SQL...');
     const [rows] = await conn.execute(
-      `SELECT u.user_id AS doctor_id, u.primer_nombre, u.apellido_paterno,
-              u.email, m.especialidad, c.nombre AS consultorio
+      `SELECT u.user_id AS doctor_id, u.primer_nombre, u.segundo_nombre,
+              u.apellido_paterno, u.apellido_materno, u.email, 
+              m.especialidad, c.nombre AS consultorio,
+              c.consultorio_id
        FROM medicos m
        JOIN usuarios u ON m.doctor_id = u.user_id
-       JOIN consultorios c ON m.consultorio_id = c.consultorio_id
+       LEFT JOIN consultorios c ON m.consultorio_id = c.consultorio_id
        WHERE u.user_id = ?`,
       [id]
     );
@@ -63,15 +65,34 @@ export async function GET(
 // PUT /api/doctores/[id] - Actualizar un doctor
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   console.log('[PUT /api/doctores/[id]] Iniciando petición...');
   try {
-    const doctor_id = params.id;
+    const { id: doctor_id } = await context.params;
     console.log('[PUT /api/doctores/[id]] ID del doctor:', doctor_id);
 
     const body = await request.json();
     console.log('[PUT /api/doctores/[id]] Datos recibidos:', body);
+
+    // Procesar campos exactamente como lo hace el formulario
+    const primer_nombre = body.primer_nombre?.trim() || null;
+    const segundo_nombre = body.segundo_nombre || null; // El formulario envía el valor tal cual
+    const apellido_paterno = body.apellido_paterno?.trim() || null;
+    const apellido_materno = body.apellido_materno || null; // El formulario envía el valor tal cual
+    const password = body.password || null; // El formulario envía el valor tal cual
+    const especialidad = body.especialidad?.trim() || null;
+    const consultorio_id = body.consultorio_id || null;
+
+    console.log('[PUT /api/doctores/[id]] Valores procesados:', {
+      primer_nombre,
+      segundo_nombre,
+      apellido_paterno,
+      apellido_materno,
+      password: password ? '[REDACTED]' : null,
+      especialidad,
+      consultorio_id
+    });
 
     console.log('[PUT /api/doctores/[id]] Conectando a la base de datos...');
     const conn = await mysql.createConnection(dbConfig);
@@ -86,15 +107,43 @@ export async function PUT(
     await conn.beginTransaction();
 
     try {
+      // Verificar que el doctor existe
+      const [existingDoctor] = await conn.execute(
+        `SELECT u.user_id, m.doctor_id 
+         FROM usuarios u 
+         JOIN medicos m ON u.user_id = m.doctor_id 
+         WHERE u.user_id = ?`,
+        [doctor_id]
+      );
+
+      if (!existingDoctor[0]) {
+        throw new Error('Doctor no encontrado');
+      }
+
       // Actualizar usuario
       console.log('[PUT /api/doctores/[id]] Actualizando tabla usuarios...');
       try {
-        const [userResult] = await conn.execute(
-          `UPDATE usuarios 
-           SET primer_nombre = ?, apellido_paterno = ? 
-           WHERE user_id = ?`,
-          [body.primer_nombre, body.apellido_paterno, doctor_id]
-        );
+        // Construir la consulta SQL dinámicamente basada en si hay contraseña o no
+        let updateUserQuery = `
+          UPDATE usuarios 
+          SET primer_nombre = ?, 
+              segundo_nombre = ?,
+              apellido_paterno = ?,
+              apellido_materno = ?
+        `;
+        
+        const updateUserParams = [primer_nombre, segundo_nombre, apellido_paterno, apellido_materno];
+
+        // Solo actualizar la contraseña si se proporciona una nueva
+        if (password) {
+          updateUserQuery += `, password = ?`;
+          updateUserParams.push(password);
+        }
+
+        updateUserQuery += ` WHERE user_id = ?`;
+        updateUserParams.push(doctor_id);
+
+        const [userResult] = await conn.execute(updateUserQuery, updateUserParams);
         console.log('[PUT /api/doctores/[id]] Resultado de actualización de usuario:', userResult);
       } catch (err) {
         console.error('[PUT /api/doctores/[id]] Error al actualizar usuario:', err);
@@ -108,9 +157,9 @@ export async function PUT(
         const [medicoResult] = await conn.execute(
           `UPDATE medicos 
            SET especialidad = ?, 
-               consultorio_id = NULLIF(?, '')
+               consultorio_id = ?
            WHERE doctor_id = ?`,
-          [body.especialidad, body.consultorio_id, doctor_id]
+          [especialidad, consultorio_id, doctor_id]
         );
         console.log('[PUT /api/doctores/[id]] Resultado de actualización de médico:', medicoResult);
       } catch (err) {
@@ -124,10 +173,26 @@ export async function PUT(
       await conn.commit();
       console.log('[PUT /api/doctores/[id]] Transacción confirmada');
 
+      // Obtener los datos actualizados del doctor
+      console.log('[PUT /api/doctores/[id]] Obteniendo datos actualizados...');
+      const [updatedDoctor] = await conn.execute(
+        `SELECT u.user_id AS doctor_id, u.primer_nombre, u.segundo_nombre,
+                u.apellido_paterno, u.apellido_materno, u.email, 
+                m.especialidad, c.nombre AS consultorio,
+                c.consultorio_id
+         FROM medicos m
+         JOIN usuarios u ON m.doctor_id = u.user_id
+         LEFT JOIN consultorios c ON m.consultorio_id = c.consultorio_id
+         WHERE u.user_id = ?`,
+        [doctor_id]
+      );
+      console.log('[PUT /api/doctores/[id]] Datos actualizados obtenidos:', updatedDoctor[0]);
+
+      // Cerrar la conexión después de obtener los datos
       await conn.end();
       console.log('[PUT /api/doctores/[id]] Conexión cerrada');
 
-      return NextResponse.json({ message: 'Doctor actualizado con éxito' });
+      return NextResponse.json(updatedDoctor[0]);
     } catch (err) {
       // Revertir transacción en caso de error
       console.error('[PUT /api/doctores/[id]] Error en la transacción:', err);
@@ -148,11 +213,11 @@ export async function PUT(
 // DELETE /api/doctores/[id] - Eliminar un doctor
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   console.log('[DELETE /api/doctores/[id]] Iniciando petición...');
   try {
-    const doctor_id = params.id;
+    const doctor_id = context.params.id;
     console.log('[DELETE /api/doctores/[id]] ID del doctor:', doctor_id);
 
     console.log('[DELETE /api/doctores/[id]] Conectando a la base de datos...');

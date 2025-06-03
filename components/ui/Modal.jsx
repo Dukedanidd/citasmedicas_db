@@ -41,22 +41,22 @@ export default function Modal({ isOpen, onClose, title, children }) {
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black bg-opacity-50"
             />
-            <motion.div
+      <motion.div
               ref={modalRef}
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               className="relative w-full max-w-[95vw] max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-xl"
-            >
+      >
               <div className="sticky top-0 z-10 flex items-center justify-between p-6 border-b border-gray-200 bg-white rounded-t-xl">
                 <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
-                <button
-                  onClick={onClose}
+          <button
+            onClick={onClose}
                   className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
-                >
+          >
                   <X className="h-5 w-5" />
-                </button>
-              </div>
+          </button>
+        </div>
               <div className="p-6">{children}</div>
             </motion.div>
           </div>

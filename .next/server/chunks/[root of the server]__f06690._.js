@@ -165,10 +165,10 @@ const dbConfig = {
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'clinica_db'
 };
-async function GET(request, { params }) {
+async function GET(request, context) {
     console.log('[GET /api/doctores/[id]] Iniciando petición...');
     try {
-        const { id } = params;
+        const { id } = await context.params;
         console.log('[GET /api/doctores/[id]] ID del doctor:', id);
         console.log('[GET /api/doctores/[id]] Conectando a la base de datos...');
         const conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
@@ -177,11 +177,13 @@ async function GET(request, { params }) {
         await conn.execute('SET @current_user_id = 1');
         console.log('[GET /api/doctores/[id]] current_user_id asignado');
         console.log('[GET /api/doctores/[id]] Ejecutando consulta SQL...');
-        const [rows] = await conn.execute(`SELECT u.user_id AS doctor_id, u.primer_nombre, u.apellido_paterno,
-              u.email, m.especialidad, c.nombre AS consultorio
+        const [rows] = await conn.execute(`SELECT u.user_id AS doctor_id, u.primer_nombre, u.segundo_nombre,
+              u.apellido_paterno, u.apellido_materno, u.email, 
+              m.especialidad, c.nombre AS consultorio,
+              c.consultorio_id
        FROM medicos m
        JOIN usuarios u ON m.doctor_id = u.user_id
-       JOIN consultorios c ON m.consultorio_id = c.consultorio_id
+       LEFT JOIN consultorios c ON m.consultorio_id = c.consultorio_id
        WHERE u.user_id = ?`, [
             id
         ]);
@@ -206,13 +208,30 @@ async function GET(request, { params }) {
         });
     }
 }
-async function PUT(request, { params }) {
+async function PUT(request, context) {
     console.log('[PUT /api/doctores/[id]] Iniciando petición...');
     try {
-        const doctor_id = params.id;
+        const { id: doctor_id } = await context.params;
         console.log('[PUT /api/doctores/[id]] ID del doctor:', doctor_id);
         const body = await request.json();
         console.log('[PUT /api/doctores/[id]] Datos recibidos:', body);
+        // Procesar campos exactamente como lo hace el formulario
+        const primer_nombre = body.primer_nombre?.trim() || null;
+        const segundo_nombre = body.segundo_nombre || null; // El formulario envía el valor tal cual
+        const apellido_paterno = body.apellido_paterno?.trim() || null;
+        const apellido_materno = body.apellido_materno || null; // El formulario envía el valor tal cual
+        const password = body.password || null; // El formulario envía el valor tal cual
+        const especialidad = body.especialidad?.trim() || null;
+        const consultorio_id = body.consultorio_id || null;
+        console.log('[PUT /api/doctores/[id]] Valores procesados:', {
+            primer_nombre,
+            segundo_nombre,
+            apellido_paterno,
+            apellido_materno,
+            password: password ? '[REDACTED]' : null,
+            especialidad,
+            consultorio_id
+        });
         console.log('[PUT /api/doctores/[id]] Conectando a la base de datos...');
         const conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);
         console.log('[PUT /api/doctores/[id]] Conexión exitosa');
@@ -223,16 +242,41 @@ async function PUT(request, { params }) {
         console.log('[PUT /api/doctores/[id]] Iniciando transacción...');
         await conn.beginTransaction();
         try {
+            // Verificar que el doctor existe
+            const [existingDoctor] = await conn.execute(`SELECT u.user_id, m.doctor_id 
+         FROM usuarios u 
+         JOIN medicos m ON u.user_id = m.doctor_id 
+         WHERE u.user_id = ?`, [
+                doctor_id
+            ]);
+            if (!existingDoctor[0]) {
+                throw new Error('Doctor no encontrado');
+            }
             // Actualizar usuario
             console.log('[PUT /api/doctores/[id]] Actualizando tabla usuarios...');
             try {
-                const [userResult] = await conn.execute(`UPDATE usuarios 
-           SET primer_nombre = ?, apellido_paterno = ? 
-           WHERE user_id = ?`, [
-                    body.primer_nombre,
-                    body.apellido_paterno,
-                    doctor_id
-                ]);
+                // Construir la consulta SQL dinámicamente basada en si hay contraseña o no
+                let updateUserQuery = `
+          UPDATE usuarios 
+          SET primer_nombre = ?, 
+              segundo_nombre = ?,
+              apellido_paterno = ?,
+              apellido_materno = ?
+        `;
+                const updateUserParams = [
+                    primer_nombre,
+                    segundo_nombre,
+                    apellido_paterno,
+                    apellido_materno
+                ];
+                // Solo actualizar la contraseña si se proporciona una nueva
+                if (password) {
+                    updateUserQuery += `, password = ?`;
+                    updateUserParams.push(password);
+                }
+                updateUserQuery += ` WHERE user_id = ?`;
+                updateUserParams.push(doctor_id);
+                const [userResult] = await conn.execute(updateUserQuery, updateUserParams);
                 console.log('[PUT /api/doctores/[id]] Resultado de actualización de usuario:', userResult);
             } catch (err) {
                 console.error('[PUT /api/doctores/[id]] Error al actualizar usuario:', err);
@@ -244,10 +288,10 @@ async function PUT(request, { params }) {
             try {
                 const [medicoResult] = await conn.execute(`UPDATE medicos 
            SET especialidad = ?, 
-               consultorio_id = NULLIF(?, '')
+               consultorio_id = ?
            WHERE doctor_id = ?`, [
-                    body.especialidad,
-                    body.consultorio_id,
+                    especialidad,
+                    consultorio_id,
                     doctor_id
                 ]);
                 console.log('[PUT /api/doctores/[id]] Resultado de actualización de médico:', medicoResult);
@@ -260,11 +304,23 @@ async function PUT(request, { params }) {
             console.log('[PUT /api/doctores/[id]] Confirmando transacción...');
             await conn.commit();
             console.log('[PUT /api/doctores/[id]] Transacción confirmada');
+            // Obtener los datos actualizados del doctor
+            console.log('[PUT /api/doctores/[id]] Obteniendo datos actualizados...');
+            const [updatedDoctor] = await conn.execute(`SELECT u.user_id AS doctor_id, u.primer_nombre, u.segundo_nombre,
+                u.apellido_paterno, u.apellido_materno, u.email, 
+                m.especialidad, c.nombre AS consultorio,
+                c.consultorio_id
+         FROM medicos m
+         JOIN usuarios u ON m.doctor_id = u.user_id
+         LEFT JOIN consultorios c ON m.consultorio_id = c.consultorio_id
+         WHERE u.user_id = ?`, [
+                doctor_id
+            ]);
+            console.log('[PUT /api/doctores/[id]] Datos actualizados obtenidos:', updatedDoctor[0]);
+            // Cerrar la conexión después de obtener los datos
             await conn.end();
             console.log('[PUT /api/doctores/[id]] Conexión cerrada');
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                message: 'Doctor actualizado con éxito'
-            });
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(updatedDoctor[0]);
         } catch (err) {
             // Revertir transacción en caso de error
             console.error('[PUT /api/doctores/[id]] Error en la transacción:', err);
@@ -282,10 +338,10 @@ async function PUT(request, { params }) {
         });
     }
 }
-async function DELETE(request, { params }) {
+async function DELETE(request, context) {
     console.log('[DELETE /api/doctores/[id]] Iniciando petición...');
     try {
-        const doctor_id = params.id;
+        const doctor_id = context.params.id;
         console.log('[DELETE /api/doctores/[id]] ID del doctor:', doctor_id);
         console.log('[DELETE /api/doctores/[id]] Conectando a la base de datos...');
         const conn = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$promise$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].createConnection(dbConfig);

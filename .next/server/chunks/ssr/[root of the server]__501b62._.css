@@ -423,6 +423,10 @@ img, video {
   bottom: 8rem;
 }
 
+.bottom-4 {
+  bottom: 1rem;
+}
+
 .left-0 {
   left: 0;
 }
@@ -449,6 +453,10 @@ img, video {
 
 .right-32 {
   right: 8rem;
+}
+
+.right-4 {
+  right: 1rem;
 }
 
 .top-0 {

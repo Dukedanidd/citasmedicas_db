@@ -23,7 +23,7 @@ export async function GET(request) {
     console.log("[GET /api/pacientes] Conexión exitosa");
 
     // Asignar current_user_id para los triggers usando el ID del paciente
-    await conn.execute("SET @current_user_id = ?", [pacienteId || null]);
+    await conn.execute("SET @current_user_id = 1", [pacienteId || null]);
     console.log("[GET /api/pacientes] current_user_id asignado:", pacienteId);
 
     if (pacienteId) {
@@ -138,7 +138,7 @@ export async function POST(request) {
 
     // Asignar current_user_id para los triggers
     const userId = request.headers.get("x-user-id");
-    await conn.execute("SET @current_user_id = ?", [userId]);
+    await conn.execute("SET @current_user_id = 1", [userId]);
     console.log("[POST /api/pacientes] current_user_id asignado");
 
     // Obtener el role_id para pacientes
@@ -228,13 +228,23 @@ export async function POST(request) {
     await conn.commit();
     console.log("[POST /api/pacientes] Transacción completada");
 
-    return NextResponse.json(
-      {
-        message: "Paciente creado exitosamente",
-        paciente_id,
-      },
-      { status: 201 },
-    );
+    // Obtener los datos completos del paciente recién creado
+    const [newPatientData] = await conn.execute(`
+      SELECT 
+        p.*,
+        u.primer_nombre,
+        u.segundo_nombre,
+        u.apellido_paterno,
+        u.apellido_materno,
+        u.email,
+        m.especialidad as doctor_especialidad
+      FROM pacientes p
+      JOIN usuarios u ON p.paciente_id = u.user_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
+      WHERE p.paciente_id = ?
+    `, [paciente_id]);
+
+    return NextResponse.json(newPatientData[0], { status: 201 });
   } catch (error) {
     console.error("[POST /api/pacientes] Error:", error);
     console.error("[POST /api/pacientes] Stack trace:", error.stack);
@@ -290,8 +300,8 @@ export async function PUT(request) {
     console.log("[PUT /api/pacientes] Transacción iniciada");
 
     // Asignar current_user_id para los triggers
-    const userId = request.headers.get("x-user-id");
-    await conn.execute("SET @current_user_id = ?", [userId]);
+    //const userId = request.headers.get("x-user-id");
+    await conn.execute("SET @current_user_id = 1");
     console.log("[PUT /api/pacientes] current_user_id asignado");
 
     // Verificar si el paciente existe
@@ -366,9 +376,23 @@ export async function PUT(request) {
     await conn.commit();
     console.log("[PUT /api/pacientes] Transacción completada");
 
-    return NextResponse.json({
-      message: "Paciente actualizado exitosamente",
-    });
+    // Obtener los datos completos del paciente actualizado
+    const [updatedPatientData] = await conn.execute(`
+      SELECT 
+        p.*,
+        u.primer_nombre,
+        u.segundo_nombre,
+        u.apellido_paterno,
+        u.apellido_materno,
+        u.email,
+        m.especialidad as doctor_especialidad
+      FROM pacientes p
+      JOIN usuarios u ON p.paciente_id = u.user_id
+      LEFT JOIN medicos m ON p.doctor_id = m.doctor_id
+      WHERE p.paciente_id = ?
+    `, [paciente_id]);
+
+    return NextResponse.json(updatedPatientData[0]);
   } catch (error) {
     console.error("[PUT /api/pacientes] Error:", error);
     console.error("[PUT /api/pacientes] Stack trace:", error.stack);
@@ -409,8 +433,8 @@ export async function DELETE(request) {
     console.log("[DELETE /api/pacientes] Conexión exitosa");
 
     // Asignar current_user_id para los triggers
-    const userId = request.headers.get("x-user-id");
-    await conn.execute("SET @current_user_id = ?", [userId]);
+    //const userId = request.headers.get("x-user-id");
+    await conn.execute("SET @current_user_id = 1");
     console.log("[DELETE /api/pacientes] current_user_id asignado");
 
     // Iniciar transacción
