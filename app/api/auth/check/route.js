@@ -4,8 +4,8 @@ import mysql from "mysql2/promise";
 // Configuración de la base de datos
 const dbConfig = {
   host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
+  user: process.env.DB_USER || "clinica-admin",
+  password: process.env.DB_PASSWORD || "admin",
   database: process.env.DB_NAME || "clinica_db",
 };
 

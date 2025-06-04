@@ -307,10 +307,49 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleConfirmDeleteCita = (citaId) => {
+    setConfirmAction({ type: 'deleteCita', id: citaId });
+    setShowConfirmModal(true);
+  };
+
   const handleDeleteCita = async (citaId) => {
-    setConfirmAction({ type: 'deleteCita', id: citaId })
-    setShowConfirmModal(true)
-  }
+    try {
+      const response = await fetch(`/api/citas?citaId=${citaId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar la cita');
+      }
+
+      // Actualizar el estado local eliminando la cita
+      setCitas(prev => prev.filter(c => c.cita_id !== citaId));
+      setFilteredCitas(prev => prev.filter(c => c.cita_id !== citaId));
+      
+      // Recalcular el número total de páginas
+      const newTotalPages = Math.ceil((filteredCitas.length - 1) / itemsPerPage);
+      setCitaTotalPages(newTotalPages);
+      
+      // Ajustar la página actual si es necesario
+      if (citaCurrentPage > newTotalPages) {
+        setCitaCurrentPage(newTotalPages || 1);
+      }
+      
+      setShowConfirmModal(false);
+      setSuccessMessage('Cita eliminada exitosamente');
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
+
+      // Actualizar las estadísticas
+      setStats(prev => ({
+        ...prev,
+        citasProgramadas: prev.citasProgramadas - 1
+      }));
+    } catch (error) {
+      console.error('Error al eliminar cita:', error);
+      setError(error.message);
+    }
+  };
 
   const handleAddDoctor = async (doctorData) => {
     try {
@@ -1178,7 +1217,7 @@ export default function AdminDashboard() {
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 className="text-red-600 hover:text-red-900"
-                                onClick={() => handleDeleteCita(cita.cita_id)}
+                                onClick={() => handleConfirmDeleteCita(cita.cita_id)}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </motion.button>

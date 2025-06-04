@@ -159,8 +159,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$mysql2$2f$pr
 // Configuración de la base de datos
 const dbConfig = {
     host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
+    user: process.env.DB_USER || "clinica-admin",
+    password: process.env.DB_PASSWORD || "admin",
     database: process.env.DB_NAME || "clinica_db"
 };
 async function GET(request) {
