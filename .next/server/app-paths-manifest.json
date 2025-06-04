@@ -1,13 +1,13 @@
 {
-  "/dashboard/admin/page": "app/dashboard/admin/page.js",
   "/page": "app/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/dashboard/admin/page": "app/dashboard/admin/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
   "/api/auth/check/route": "app/api/auth/check/route.js",
   "/api/doctores/route": "app/api/doctores/route.js",
   "/api/pacientes/route": "app/api/pacientes/route.js",
   "/api/citas/route": "app/api/citas/route.js",
   "/api/bitacora/route": "app/api/bitacora/route.js",
-  "/api/consultorios/route": "app/api/consultorios/route.js",
-  "/api/doctores/[id]/route": "app/api/doctores/[id]/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/api/consultorios/route": "app/api/consultorios/route.js"
 }

@@ -71,6 +71,8 @@ export default function AdminDashboard() {
   const [confirmAction, setConfirmAction] = useState(null)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const [showConcurrencyModal, setShowConcurrencyModal] = useState(false)
+  const [concurrencyMessage, setConcurrencyMessage] = useState({ title: '', description: '' })
 
   useEffect(() => {
     // Aquí podrías verificar si el usuario está autenticado
@@ -467,25 +469,36 @@ export default function AdminDashboard() {
         body: JSON.stringify(updatedPatient),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        const updatedPacientes = pacientes.map(p => 
-          p.paciente_id === data.paciente_id ? {
-            ...data,
-            doctor: doctores.find(d => d.doctor_id === data.doctor_id) || null
-          } : p
-        );
-        setPacientes(updatedPacientes);
-        setFilteredPacientes(updatedPacientes);
+      if (response.status === 404) {
+        // Caso específico: el paciente fue eliminado
+        setConcurrencyMessage({
+          title: 'Error de Concurrencia Detectado',
+          description: 'El paciente que intentas editar ya no existe en la base de datos. Probablemente fue eliminado por otro usuario mientras lo editabas.'
+        });
+        setShowConcurrencyModal(true);
         setIsPatientModalOpen(false);
-        setEditingPatient(null);
-        setSuccessMessage('Paciente actualizado exitosamente');
-        setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 3000);
-      } else {
+        return;
+      }
+
+      if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Error al actualizar el paciente');
       }
+
+      const data = await response.json();
+      const updatedPacientes = pacientes.map(p => 
+        p.paciente_id === data.paciente_id ? {
+          ...data,
+          doctor: doctores.find(d => d.doctor_id === data.doctor_id) || null
+        } : p
+      );
+      setPacientes(updatedPacientes);
+      setFilteredPacientes(updatedPacientes);
+      setIsPatientModalOpen(false);
+      setEditingPatient(null);
+      setSuccessMessage('Paciente actualizado exitosamente');
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 3000);
     } catch (error) {
       console.error('Error al actualizar paciente:', error);
       setError(error.message);
@@ -669,6 +682,52 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error al ejecutar acción:', error);
       setError(error.message);
+    }
+  };
+
+  const runConcurrencyTest = async () => {
+    try {
+      // Simular dos clientes intentando crear pacientes con el mismo email
+      const testEmail = `test${Date.now()}@test.com`;
+      
+      // Primera creación
+      const promise1 = handleAddPatient({
+        primer_nombre: "Test1",
+        apellido_paterno: "Concurrencia",
+        email: testEmail,
+        password: "123456",
+        fecha_nacimiento: "1990-01-01",
+        sexo: "M"
+      });
+
+      // Segunda creación (mismo email)
+      const promise2 = handleAddPatient({
+        primer_nombre: "Test2",
+        apellido_paterno: "Concurrencia",
+        email: testEmail,
+        password: "123456",
+        fecha_nacimiento: "1990-01-01",
+        sexo: "M"
+      });
+
+      // Ejecutar ambas promesas simultáneamente
+      const results = await Promise.allSettled([promise1, promise2]);
+
+      // Verificar resultados
+      console.log('Resultados de prueba de concurrencia:', results);
+      
+      // Mostrar resultados en la UI
+      const successCount = results.filter(r => r.status === 'fulfilled').length;
+      const failCount = results.filter(r => r.status === 'rejected').length;
+      
+      setSuccessMessage(
+        `Prueba completada - Éxitos: ${successCount}, Fallos: ${failCount}`
+      );
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    } catch (error) {
+      console.error('Error en prueba de concurrencia:', error);
+      setError('Error al ejecutar prueba de concurrencia');
     }
   };
 
@@ -885,14 +944,23 @@ export default function AdminDashboard() {
             <div className="p-6 border-b border-gray-200">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-slate-800">Gestión de Pacientes</h2>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
-                  onClick={() => setIsPatientModalOpen(true)}
-                >
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Agregar Paciente
-                </motion.button>
+                <div className="flex space-x-2">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    className="flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg"
+                    onClick={runConcurrencyTest}
+                  >
+                    Probar Concurrencia
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    className="flex items-center px-4 py-2 bg-sky-500 text-white rounded-lg"
+                    onClick={() => setIsPatientModalOpen(true)}
+                  >
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Agregar Paciente
+                  </motion.button>
+                </div>
               </div>
               
               <div className="flex space-x-4 mb-6">
@@ -1598,6 +1666,43 @@ export default function AdminDashboard() {
             className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"
           >
             {successMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal de Concurrencia */}
+      <AnimatePresence>
+        {showConcurrencyModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setShowConcurrencyModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center space-x-2 text-red-600 mb-4">
+                <Clock className="h-6 w-6" />
+                <h2 className="text-xl font-bold">{concurrencyMessage.title}</h2>
+              </div>
+              <p className="text-slate-600 mb-6">
+                {concurrencyMessage.description}
+              </p>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setShowConcurrencyModal(false)}
+                  className="px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
+                >
+                  Entendido
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -96,10 +96,7 @@ export async function POST(request) {
   let conn;
   try {
     const data = await request.json();
-    console.log("[POST /api/pacientes] Datos recibidos:", {
-      ...data,
-      password: "***",
-    });
+    console.log("[POST /api/pacientes] Datos recibidos:", data);
 
     const {
       primer_nombre,
@@ -113,17 +110,13 @@ export async function POST(request) {
       doctor_id,
     } = data;
 
-    if (
-      !primer_nombre ||
-      !apellido_paterno ||
-      !email ||
-      !password ||
-      !fecha_nacimiento ||
-      !sexo ||
-      !doctor_id
-    ) {
+    // Validar campos requeridos
+    if (!primer_nombre || !apellido_paterno || !email || !password || !fecha_nacimiento || !sexo) {
       return NextResponse.json(
-        { error: "Faltan campos requeridos" },
+        {
+          error: "Faltan campos requeridos",
+          details: "Todos los campos marcados con * son obligatorios",
+        },
         { status: 400 },
       );
     }
@@ -132,73 +125,68 @@ export async function POST(request) {
     conn = await mysql.createConnection(dbConfig);
     console.log("[POST /api/pacientes] Conexión exitosa");
 
+    // Establecer current_user_id para los triggers
+    await conn.execute("SET @current_user_id = 1");
+    console.log("[POST /api/pacientes] current_user_id asignado");
+
+    // Establecer nivel de aislamiento REPEATABLE READ
+    await conn.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+    console.log("[POST /api/pacientes] Nivel de aislamiento establecido: REPEATABLE READ");
+
     // Iniciar transacción
     await conn.beginTransaction();
     console.log("[POST /api/pacientes] Transacción iniciada");
 
-    // Asignar current_user_id para los triggers
-    const userId = request.headers.get("x-user-id");
-    await conn.execute("SET @current_user_id = 1", [userId]);
-    console.log("[POST /api/pacientes] current_user_id asignado");
-
-    // Obtener el role_id para pacientes
-    console.log("[POST /api/pacientes] Obteniendo role_id para pacientes...");
-    const [roles] = await conn.execute(
-      "SELECT role_id FROM roles WHERE nombre = ?",
-      ["paciente"],
-    );
-
-    if (!roles[0]) {
-      await conn.rollback();
-      console.log("[POST /api/pacientes] No se encontró el rol de paciente");
-      return NextResponse.json(
-        { error: "No se encontró el rol de paciente en la base de datos" },
-        { status: 500 },
-      );
-    }
-
-    const role_id = roles[0].role_id;
-    console.log("[POST /api/pacientes] Role_id obtenido:", role_id);
-
     // Verificar si el email ya existe
     console.log("[POST /api/pacientes] Verificando email...");
     const [existingUser] = await conn.execute(
-      "SELECT user_id FROM usuarios WHERE email = ?",
+      "SELECT user_id FROM usuarios WHERE email = ? FOR UPDATE",
       [email],
     );
 
     if (existingUser[0]) {
       await conn.rollback();
-      console.log("[POST /api/pacientes] Email ya existe");
       return NextResponse.json(
-        { error: "El email ya está registrado" },
-        { status: 400 },
+        { 
+          error: "Email ya registrado",
+          code: "EMAIL_EXISTS"
+        },
+        { status: 409 },
       );
     }
 
-    // Verificar si el doctor existe
-    console.log("[POST /api/pacientes] Verificando doctor...");
-    const [doctor] = await conn.execute(
-      "SELECT doctor_id FROM medicos WHERE doctor_id = ?",
-      [doctor_id],
-    );
-
-    if (!doctor[0]) {
-      await conn.rollback();
-      console.log("[POST /api/pacientes] Doctor no encontrado");
-      return NextResponse.json(
-        { error: "El doctor especificado no existe" },
-        { status: 400 },
+    // Si se especifica un doctor, verificar que exista
+    if (doctor_id) {
+      console.log("[POST /api/pacientes] Verificando doctor...");
+      const [doctor] = await conn.execute(
+        "SELECT doctor_id FROM medicos WHERE doctor_id = ? FOR UPDATE",
+        [doctor_id],
       );
+
+      if (!doctor[0]) {
+        await conn.rollback();
+        return NextResponse.json(
+          { 
+            error: "El doctor especificado no existe",
+            code: "DOCTOR_NOT_FOUND"
+          },
+          { status: 404 },
+        );
+      }
     }
 
-    // Insertar usuario
+    // Crear usuario
     console.log("[POST /api/pacientes] Creando usuario...");
     const [userResult] = await conn.execute(
       `
       INSERT INTO usuarios (
-        primer_nombre, segundo_nombre, apellido_paterno, apellido_materno,
-        email, password, role_id
+        primer_nombre,
+        segundo_nombre,
+        apellido_paterno,
+        apellido_materno,
+        email,
+        password,
+        role_id
       ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `,
       [
@@ -208,21 +196,25 @@ export async function POST(request) {
         apellido_materno || null,
         email,
         password,
-        role_id,
+        3, // Role ID para pacientes
       ],
     );
 
     const paciente_id = userResult.insertId;
     console.log("[POST /api/pacientes] Usuario creado con ID:", paciente_id);
 
-    // Insertar paciente
+    // Crear paciente
     console.log("[POST /api/pacientes] Creando paciente...");
     await conn.execute(
       `
-      INSERT INTO pacientes (paciente_id, fecha_nacimiento, sexo, doctor_id)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO pacientes (
+        paciente_id,
+        fecha_nacimiento,
+        sexo,
+        doctor_id
+      ) VALUES (?, ?, ?, ?)
     `,
-      [paciente_id, fecha_nacimiento, sexo, doctor_id],
+      [paciente_id, fecha_nacimiento, sexo, doctor_id || null],
     );
 
     await conn.commit();
@@ -253,7 +245,11 @@ export async function POST(request) {
       console.log("[POST /api/pacientes] Transacción revertida");
     }
     return NextResponse.json(
-      { error: "Error al crear paciente" },
+      { 
+        error: "Error al crear paciente",
+        details: error.message,
+        code: "INTERNAL_ERROR"
+      },
       { status: 500 },
     );
   } finally {
@@ -286,7 +282,10 @@ export async function PUT(request) {
 
     if (!paciente_id) {
       return NextResponse.json(
-        { error: "ID de paciente requerido" },
+        { 
+          error: "Se requiere el ID del paciente",
+          code: "MISSING_ID"
+        },
         { status: 400 },
       );
     }
@@ -295,45 +294,72 @@ export async function PUT(request) {
     conn = await mysql.createConnection(dbConfig);
     console.log("[PUT /api/pacientes] Conexión exitosa");
 
+    // Establecer current_user_id para los triggers
+    await conn.execute("SET @current_user_id = 1");
+    console.log("[PUT /api/pacientes] current_user_id asignado");
+
+    // Establecer nivel de aislamiento REPEATABLE READ
+    await conn.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ');
+    console.log("[PUT /api/pacientes] Nivel de aislamiento establecido: REPEATABLE READ");
+
     // Iniciar transacción
     await conn.beginTransaction();
     console.log("[PUT /api/pacientes] Transacción iniciada");
 
-    // Asignar current_user_id para los triggers
-    //const userId = request.headers.get("x-user-id");
-    await conn.execute("SET @current_user_id = 1");
-    console.log("[PUT /api/pacientes] current_user_id asignado");
-
     // Verificar si el paciente existe
     console.log("[PUT /api/pacientes] Verificando paciente...");
     const [paciente] = await conn.execute(
-      "SELECT paciente_id FROM pacientes WHERE paciente_id = ?",
+      "SELECT paciente_id FROM pacientes WHERE paciente_id = ? FOR UPDATE",
       [paciente_id],
     );
 
     if (!paciente[0]) {
       await conn.rollback();
-      console.log("[PUT /api/pacientes] Paciente no encontrado");
       return NextResponse.json(
-        { error: "Paciente no encontrado" },
+        { 
+          error: "Paciente no encontrado",
+          code: "PATIENT_NOT_FOUND"
+        },
         { status: 404 },
       );
+    }
+
+    // Verificar si el email ya existe (si se está actualizando)
+    if (email) {
+      console.log("[PUT /api/pacientes] Verificando email...");
+      const [existingUser] = await conn.execute(
+        "SELECT user_id FROM usuarios WHERE email = ? AND user_id != ? FOR UPDATE",
+        [email, paciente_id],
+      );
+
+      if (existingUser[0]) {
+        await conn.rollback();
+        return NextResponse.json(
+          { 
+            error: "El email ya está registrado por otro usuario",
+            code: "EMAIL_EXISTS"
+          },
+          { status: 409 },
+        );
+      }
     }
 
     // Verificar si el doctor existe si se está actualizando
     if (doctor_id) {
       console.log("[PUT /api/pacientes] Verificando doctor...");
       const [doctor] = await conn.execute(
-        "SELECT doctor_id FROM medicos WHERE doctor_id = ?",
+        "SELECT doctor_id FROM medicos WHERE doctor_id = ? FOR UPDATE",
         [doctor_id],
       );
 
       if (!doctor[0]) {
         await conn.rollback();
-        console.log("[PUT /api/pacientes] Doctor no encontrado");
         return NextResponse.json(
-          { error: "El doctor especificado no existe" },
-          { status: 400 },
+          { 
+            error: "El doctor especificado no existe",
+            code: "DOCTOR_NOT_FOUND"
+          },
+          { status: 404 },
         );
       }
     }
@@ -343,18 +369,18 @@ export async function PUT(request) {
     await conn.execute(
       `
       UPDATE usuarios
-      SET primer_nombre = ?,
-          segundo_nombre = ?,
-          apellido_paterno = ?,
-          apellido_materno = ?,
-          email = ?
+      SET primer_nombre = COALESCE(?, primer_nombre),
+          segundo_nombre = COALESCE(?, segundo_nombre),
+          apellido_paterno = COALESCE(?, apellido_paterno),
+          apellido_materno = COALESCE(?, apellido_materno),
+          email = COALESCE(?, email)
       WHERE user_id = ?
     `,
       [
         primer_nombre,
-        segundo_nombre || null,
+        segundo_nombre,
         apellido_paterno,
-        apellido_materno || null,
+        apellido_materno,
         email,
         paciente_id,
       ],
@@ -365,9 +391,9 @@ export async function PUT(request) {
     await conn.execute(
       `
       UPDATE pacientes
-      SET fecha_nacimiento = ?,
-          sexo = ?,
-          doctor_id = ?
+      SET fecha_nacimiento = COALESCE(?, fecha_nacimiento),
+          sexo = COALESCE(?, sexo),
+          doctor_id = COALESCE(?, doctor_id)
       WHERE paciente_id = ?
     `,
       [fecha_nacimiento, sexo, doctor_id, paciente_id],
@@ -401,7 +427,11 @@ export async function PUT(request) {
       console.log("[PUT /api/pacientes] Transacción revertida");
     }
     return NextResponse.json(
-      { error: "Error al actualizar paciente" },
+      { 
+        error: "Error al actualizar paciente",
+        details: error.message,
+        code: "INTERNAL_ERROR"
+      },
       { status: 500 },
     );
   } finally {
